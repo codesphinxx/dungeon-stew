@@ -1,0 +1,33 @@
+{
+  "name": "dungeon-stew",
+  "version": "0.0.1",
+  "description": "Dungeon crawler game for Game Off 2018",
+  "main": "src/index.js",
+  "scripts": {
+    "build": "webpack",
+    "start": "npm run build && webpack-dev-server --port=3000"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/codesphinxx/dungeon-stew.git"
+  },
+  "author": "Code Sphinx <https://twitter.com/codesphinx>",
+  "license": "MIT",
+  "licenseUrl": "http://www.opensource.org/licenses/mit-license.php",
+  "bugs": {
+    "url": "https://github.com/codesphinxx/dungeon-stew/issues"
+  },
+  "homepage": "https://github.com/codesphinxx/dungeon-stew#readme",
+  "dependencies": {
+    "@mikewesthad/dungeon": "^1.2.2",
+    "phaser": "^3.15.1",
+    "stats.js": "^0.17.0"
+  },
+  "devDependencies": {
+    "raw-loader": "^0.5.1",
+    "webpack": "^4.25.1",
+    "webpack-cli": "^3.1.2",
+    "webpack-command": "^0.4.2",
+    "webpack-dev-server": "^3.1.10"
+  }
+}
