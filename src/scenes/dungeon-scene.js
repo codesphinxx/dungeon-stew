@@ -1,18 +1,13 @@
 import Phaser from 'phaser';
-import Dungeon from "@mikewesthad/dungeon";
 import Player from "../prefabs/player.js";
 import Monster from '../prefabs/monster';
-import TILES from "../tile-mapping.js";
 import Config from '../config';
 import MathHelper from '../helpers/math';
 import Creator from "../helpers/creator.js";
-import Utilx from "../helpers/utilx.js";
 import Hud from "../prefabs/hud.js";
 import Collectible from "../prefabs/collectible.js";
 
-/**
- * Scene that generates a new dungeon
- */
+
 export default class DungeonScene extends Phaser.Scene 
 {
   constructor() 
@@ -46,9 +41,9 @@ export default class DungeonScene extends Phaser.Scene
 
     //Setup enemy group colliders
     this.enemies = this.physics.add.group();
-    //this.physics.add.collider(this.enemies, this.stuffLayer);
+    this.physics.add.collider(this.enemies, worldLayer);
+    this.physics.add.collider(this.enemies, this.enemies, this.onEnemyFriendContact, null, this);
     //this.physics.add.collider(this.enemies, this.groundLayer, this.onEnemyWallContact, null, this);
-    //this.physics.add.collider(this.enemies, this.enemies, this.onEnemyFriendContact, null, this);
 
     // Object layers in Tiled let you embed extra info into a map - like a spawn point or custom
     // collision shapes. In the tmx file, there's an object layer with a point named "Spawn Point"
@@ -62,14 +57,13 @@ export default class DungeonScene extends Phaser.Scene
 
     // Constrain the camera so that it isn't allowed to move outside the width/height of tilemap
     camera.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
-    camera.startFollow(this.player);    
-    
+    camera.startFollow(this.player);     
 
     // Watch the player and tilemap layers for collisions, for the duration of the scene:
     this.physics.add.collider(this.player, worldLayer);
     //this.physics.add.collider(this.player, this.stuffLayer);
-    //this.physics.add.overlap(this.player, this.enemies, this.onPlayerEnemyContact, null, this);
-    //this.physics.add.overlap(this.player, this.collectibles, this.onPlayerItemContact, null, this);
+    this.physics.add.overlap(this.player, this.enemies, this.onPlayerEnemyContact, null, this);
+    this.physics.add.overlap(this.player, this.collectibles, this.onPlayerItemContact, null, this);
 
     // Help text that has a "fixed" position on the screen
     this.add
@@ -86,6 +80,7 @@ export default class DungeonScene extends Phaser.Scene
 
     this.hud = new Hud(this, 0, 0, {atlas:'ui',left:'left',right:'right',up:'up',down:'down',keyA:'keyA'});
     this.hud.syncLife(this.player.health); 
+    this.hud.setDepth(11);
 
     this.player.on('healthchange', () =>{
       this.hud.syncLife(this.player.health);
@@ -96,13 +91,13 @@ export default class DungeonScene extends Phaser.Scene
   {
     this.player.update(time, delta);
 
-    /*this.enemies.children.iterate(function(enemy) {    
+    this.enemies.children.iterate(function(enemy) {    
       enemy.update(time, delta);
     });
 
     this.collectibles.children.iterate(function(item) {    
       item.update(time, delta);
-    });*/
+    });
 
     if (this.player.state == Config.PlayerStates.ATTACK)
     {
@@ -154,6 +149,10 @@ export default class DungeonScene extends Phaser.Scene
     this.graphics.strokeCircleShape(this.circle);*/
   }
 
+  /**
+   * @param {Player} player 
+   * @param {Monster} enemy 
+   */
   onPlayerEnemyContact(player, enemy)
   {    
     this.player.damage(enemy, enemy.strength);
@@ -168,11 +167,19 @@ export default class DungeonScene extends Phaser.Scene
     item.collect(player);
   }
 
+  /**
+   * @param {Monster} enemy 
+   * @param {Monster} friend 
+   */
   onEnemyFriendContact(enemy, friend)
   {
     enemy.decideNextAction(enemy.direction);
   }
 
+  /**
+   * @param {Monster} enemy 
+   * @param {Phaser.Physics.Arcade.StaticBody} wall 
+   */
   onEnemyWallContact(enemy, wall)
   {
     enemy.idle();

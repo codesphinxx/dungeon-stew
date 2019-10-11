@@ -25,9 +25,9 @@ Run next commands in your terminal:
 
 
 ## TODO
-1. fix hud life panel
-2. show icon for active skill
-3. show key icon once collected
+1. 
+2. character level system
+3. show inventory items
 4. create GameOver scene
 5. refine damage knockback
 6. refine melee collision detection
@@ -35,7 +35,8 @@ Run next commands in your terminal:
 8. refine collectible bounce effect
 9. handle item collect animation/effect
 10. create NPC entities
-11. create world events
+11. monster item drop
+12. create dialog window
 
 
 

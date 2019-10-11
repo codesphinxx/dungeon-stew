@@ -10,7 +10,8 @@ export const PlayerStates = {
     ATTACK:1,
     DAMAGE:2,
     MOVE:3,
-    CORPSE:4
+    CORPSE:4,
+    TALK: 5
 };
 
 export const ItemTypes = {

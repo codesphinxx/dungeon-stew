@@ -50,23 +50,7 @@ export default class BootScene extends Phaser.Scene
 
   create() 
   {
-    this.dungeon = {
-      width: 50,
-      height: 50,
-      doorPadding: 2,
-      rooms: {
-        width: { min: 7, max: 15, onlyOdd: true },
-        height: { min: 7, max: 15, onlyOdd: true }
-      },
-      maxRooms: 10,
-      collectibles:[
-        Config.ItemTypes.KEY,
-        Config.ItemTypes.LIFE,
-        Config.ItemTypes.LIFE,
-        Config.ItemTypes.LIFE
-      ],
-      monsters:3
-    };
+        
   }
 
   update(time, delta) 

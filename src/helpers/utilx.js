@@ -9,6 +9,15 @@ export default class Utilx
     }
 
     /**
+     * @function Utilx.deepCopy
+     * @param {Object} json 
+     */
+    static deepCopy (json) 
+    {
+        return JSON.parse(JSON.stringify(json));
+    }
+
+    /**
      * @function Utilx.MergeObject
      * @param {Object} target 
      * @param {Object} modifier 
