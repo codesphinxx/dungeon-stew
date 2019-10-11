@@ -80,19 +80,16 @@ export default class Creator
      * @param {Phaser.Physics.Arcade.Group} physicsGroup
      * @param {Number} x 
      * @param {Number} y 
-     * @param {String} texture
+     * @param {String} id
      * @param {String} title
+     * @param {String} texture
      */
-    static createPlayer(scene, physicsGroup, x, y, texture, title)
+    static createPlayer(scene, physicsGroup, x, y, texture, title, id)
     {
-        var player = new Player(scene, x, y, texture);
+        var player = new Player(scene, x, y, {key:texture,name:title, id:id});
         if (physicsGroup != null && physicsGroup != undefined)
         {
             physicsGroup.add(player);
-        }
-        if (title != null && title != undefined)
-        {
-        player.setTitle(title);
         }
         return player;
     }

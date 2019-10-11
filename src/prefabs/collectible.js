@@ -1,5 +1,5 @@
 import Phaser from 'phaser';
-import GameSprite from './gamesprite';
+import Player from './player';
 
 export default class Collectible extends Phaser.GameObjects.Sprite
 {
@@ -10,6 +10,8 @@ export default class Collectible extends Phaser.GameObjects.Sprite
    * @param {String} texture
    * @param {String|Number} frame
    * @param {Object} data
+   * @param {Number} data.id
+   * @param {String} data.name
    * @param {Number} data.amount
    * @param {Number} data.itemType
    * @param {Number} data.duration
@@ -21,11 +23,14 @@ export default class Collectible extends Phaser.GameObjects.Sprite
     this.body.setCircle(this.width * 0.4);
     scene.add.existing(this);
     
+    this.id = data.id;
     this.setDataEnabled();
-    this.setData(data);
     this.setData('initialY', y);
     this.setData('collected', false);
-    this.setName(Phaser.Utils.String.UUID());
+    this.setData('amount', data.amount);
+    this.setData('duration', data.duration);
+    this.setData('itemType', data.itemType);
+    this.setName(data.name);
   }
 
   /**
@@ -101,12 +106,13 @@ export default class Collectible extends Phaser.GameObjects.Sprite
   }
 
   /**
-   * @param {GameSprite} sprite 
+   * @param {Player} sprite 
    */
   collect(sprite)
   {
     if (this.collected) return;
     this.collected = true;
-    this.destroy(); 
+    if (sprite && sprite.alive) sprite.collectItem(this.id, this.itemType, this.amount, this.duration);
+    this.destroy();
   }
 }

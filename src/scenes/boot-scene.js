@@ -18,7 +18,7 @@ export default class BootScene extends Phaser.Scene
     var url = 'http://raw.githubusercontent.com/rexrainbow/phaser3-rex-notes/master/plugins/dist/rexbbcodetextplugin.min.js';
     this.load.plugin('rexbbcodetextplugin', url, true);
     this.load.image('mask', '../assets/images/mask1.png');
-    this.load.image("tiles", "../assets/tilesets/buch-tileset-48px-extruded.png");
+    this.load.image("tiles", "../assets/tilesets/tuxmon-sample-32px-extruded.png");
     this.load.atlas('ui', '../assets/images/ui.png', '../assets/images/ui.json');
     this.load.spritesheet(
       "player",

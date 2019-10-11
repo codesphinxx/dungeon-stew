@@ -1,5 +1,5 @@
 # Dungeon Stew
-Dungeon crawler game for Game Off 2018
+Dungeon crawler game built on Phaser 3
 
 
 ## Collectibles
@@ -34,7 +34,8 @@ Run next commands in your terminal:
 7. refine death animation effects
 8. refine collectible bounce effect
 9. handle item collect animation/effect
-10. win logic
+10. create NPC entities
+11. create world events
 
 
 

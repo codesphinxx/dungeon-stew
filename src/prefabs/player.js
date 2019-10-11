@@ -1,7 +1,6 @@
 import Phaser from 'phaser';
 import Config from '../config';
 import GameSprite from './gamesprite';
-import Collectible from './collectible';
 
 export default class Player extends GameSprite
 {
@@ -9,15 +8,19 @@ export default class Player extends GameSprite
    * @param {Phaser.Scene} scene 
    * @param {Number} x 
    * @param {Number} y 
-   * @param {String} key
+   * @param {Object} data
+   * @param {String} data.id
+   * @param {String} data.key
+   * @param {String} data.name
    */
-  constructor(scene, x, y, key) 
+  constructor(scene, x, y, data) 
   {
-    super(scene, x, y, key);
+    super(scene, x, y, data.key, data.id);
     this._buffTimer = {};
     this._invulnerable = false;
     this.health = Config.BASE_HEALTH;
     this.speed = Config.PLAYER_MOVE_SPEED;
+    this.setName(data.name);
 
     this.keys = scene.input.keyboard.addKeys({
       up: Phaser.Input.Keyboard.KeyCodes.UP,
@@ -197,23 +200,85 @@ export default class Player extends GameSprite
   }
 
   /**
-   * @param {Collectible} item 
+   * Adds item to player's inventory.
+   * @param {Number} id 
+   * @param {Number} type 
+   * @param {Number} qty
    */
-  collectItem(item)
+  inventoryAdd(id, type, qty)
   {
-    switch(item.itemType)
+    var entry = this.inventory.find(a => a.id == id && a.itemType == type);
+    if (entry)
+    {
+      entry.quantity += qty;
+    }
+    else
+    {
+      this.inventory.push({id:id, type:type,quantity:qty});
+    }
+  }
+
+  /**
+   * Reduces an item quantity in player's inventory.
+   * @param {Number} id 
+   */
+  useItem(id)
+  {
+      var entry = this.inventory.find(a => a.id == id);
+      if (entry)
+      {
+        if (entry.quantity > 0)
+        {
+          entry.quantity--;
+        }
+        else
+        {
+          let index = this.inventory.findIndex(a => a.id == id);
+          this.inventory.splice(index, 1);
+        }        
+        return true;
+      }
+
+      return false;
+  }
+
+  /**
+   * Checks for entry in player's inventory.
+   * @param {Number} id 
+   */
+  hasItem(id)
+  {
+    return this.inventory.findIndex(a => a.id == id && a.quantity > 0) !== -1;
+  }
+
+  /**
+   * @param {Number} id 
+   * @param {Number} itemType 
+   * @param {Number} value 
+   * @param {Number} duration
+   */
+  collectItem(id, itemType, value, duration)
+  {
+    switch(itemType)
     {
       case Config.ItemTypes.INVULNERABLE:
         this.invulnerable = true; 
-        this._buffTimer[item.itemType] = item.duration;       
+        this._buffTimer[itemType] = duration;       
       break;
       case Config.ItemTypes.DAMAGE_UP:
-        this.strength += item.amount; 
-        this._buffTimer[item.itemType] = item.duration; 
+        this.strength += value; 
+        this._buffTimer[item.itemType] = duration; 
       break;
       case Config.ItemTypes.STEALTH:
-        this.alpha = item.amount; 
-        this._buffTimer[item.itemType] = item.duration; 
+        this.alpha = value; 
+        this._buffTimer[item.itemType] = duration; 
+      break;
+      case Config.ItemTypes.LIFE:
+         this.health += value;
+         this.emit('healthchange');
+      break;
+      case Config.ItemTypes.KEY:
+        this.inventoryAdd(id, itemType, value);
       break;
     }
   }

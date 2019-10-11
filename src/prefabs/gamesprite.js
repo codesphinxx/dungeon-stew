@@ -7,9 +7,10 @@ export default class GameSprite extends Phaser.Physics.Arcade.Sprite
    * @param {Phaser.Scene} scene 
    * @param {Number} x 
    * @param {Number} y 
+   * @param {String} id
    * @param {String} asset
    */
-  constructor(scene, x, y, asset) 
+  constructor(scene, x, y, asset, id) 
   {
     super(scene, x, y, asset);
     scene.physics.add.existing(this);
@@ -19,8 +20,12 @@ export default class GameSprite extends Phaser.Physics.Arcade.Sprite
     this._health = 0;
     this.key = asset;
     this.state = Config.PlayerStates.IDLE;    
-    this.id = Phaser.Utils.String.UUID();
+    this.id = id || Phaser.Utils.String.UUID();
     this.flash = {active:false, counter:0, duration:15, color:0xff3300};
+    /**
+     * @type {{id:Number,type:Number,quantity:Number}[]}
+     */
+    this.inventory = [];
     
     const anims = scene.anims;
 
@@ -145,6 +150,7 @@ export default class GameSprite extends Phaser.Physics.Arcade.Sprite
   setTitle(displayName)
   {
     this.title.text = displayName;
+    this.setName(displayName);
   }
   
   _onAttackComplete(animation, frame)
