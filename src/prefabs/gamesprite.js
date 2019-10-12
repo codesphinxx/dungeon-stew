@@ -7,7 +7,7 @@ export default class GameSprite extends Phaser.Physics.Arcade.Sprite
    * @param {Phaser.Scene} scene 
    * @param {Number} x 
    * @param {Number} y 
-   * @param {String} id
+   * @param {String|Number} id
    * @param {String} asset
    */
   constructor(scene, x, y, asset, id) 
@@ -15,12 +15,12 @@ export default class GameSprite extends Phaser.Physics.Arcade.Sprite
     super(scene, x, y, asset);
     scene.physics.add.existing(this);
 
-    this._strength = 1;
+    this.id = id;
     this.speed = 0;
+    this._strength = 1;
     this._health = 0;
     this.key = asset;
     this.state = Config.PlayerStates.IDLE;    
-    this.id = id || Phaser.Utils.String.UUID();
     this.flash = {active:false, counter:0, duration:15, color:0xff3300};
     /**
      * @type {{id:Number,type:Number,quantity:Number}[]}
@@ -226,11 +226,25 @@ export default class GameSprite extends Phaser.Physics.Arcade.Sprite
     this.flash.active = true;
     this.flash.counter = this.flash.duration;
 
-    let angle = Phaser.Math.Angle.Between(enemy.x, enemy.y, this.x, this.y);
-
-    let dx = this.x + (Config.KNOCKBACK_INFLUENCE * Math.sign(angle));
-    let dy = this.y + (Config.KNOCKBACK_INFLUENCE * Math.sign(angle));
-
+    let dx = this.x;
+    let dy = this.y;
+    let direction = Number(enemy.direction);
+    if (direction == Config.Directions.UP)
+    {
+      dy += Config.KNOCKBACK_INFLUENCE;
+    }
+    else if (direction == Config.Directions.DOWN)
+    {
+      dy -= Config.KNOCKBACK_INFLUENCE;
+    }
+    else if (direction == Config.Directions.RIGHT)
+    {
+      dx += Config.KNOCKBACK_INFLUENCE;
+    }
+    else if (direction == Config.Directions.LEFT)
+    {
+      dx -= Config.KNOCKBACK_INFLUENCE;
+    }
     this.scene.physics.moveTo(this, dx, dy, 0, 25);    
   }
 

@@ -7,18 +7,18 @@ export default class Collectible extends Phaser.GameObjects.Sprite
    * @param {Phaser.Scene} scene 
    * @param {Number} x 
    * @param {Number} y 
-   * @param {String} texture
-   * @param {String|Number} frame
    * @param {Object} data
    * @param {Number} data.id
    * @param {String} data.name
    * @param {Number} data.amount
    * @param {Number} data.itemType
    * @param {Number} data.duration
+   * @param {String} data.texture
+   * @param {String|Number} data.frame
    */
-  constructor(scene, data, x, y, texture, frame) 
+  constructor(scene, x, y, data) 
   {
-    super(scene, x, y, texture, frame);
+    super(scene, x, y, data.texture, data.frame);
     scene.physics.add.existing(this, false);
     this.body.setCircle(this.width * 0.4);
     scene.add.existing(this);
@@ -99,9 +99,9 @@ export default class Collectible extends Phaser.GameObjects.Sprite
 
   update(time, delta) 
   {
-    var speed  = 0.0020;
-    var displacement = 16.0;
-    this.y = this.data.values.initialY + Math.sin(time * speed) * displacement / 2.0;
+    var speed  = 0.0040;
+    var displacement = 8.0;
+    this.y = this.data.values.initialY + Math.sin(time * speed) * delta/displacement;
     super.update();
   }
 

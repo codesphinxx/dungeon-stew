@@ -32,7 +32,7 @@ export default class BootScene extends Phaser.Scene
     );
     this.load.spritesheet(
       "slime",
-      "../assets/spritesheets/chara_slime.png",
+      "../assets/spritesheets/slime.png",
       {
         frameWidth: 48,
         frameHeight: 48,

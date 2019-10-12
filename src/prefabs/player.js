@@ -12,6 +12,8 @@ export default class Player extends GameSprite
    * @param {String} data.id
    * @param {String} data.key
    * @param {String} data.name
+   * @param {Number} data.speed
+   * @param {Number} data.health
    */
   constructor(scene, x, y, data) 
   {
@@ -273,7 +275,7 @@ export default class Player extends GameSprite
         this.alpha = value; 
         this._buffTimer[item.itemType] = duration; 
       break;
-      case Config.ItemTypes.LIFE:
+      case Config.ItemTypes.POTION:
          this.health += value;
          this.emit('healthchange');
       break;

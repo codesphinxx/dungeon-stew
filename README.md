@@ -25,7 +25,7 @@ Run next commands in your terminal:
 
 
 ## TODO
-1. 
+1. monster move within route
 2. character level system
 3. show inventory items
 4. create GameOver scene

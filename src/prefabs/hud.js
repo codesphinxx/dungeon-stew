@@ -96,7 +96,7 @@ export default class Hud extends Phaser.GameObjects.Container
             var increase = health - this.hearts.length;
             for (var i=0; i < increase; i++)
             {
-                var heart = this.scene.add.image(dx, 12, 'ui', 'life');
+                var heart = this.scene.add.image(dx, 12, 'ui', 'potion');
                 heart.displayOriginX = 0;
                 heart.displayOriginY = 0;
                 this.hearts.push(heart);

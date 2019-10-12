@@ -8,6 +8,8 @@ import Utilx from './helpers/utilx';
 import BootScene from "./scenes/boot-scene.js";
 import DungeonScene from "./scenes/dungeon-scene";
 
+const gameVariables = {};
+
 const config = {
   type: Phaser.AUTO,
   width: window.innerWidth,
@@ -18,8 +20,12 @@ const config = {
   backgroundColor: "#000",
   parent: "game-container",
   disableContextMenu:true,
-  resolution: window.devicePixelRatio,
+  //resolution: window.devicePixelRatio,
   scene: [BootScene, DungeonScene],
+  scale: {
+    mode: Phaser.Scale.ENVELOP,
+    autoCenter: Phaser.Scale.CENTER_BOTH
+  },
   physics: {
     default: "arcade",
     arcade: {

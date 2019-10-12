@@ -16,7 +16,7 @@ export const PlayerStates = {
 
 export const ItemTypes = {
     NONE:'none',
-    LIFE:'life',
+    POTION:'potion',
     DAMAGE_UP:'dmgup',
     INVULNERABLE:'invulnerable',
     STEALTH:'stealth',
@@ -32,7 +32,6 @@ const Config = {
     MAX_HEALTH:7,
     MAX_STRENGTH:4,
     PLAYER_MOVE_SPEED:200,
-    MONSTER_MOVE_SPEED:40,
     AI:{        
         IDLE_DURATION:1500,
         CHANGE_INTERVAL_MIN:5000,

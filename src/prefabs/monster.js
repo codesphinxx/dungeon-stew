@@ -10,21 +10,30 @@ export default class Monster extends GameSprite
    * @param {Phaser.Scene} scene 
    * @param {Number} x 
    * @param {Number} y 
-   * @param {String} key
-   * @param {Number} hp 
+   * @param {Object} data
+   * @param {Number} data.id
+   * @param {String} data.texture
+   * @param {String} data.name
+   * @param {Number} data.speed 
+   * @param {Number} data.health 
+   * @param {Number} data.strength 
+   * @param {Object} route
+   * @param {Number} route.width 
+   * @param {Number} route.height 
    */
-  constructor(scene, x, y, key, hp) 
+  constructor(scene, x, y, data, route) 
   {
-    super(scene, x, y, key);
-    this.speed = Config.MONSTER_MOVE_SPEED;
-    this.setName(Phaser.Utils.String.UUID());
-    this.healthbar = new HealthBar(scene, x, y, hp);
-    super.health = hp;
+    super(scene, x, y, data.texture, data.id);
+    this.speed = data.speed;
+    super.health = data.health;
+    this.healthbar = new HealthBar(scene, x, y, data.health);
 
     this._chasing = false;
     this._places = [0,1,2,3];
     this._enemyDirection = null;
     this._decisionTimer = Config.AI.CHANGE_INTERVAL_MIN;
+    this.route = new Phaser.Geom.Rectangle(x, y, route.width, route.height);
+    this.setTitle(data.name);
   }  
 
   get health()
@@ -75,11 +84,11 @@ export default class Monster extends GameSprite
 
   idle()
   {
-    if (this.state == Config.PlayerStates.DAMAGE || this._health == 0) return;
+    if (this._health == 0) return;
 
     this.state = Config.PlayerStates.IDLE;
     this._decisionTimer = Config.AI.IDLE_DURATION;
-    this._places = Utilx.RemoveItem([0,1,2,3], this.direction);
+    this._places = Phaser.Utils.Array.Remove([0,1,2,3], this.direction);
   }
 
   /**
