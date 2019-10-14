@@ -54,14 +54,14 @@
          "name":"MonsterLayer",
          "objects":[
                 {
-                 "height":128,
+                 "height":109,
                  "id":286,
                  "name":"slime",
                  "rotation":0,
                  "type":"0",
-                 "visible":true,
-                 "width":400,
-                 "x":685,
+                 "visible":false,
+                 "width":356,
+                 "x":703,
                  "y":1060
                 }],
          "opacity":1,

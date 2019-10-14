@@ -12,6 +12,10 @@ export default class DungeonScene extends Phaser.Scene
   constructor() 
   {
     super({key:'dungeon', active:false});
+    /**
+     * @type {Player}
+     */
+    this.player = null;
   }
 
   preload() 
@@ -39,7 +43,7 @@ export default class DungeonScene extends Phaser.Scene
 
     //Setup enemy group colliders
     this.monsters = this.physics.add.group();
-    this.physics.add.collider(this.monsters, worldLayer);
+    this.physics.add.collider(this.monsters, worldLayer, this.onEnemyWallContact, null, this);
     this.physics.add.collider(this.monsters, this.monsters, this.onEnemyFriendContact, null, this);
     //this.physics.add.collider(this.monsters, worldObjectLayer, this.onEnemyWallContact, null, this);
 
@@ -82,7 +86,7 @@ export default class DungeonScene extends Phaser.Scene
     this.hud = new Hud(this, 0, 0, {atlas:'ui',left:'left',right:'right',up:'up',down:'down',keyA:'keyA'});
     this.hud.syncLife(this.player.health); 
     
-    this.player.on('healthchange', () =>{
+    this.player.on('health.change', () =>{
       this.hud.syncLife(this.player.health);
     });
 
@@ -111,11 +115,11 @@ export default class DungeonScene extends Phaser.Scene
 
     if (this.player.state == Config.PlayerStates.ATTACK)
     {
-      this.attackHitTest();
+      this.meleeHitTest();
     }
   }
 
-  attackHitTest() 
+  meleeHitTest() 
   {
     //var currentFrame = this.player.anims.currentFrame.index;
     //var totalFrames = this.player.anims.getTotalFrames();
@@ -141,18 +145,15 @@ export default class DungeonScene extends Phaser.Scene
     {
       px += radius; 
     }
+    let meleeConnected = false;
+
     this.monsters.children.iterate((enemy) => {    
       if (enemy.state == Config.PlayerStates.DAMAGE) return;
-
-      this.circle.x = px;
-      this.circle.y = py;
-      this.circle.radius = radius;
-      this.graphics.clear();
-      this.graphics.strokeCircleShape(this.circle);
       var collided = Utilx.CircleIntersect(px, py, radius, enemy.x, enemy.y, enemy.body.width*0.5);
       if (collided)
       {
-        enemy.damage(this.player, this.player.strength);        
+        enemy.damage(this.player, this.player.strength);   
+        meleeConnected = true;     
       }
     });
     /*this.graphics.clear();
@@ -162,6 +163,7 @@ export default class DungeonScene extends Phaser.Scene
     this.circle.radius = radius;        
     this.graphics.lineStyle(2, 0x00ff00);
     this.graphics.strokeCircleShape(this.circle);*/
+    return meleeConnected;
   }
 
   /**
@@ -170,7 +172,8 @@ export default class DungeonScene extends Phaser.Scene
    */
   onPlayerEnemyContact(player, enemy)
   {    
-    this.player.damage(enemy, enemy.strength);
+    player.damage(enemy, enemy.strength);
+    enemy.idle();
   }
 
   /**
@@ -196,7 +199,8 @@ export default class DungeonScene extends Phaser.Scene
    * @param {Phaser.Physics.Arcade.StaticBody} wall 
    */
   onEnemyWallContact(enemy, wall)
-  {
-    enemy.idle();
+  {    
+    enemy.decideNextAction(1);
+    console.log('enemy.wall');
   }
 }

@@ -53,7 +53,7 @@ export default class Player extends GameSprite
   set health(value)
   {    
     super.health = value;
-    this.emit('healthchange');
+    this.emit('health.change');
   }
 
   get invulnerable()
@@ -68,12 +68,21 @@ export default class Player extends GameSprite
   {
     this._invulnerable = value;
     //TODO: initialize invulnerable graphics
+  }  
+
+  /**
+   * @param {String} animKey 
+   */
+  _onPostAttackComplete(animKey)
+  {
+    this.state = Config.PlayerStates.MOVE;
   }
 
   update(time, delta) 
   {     
+    if (!this.scene) return;
     if (this.state == Config.PlayerStates.CORPSE) return;
-    
+
     var keys = this.keys;
 
     if (this.state == Config.PlayerStates.IDLE || this.state == Config.PlayerStates.MOVE)
@@ -277,7 +286,7 @@ export default class Player extends GameSprite
       break;
       case Config.ItemTypes.POTION:
          this.health += value;
-         this.emit('healthchange');
+         this.emit('health.change');
       break;
       case Config.ItemTypes.KEY:
         this.inventoryAdd(id, itemType, value);

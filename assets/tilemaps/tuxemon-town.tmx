@@ -3424,7 +3424,7 @@
   </object>
  </objectgroup>
  <objectgroup id="7" name="MonsterLayer">
-  <object id="286" name="slime" type="0" x="685" y="1060" width="400" height="128"/>
+  <object id="286" name="slime" type="0" x="703" y="1060" width="356" height="109" visible="0"/>
  </objectgroup>
  <layer id="2" name="World" width="40" height="40">
   <data encoding="csv">

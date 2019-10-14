@@ -23,17 +23,23 @@ export default class Monster extends GameSprite
    */
   constructor(scene, x, y, data, route) 
   {
-    super(scene, x, y, data.texture, data.id);
+    let area = new Phaser.Geom.Rectangle(x, y, route.width, route.height);
+
+    super(scene, area.centerX, area.centerY, data.texture, data.id);
+    this.healthbar = new HealthBar(scene, area.centerX, area.centerY, data.health);
     this.speed = data.speed;
     super.health = data.health;
-    this.healthbar = new HealthBar(scene, x, y, data.health);
-
+    this.strength = data.strength;
     this._chasing = false;
-    this._places = [0,1,2,3];
+    this._zoning = false;
+    this._places = Phaser.Utils.Array.Shuffle([0,1,2,3]);
     this._enemyDirection = null;
-    this._decisionTimer = Config.AI.CHANGE_INTERVAL_MIN;
-    this.route = new Phaser.Geom.Rectangle(x, y, route.width, route.height);
+    this._timer = Phaser.Math.Between(Config.AI.CHANGE_INTERVAL_MIN, Config.AI.CHANGE_INTERVAL_MAX);;
     this.setTitle(data.name);
+    
+    this.route = area;
+    this.direction = this._places[0];
+    this.state = Phaser.Math.Between(1, 100) < Config.AI.IDLE_PROBABILITY ? Config.PlayerStates.IDLE : Config.PlayerStates.MOVE;
   }  
 
   get health()
@@ -52,9 +58,68 @@ export default class Monster extends GameSprite
    */
   _onPostAttackComplete(animKey)
   {
-    if(this.alive && animKey.indexOf('hit') != -1)
+    this.idle();
+  }
+
+  _meleeRangeTest() 
+  {
+    if (!this.scene.player) return false;
+    if (!this.scene.player.alive) return false;
+    if (!this.state == Config.PlayerStates.ATTACK) return false;
+    if (this.scene.player.state === Config.PlayerStates.DAMAGE) return false;
+
+    var radius = this.body.radius;
+    var px = this.body.center.x;
+    var py = this.body.center.y;
+    if (this.direction == Config.Directions.DOWN)
     {
-      this.chase();
+      py += radius; 
+    }
+    else if (this.direction == Config.Directions.UP)
+    {
+      py -= radius; 
+    }
+    else if (this.direction == Config.Directions.LEFT)
+    {
+      px -= radius; 
+    }
+    else if (this.direction == Config.Directions.RIGHT)
+    {
+      px += radius; 
+    }
+        
+    return Utilx.CircleIntersect(px, py, radius, this.scene.player.x, this.scene.player.y, this.scene.player.body.width*0.75);
+  }
+
+  _meleeHitTest() 
+  {
+    if (!this.scene.player) return false;
+    if (!this.scene.player.alive) return false;
+    if (this.scene.player.state === Config.PlayerStates.DAMAGE) return false;
+
+    var radius = this.body.radius;
+    var px = this.body.center.x;
+    var py = this.body.center.y;
+    if (this.direction == Config.Directions.DOWN)
+    {
+      py += radius; 
+    }
+    else if (this.direction == Config.Directions.UP)
+    {
+      py -= radius; 
+    }
+    else if (this.direction == Config.Directions.LEFT)
+    {
+      px -= radius; 
+    }
+    else if (this.direction == Config.Directions.RIGHT)
+    {
+      px += radius; 
+    }
+    var collided = Utilx.CircleIntersect(px, py, radius, this.scene.player.x, this.scene.player.y, this.scene.player.body.width*0.5);
+    if (collided)
+    {
+      this.scene.player.damage(this, this.strength);       
     }
   }
 
@@ -64,71 +129,138 @@ export default class Monster extends GameSprite
     this._enemyDirection = enemy.direction;
   }
 
-  chase()
+  idle()
   {
-    this._chasing = true;
-    let pointer = {x:this.scene.player.x, y:this.scene.player.y};
-    let dx = Math.abs(pointer.x - this.body.x);
-    let dy = Math.abs(pointer.y - this.body.y);
+    if (!this.alive) return;
 
-    if (dx > dy)
+    this.body.setVelocity(0);
+    this.state = Config.PlayerStates.IDLE;
+    this._timer = Config.AI.IDLE_DURATION;
+  }
+
+  decideNextAction(stage = null)
+  {   
+    if (this.state == Config.PlayerStates.DAMAGE || this._health == 0) return;
+    this._zoning = !this.route.contains(this.x, this.y);
+
+    if (stage == 1)
     {
-      this.direction = (pointer.x > this.x) ? Config.Directions.RIGHT : Config.Directions.LEFT;
+      this._timer = 0;
+      this.state = Config.PlayerStates.IDLE;
+    }
+    if (this.state == Config.PlayerStates.MOVE && !this.route.contains(this.x, this.y))
+    {
+      this.idle();
+      console.log('moving to idle');
+    }
+    else if (this.state == Config.PlayerStates.IDLE && this._timer <= 0)
+    {
+      this._places = Phaser.Utils.Array.Shuffle([0,1,2,3]);
+      if (!this.route.contains(this.x, this.y))
+      {
+        if (this.route.x > this.x)
+        {
+          console.log('outside remove left', this._places);
+          Phaser.Utils.Array.Remove(this._places, 3);
+        }
+        else if (this.route.right < this.x)
+        {
+          console.log('outside remove right', this._places);
+          Phaser.Utils.Array.Remove(this._places, 1);
+        }
+        if (this.route.y > this.y)
+        {
+          console.log('outside remove up', this._places);
+          Phaser.Utils.Array.Remove(this._places, Config.Directions.UP);
+        }
+        else if (this.route.bottom < this.y)
+        {
+          console.log('outside remove down', this._places);
+          Phaser.Utils.Array.Remove(this._places, Config.Directions.DOWN);
+        }
+      }
+      this.state = Config.PlayerStates.MOVE;
+      this.direction = Number(Phaser.Utils.Array.GetRandom(this._places));  
+    }
+    else 
+    {      
+      console.log('some other action');
+    }
+    /*this._chasing = false;
+    if (this.scene.player && this.scene.player.alive)
+    {
+      this._chasing = this.route.contains(this.scene.player.x, this.scene.player.y);
+    }
+    let inRange = this._meleeRangeTest();
+    if (inRange)
+    {
+      this.attack();
+    }
+    else if (this._chasing)
+    {
+      let pointer = {x:this.scene.player.x, y:this.scene.player.y};
+      let dx = Math.abs(pointer.x - this.body.x);
+      let dy = Math.abs(pointer.y - this.body.y);
+
+      if (dx > dy)
+      {
+        this.direction = (pointer.x > this.x) ? Config.Directions.RIGHT : Config.Directions.LEFT;
+      }
+      else
+      {
+        this.direction = (pointer.y > this.y) ? Config.Directions.DOWN : Config.Directions.UP;
+      }
+      this.state = Config.PlayerStates.MOVE;
+      this._timer = Config.AI.CHASE_INTERVAL;
     }
     else
     {
-      this.direction = (pointer.y > this.y) ? Config.Directions.DOWN : Config.Directions.UP;
-    }
-    this._decisionTimer = Config.AI.CHANGE_INTERVAL_MAX;
-  }
+      var idle = Phaser.Math.Between(1, 100) < Config.AI.IDLE_PROBABILITY ? true : false;
+      this._places = Phaser.Utils.Array.Shuffle([0,1,2,3]);
+      this._places = Phaser.Utils.Array.Remove(this._places, this.direction);
+      var nDirection = Phaser.Utils.Array.GetRandom(this._places);      
 
-  idle()
-  {
-    if (this._health == 0) return;
-
-    this.state = Config.PlayerStates.IDLE;
-    this._decisionTimer = Config.AI.IDLE_DURATION;
-    this._places = Phaser.Utils.Array.Remove([0,1,2,3], this.direction);
-  }
-
-  /**
-   * @param {Number} dir 
-   */
-  decideNextAction(dir = null)
-  {   
-    if (this.state == Config.PlayerStates.DAMAGE || this._health == 0) return;
-
-    this._chasing = false;
-    var idle = Phaser.Math.Between(1, 100) < Config.AI.IDLE_PROBABILITY ? true : false;
-    var nDirection = Phaser.Utils.Array.GetRandom(this._places);
-
-    if (this.state == Config.PlayerStates.IDLE || !idle)
-    {
-      this._decisionTimer = Phaser.Math.Between(Config.AI.CHANGE_INTERVAL_MIN, Config.AI.CHANGE_INTERVAL_MAX);
-      this.state = Config.PlayerStates.MOVE;
-      this.direction = nDirection;
-    }
-    else if (idle)
-    {
-      this.state = Config.PlayerStates.IDLE;
-      if (Phaser.Math.Between(1, 100) < Config.AI.LOOK_CHANGE_PROBABILITY) this.direction = nDirection;
-    }  
-    this._places = Phaser.Utils.Array.Shuffle([0,1,2,3]);   
+      if (this.state == Config.PlayerStates.IDLE || !idle)
+      {        
+        this._timer = Phaser.Math.Between(Config.AI.CHANGE_INTERVAL_MIN, Config.AI.CHANGE_INTERVAL_MAX);
+        this.state = Config.PlayerStates.MOVE;
+        this.direction = nDirection;
+      }
+      else if (idle)
+      {
+        this.idle();
+        this.state = Config.PlayerStates.IDLE;
+        if (Phaser.Math.Between(1, 100) < Config.AI.LOOK_CHANGE_PROBABILITY) this.direction = nDirection;
+      }  
+      this._places = Phaser.Utils.Array.Shuffle([0,1,2,3]);
+    }*/
   }
 
   update(time, delta) 
   {    
     if (this.state == Config.PlayerStates.CORPSE || Utilx.IsNull(this.body)) return;
 
-    if (this.state == Config.PlayerStates.IDLE || this.state == Config.PlayerStates.MOVE)
+    if (this.state == Config.PlayerStates.IDLE)
     {
-      this._decisionTimer -= delta;
-      if(this._decisionTimer <= 0)
-      {        
+      this._timer -= delta;
+      if(this._timer <= 0)
+      {       
         this.decideNextAction();
       }      
     }
-
+    else if (!this._zoning && this.state == Config.PlayerStates.MOVE && !this.route.contains(this.x, this.y))
+    {
+      this.decideNextAction();      
+    }
+    else if (this.state == Config.PlayerStates.ATTACK)
+    {
+      this._meleeHitTest();
+    }
+    else
+    {
+      this._zoning = !this.route.contains(this.x, this.y);
+      console.log('some other update', this.state, this.direction);
+    }
     if (this.state != Config.PlayerStates.DAMAGE)
     {
       if (this.direction == Config.Directions.LEFT)

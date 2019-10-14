@@ -161,10 +161,6 @@ export default class GameSprite extends Phaser.Physics.Arcade.Sprite
       {        
         this.onDeath();
       }
-      else
-      {
-        this.state = Config.PlayerStates.MOVE;
-      }
       this._onPostAttackComplete(animation.key);
     }
   }
