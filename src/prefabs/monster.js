@@ -38,6 +38,7 @@ export default class Monster extends GameSprite
     this.setTitle(data.name);
     
     this.route = area;
+    this._initialRoute = new Phaser.Geom.Rectangle(x, y, route.width, route.height);
     this.direction = this._places[0];
     this.state = Phaser.Math.Between(1, 100) < Config.AI.IDLE_PROBABILITY ? Config.PlayerStates.IDLE : Config.PlayerStates.MOVE;
   }  
@@ -158,7 +159,7 @@ export default class Monster extends GameSprite
       this._places = Phaser.Utils.Array.Shuffle([0,1,2,3]);
       if (!this.route.contains(this.x, this.y))
       {
-        /*if (this.route.x > this.x)
+        if (this.route.x > this.x)
         {
           Phaser.Utils.Array.Remove(this._places, 3);
           console.log('outside remove left', this._places);
@@ -177,20 +178,24 @@ export default class Monster extends GameSprite
         {
           Phaser.Utils.Array.Remove(this._places, Config.Directions.DOWN);
           console.log('outside remove down', this._places);
-        }*/
+        }
         switch(this.direction)
         {
-          case Config.Directions.DOWN:
-            this._places = [Config.Directions.UP];
+          case Config.Directions.DOWN:            
+            this.route.height += 10;
+            //this._places = [Config.Directions.UP];
           break;
-          case Config.Directions.LEFT:
-              this._places = [Config.Directions.RIGHT];
+          case Config.Directions.LEFT:          
+            this.route.x -= 10;
+            //this._places = [Config.Directions.RIGHT];
           break;
-          case Config.Directions.RIGHT:
-            this._places = [Config.Directions.LEFT];
+          case Config.Directions.RIGHT:          
+            this.route.width += 10;
+            //this._places = [Config.Directions.LEFT];
           break;
-          case Config.Directions.UP:
-            this._places = [Config.Directions.DOWN];
+          case Config.Directions.UP:          
+            this.route.y -= 10;
+            //this._places = [Config.Directions.DOWN];
           break;
         }
         this._timer = Phaser.Math.Between(Config.AI.CHANGE_INTERVAL_MIN, Config.AI.CHANGE_INTERVAL_MAX);
@@ -265,14 +270,9 @@ export default class Monster extends GameSprite
   update(time, delta) 
   {    
     if (this.state == Config.PlayerStates.CORPSE || Utilx.IsNull(this.body)) return;
-    if (this._zoning && this.route.contains(this.x, this.y))
+    if (this._initialRoute.contains(this.x, this.y))
     {
-      console.log('zoning');
-      this._timer -= delta;
-      if(this._timer <= 0)
-      {       
-        this.decideNextAction();
-      } 
+       
     }
     else if (this.state == Config.PlayerStates.IDLE)
     {
