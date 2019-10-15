@@ -200,7 +200,14 @@ export default class DungeonScene extends Phaser.Scene
    */
   onEnemyWallContact(enemy, wall)
   {    
-    enemy.decideNextAction(1);
-    console.log('enemy.wall');
+    console.log('wall collision');
+    if (enemy.state == Config.PlayerStates.DAMAGE)
+    {
+      enemy.decideNextAction(1);
+    }
+    else
+    {
+      enemy.idle();
+    }    
   }
 }

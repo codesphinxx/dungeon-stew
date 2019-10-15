@@ -34,7 +34,7 @@ export default class Monster extends GameSprite
     this._zoning = false;
     this._places = Phaser.Utils.Array.Shuffle([0,1,2,3]);
     this._enemyDirection = null;
-    this._timer = Phaser.Math.Between(Config.AI.CHANGE_INTERVAL_MIN, Config.AI.CHANGE_INTERVAL_MAX);;
+    this._timer = Phaser.Math.Between(Config.AI.CHANGE_INTERVAL_MIN, Config.AI.CHANGE_INTERVAL_MAX);
     this.setTitle(data.name);
     
     this.route = area;
@@ -158,33 +158,59 @@ export default class Monster extends GameSprite
       this._places = Phaser.Utils.Array.Shuffle([0,1,2,3]);
       if (!this.route.contains(this.x, this.y))
       {
-        if (this.route.x > this.x)
+        /*if (this.route.x > this.x)
         {
-          console.log('outside remove left', this._places);
           Phaser.Utils.Array.Remove(this._places, 3);
+          console.log('outside remove left', this._places);
         }
         else if (this.route.right < this.x)
         {
-          console.log('outside remove right', this._places);
           Phaser.Utils.Array.Remove(this._places, 1);
+          console.log('outside remove right', this._places);
         }
         if (this.route.y > this.y)
         {
-          console.log('outside remove up', this._places);
           Phaser.Utils.Array.Remove(this._places, Config.Directions.UP);
+          console.log('outside remove up', this._places);
         }
         else if (this.route.bottom < this.y)
         {
-          console.log('outside remove down', this._places);
           Phaser.Utils.Array.Remove(this._places, Config.Directions.DOWN);
+          console.log('outside remove down', this._places);
+        }*/
+        switch(this.direction)
+        {
+          case Config.Directions.DOWN:
+            this._places = [Config.Directions.UP];
+          break;
+          case Config.Directions.LEFT:
+              this._places = [Config.Directions.RIGHT];
+          break;
+          case Config.Directions.RIGHT:
+            this._places = [Config.Directions.LEFT];
+          break;
+          case Config.Directions.UP:
+            this._places = [Config.Directions.DOWN];
+          break;
         }
+        this._timer = Phaser.Math.Between(Config.AI.CHANGE_INTERVAL_MIN, Config.AI.CHANGE_INTERVAL_MAX);
       }
       this.state = Config.PlayerStates.MOVE;
+      Phaser.Utils.Array.Remove(this._places, this.direction);
       this.direction = Number(Phaser.Utils.Array.GetRandom(this._places));  
+      console.log('direction', this.direction, this._places, this._zoning);
+    }
+    else if (this.state == Config.PlayerStates.MOVE && this.route.contains(this.x, this.y))
+    {
+      if (Phaser.Math.Between(1, 100) < Config.AI.IDLE_PROBABILITY)
+      {
+        this.idle();
+        console.log('change within area');
+      }
     }
     else 
     {      
-      console.log('some other action');
+      console.log('some other action', this._zoning, this._timer);
     }
     /*this._chasing = false;
     if (this.scene.player && this.scene.player.alive)
@@ -239,8 +265,16 @@ export default class Monster extends GameSprite
   update(time, delta) 
   {    
     if (this.state == Config.PlayerStates.CORPSE || Utilx.IsNull(this.body)) return;
-
-    if (this.state == Config.PlayerStates.IDLE)
+    if (this._zoning && this.route.contains(this.x, this.y))
+    {
+      console.log('zoning');
+      this._timer -= delta;
+      if(this._timer <= 0)
+      {       
+        this.decideNextAction();
+      } 
+    }
+    else if (this.state == Config.PlayerStates.IDLE)
     {
       this._timer -= delta;
       if(this._timer <= 0)
@@ -258,8 +292,8 @@ export default class Monster extends GameSprite
     }
     else
     {
-      this._zoning = !this.route.contains(this.x, this.y);
-      console.log('some other update', this.state, this.direction);
+      //this._zoning = !this.route.contains(this.x, this.y);
+      //console.log('some other update', this.state, this.direction);
     }
     if (this.state != Config.PlayerStates.DAMAGE)
     {
