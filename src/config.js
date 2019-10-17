@@ -35,7 +35,7 @@ const Config = {
     AI:{        
         IDLE_DURATION:1500,
         CHASE_INTERVAL:500,
-        CHANGE_INTERVAL_MIN:2000,
+        CHANGE_INTERVAL_MIN:1000,
         CHANGE_INTERVAL_MAX:4000,
         ATTACK_PROBABILITY:45,
         ATTACK_CHECK_RATE:2,
