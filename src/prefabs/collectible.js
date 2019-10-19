@@ -8,22 +8,24 @@ export default class Collectible extends Phaser.GameObjects.Sprite
    * @param {Number} x 
    * @param {Number} y 
    * @param {Object} data
-   * @param {Number} data.id
+   * @param {Number} data._key
    * @param {String} data.name
    * @param {Number} data.amount
    * @param {Number} data.itemType
    * @param {Number} data.duration
    * @param {String} data.texture
    * @param {String|Number} data.frame
+   * @param {String} id
    */
-  constructor(scene, x, y, data) 
+  constructor(scene, x, y, data, id) 
   {
     super(scene, x, y, data.texture, data.frame);
     scene.physics.add.existing(this, false);
     this.body.setCircle(this.width * 0.4);
     scene.add.existing(this);
     
-    this.id = data.id;
+    this.id = id;
+    this.key = data._key;
     this.setDataEnabled();
     this.setData('initialY', y);
     this.setData('collected', false);
@@ -112,7 +114,7 @@ export default class Collectible extends Phaser.GameObjects.Sprite
   {
     if (this.collected) return;
     this.collected = true;
-    if (sprite && sprite.alive) sprite.collectItem(this.id, this.itemType, this.amount, this.duration);
+    if (sprite && sprite.alive) sprite.collectItem(this.key, this.itemType, this.amount, this.duration);
     this.destroy();
   }
 }

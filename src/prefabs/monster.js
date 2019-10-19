@@ -10,8 +10,8 @@ export default class Monster extends GameSprite
    * @param {Phaser.Scene} scene 
    * @param {Number} x 
    * @param {Number} y 
+   * @param {String} id
    * @param {Object} data
-   * @param {Number} data.id
    * @param {String} data.texture
    * @param {String} data.name
    * @param {Number} data.speed 
@@ -21,11 +21,11 @@ export default class Monster extends GameSprite
    * @param {Number} route.width 
    * @param {Number} route.height 
    */
-  constructor(scene, x, y, data, route) 
+  constructor(scene, x, y, id, data, route) 
   {
     let area = new Phaser.Geom.Rectangle(x, y, route.width, route.height);
 
-    super(scene, area.centerX, area.centerY, data.texture, data.id);
+    super(scene, area.centerX, area.centerY, data.texture, id);
     this.healthbar = new HealthBar(scene, area.centerX, area.centerY, data.health);
     this.speed = data.speed;
     super.health = data.health;
@@ -34,7 +34,6 @@ export default class Monster extends GameSprite
     this._zoning = false;
     this._places = Phaser.Utils.Array.Shuffle([0,1,2,3]);
     this._enemyDirection = null;
-    this.identifier = Phaser.Utils.String.UUID();
     this.setTitle(data.name);
     
     this.route = area;
@@ -53,11 +52,14 @@ export default class Monster extends GameSprite
     super.health = value;
     this.healthbar.value = super.health;
   }
+  
+  _onPostDamageComplete()
+  {
+    if (!this.alive) return;
+    this.idle();
+  }
 
-  /**
-   * @param {String} animKey 
-   */
-  _onPostAttackComplete(animKey)
+  _onAttackComplete(animation, frame)
   {
     this.idle();
   }
@@ -156,7 +158,6 @@ export default class Monster extends GameSprite
     if (this.state == Config.PlayerStates.MOVE && !this.route.contains(this.x, this.y))
     {
       this.idle();
-      console.log('moving to idle');
     }
     else if (this.state == Config.PlayerStates.IDLE && this._timer <= 0)
     {
@@ -166,47 +167,33 @@ export default class Monster extends GameSprite
         if (this.route.x > this.x)
         {
           Phaser.Utils.Array.Remove(this._places, 3);
-          console.log('outside remove left', this._places);
         }
         else if (this.route.right < this.x)
         {
           Phaser.Utils.Array.Remove(this._places, 1);
-          console.log('outside remove right', this._places);
         }
         if (this.route.y > this.y)
         {
           Phaser.Utils.Array.Remove(this._places, Config.Directions.UP);
-          console.log('outside remove up', this._places);
         }
         else if (this.route.bottom < this.y)
         {
           Phaser.Utils.Array.Remove(this._places, Config.Directions.DOWN);
-          console.log('outside remove down', this._places);
         }
         this._timer = Phaser.Math.Between(Config.AI.CHANGE_INTERVAL_MIN, Config.AI.CHANGE_INTERVAL_MAX);
       }
       this.state = Config.PlayerStates.MOVE;
       Phaser.Utils.Array.Remove(this._places, this.direction);
       this.direction = Number(Phaser.Utils.Array.GetRandom(this._places));  
-      console.log('direction', this.direction, this._places, this._zoning);
-    }
-    else if (this.state == Config.PlayerStates.MOVE && this.route.contains(this.x, this.y))
-    {
-      if (Phaser.Math.Between(1, 100) < Config.AI.IDLE_PROBABILITY)
-      {
-        this.idle();
-        console.log('change within area');
-      }
     }
     else if (this._chasing)
     {
-      /*
       let inRange = this._meleeRangeTest();
       if (inRange)
       {
         this.attack();
       }
-      else if (this._chasing)
+      else
       {
         let pointer = {x:this.scene.player.x, y:this.scene.player.y};
         let dx = Math.abs(pointer.x - this.body.x);
@@ -222,28 +209,14 @@ export default class Monster extends GameSprite
         }
         this.state = Config.PlayerStates.MOVE;
         this._timer = Config.AI.CHASE_INTERVAL;
-      }
-      else
+      }      
+    }
+    else if (this.state == Config.PlayerStates.MOVE && this.route.contains(this.x, this.y))
+    {
+      if (Phaser.Math.Between(1, 100) < Config.AI.IDLE_PROBABILITY)
       {
-        var idle = Phaser.Math.Between(1, 100) < Config.AI.IDLE_PROBABILITY ? true : false;
-        this._places = Phaser.Utils.Array.Shuffle([0,1,2,3]);
-        this._places = Phaser.Utils.Array.Remove(this._places, this.direction);
-        var nDirection = Phaser.Utils.Array.GetRandom(this._places);      
-
-        if (this.state == Config.PlayerStates.IDLE || !idle)
-        {        
-          this._timer = Phaser.Math.Between(Config.AI.CHANGE_INTERVAL_MIN, Config.AI.CHANGE_INTERVAL_MAX);
-          this.state = Config.PlayerStates.MOVE;
-          this.direction = nDirection;
-        }
-        else if (idle)
-        {
-          this.idle();
-          this.state = Config.PlayerStates.IDLE;
-          if (Phaser.Math.Between(1, 100) < Config.AI.LOOK_CHANGE_PROBABILITY) this.direction = nDirection;
-        }  
-        this._places = Phaser.Utils.Array.Shuffle([0,1,2,3]);
-      }*/
+        this.idle();
+      }
     }
     else 
     {      
@@ -278,6 +251,14 @@ export default class Monster extends GameSprite
     else if (this.state == Config.PlayerStates.ATTACK)
     {
       this._meleeHitTest();
+    }
+    else if (this._chasing && this.state == Config.PlayerStates.MOVE)
+    {
+      this._timer -= delta;
+      if(this._timer <= 0)
+      {    
+        this.decideNextAction();
+      }      
     }
     else
     {

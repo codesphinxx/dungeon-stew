@@ -20,7 +20,7 @@ export default class GameSprite extends Phaser.Physics.Arcade.Sprite
     this._strength = 1;
     this._health = 0;
     this.key = asset;
-    this.state = Config.PlayerStates.IDLE;    
+    this._state = Config.PlayerStates.IDLE;    
     this.flash = {active:false, counter:0, duration:15, color:0xff3300};
     /**
      * @type {{id:Number,type:Number,quantity:Number}[]}
@@ -91,8 +91,7 @@ export default class GameSprite extends Phaser.Physics.Arcade.Sprite
     
     this._direction = Config.Directions.DOWN;
     this._prevDirection = Config.Directions.DOWN;
-    this.on('animationcomplete', this._onAttackComplete, this);
-
+    
     this.setScale(2);     
     this.setOffset(16, 16);
     this.setCircle(8);
@@ -144,6 +143,18 @@ export default class GameSprite extends Phaser.Physics.Arcade.Sprite
     this._direction = value;
   }
 
+  get state()
+  {
+    return this._state;
+  }
+  /**
+   * @param {Number} value
+   */
+  set state(value)
+  {
+    this._state = value;
+  }
+
   /**
    * @param {String} displayName 
    */
@@ -155,20 +166,19 @@ export default class GameSprite extends Phaser.Physics.Arcade.Sprite
   
   _onAttackComplete(animation, frame)
   {
-    if (animation && (animation.key.indexOf('attack') != -1 || animation.key.indexOf('hit') != -1))
-    {
-      if (this._health == 0)
-      {        
-        this.onDeath();
-      }
-      this._onPostAttackComplete(animation.key);
+    
+  }
+  
+  _onDamageComplete()
+  {
+    if (this._health == 0)
+    {        
+      this.onDeath();
     }
+    this._onPostDamageComplete();
   }
 
-  /**
-   * @param {String} animKey 
-   */
-  _onPostAttackComplete(animKey)
+  _onPostDamageComplete()
   {
     
   }
@@ -178,6 +188,7 @@ export default class GameSprite extends Phaser.Physics.Arcade.Sprite
     if (this.state == Config.PlayerStates.ATTACK || this.state == Config.PlayerStates.DAMAGE) return;
 
     this.state = Config.PlayerStates.ATTACK;
+    this.once('animationcomplete', this._onAttackComplete, this);
     switch(this.direction)
     {
       case Config.Directions.DOWN:
@@ -204,6 +215,7 @@ export default class GameSprite extends Phaser.Physics.Arcade.Sprite
   
     this.health -= dmg;
     this.state = Config.PlayerStates.DAMAGE;
+
     switch(this.direction)
     { 
       case Config.Directions.DOWN:
@@ -222,7 +234,7 @@ export default class GameSprite extends Phaser.Physics.Arcade.Sprite
     this.flash.active = true;
     this.flash.counter = this.flash.duration;
 
-    let dx = this.x;
+    /*let dx = this.x;
     let dy = this.y;
     let direction = Number(enemy.direction);
     if (direction == Config.Directions.UP)
@@ -241,7 +253,24 @@ export default class GameSprite extends Phaser.Physics.Arcade.Sprite
     {
       dx -= Config.KNOCKBACK_INFLUENCE;
     }
-    this.scene.physics.moveTo(this, dx, dy, 0, 25);    
+    this.scene.physics.moveTo(this, dx, dy, 0, 25);*/
+
+    let angle = Phaser.Math.Angle.Between(enemy.x, enemy.y, this.x, this.y);
+
+    let roundingAngle = 45;
+    let dAngle = Phaser.Math.RadToDeg(angle);
+    let nAngle = Math.floor((dAngle%360+roundingAngle/2)/roundingAngle)*roundingAngle;
+    let rAngle = Phaser.Math.DegToRad(nAngle);
+
+    let dx = this.x + (Config.KNOCKBACK_INFLUENCE * Math.sign(rAngle));
+    let dy = this.y + (Config.KNOCKBACK_INFLUENCE * Math.sign(rAngle));
+
+
+    console.log('a:', dx - this.x, dy - this.y);
+    //this.body.setVelocity(0);
+    this.scene.physics.moveTo(this, dx, dy, 0, 25);
+
+    this.scene.time.delayedCall(200, this._onDamageComplete, null, this);
   }
 
   onDeath()

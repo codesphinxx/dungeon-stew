@@ -121,12 +121,12 @@ export default class DungeonScene extends Phaser.Scene
 
   meleeHitTest() 
   {
-    //var currentFrame = this.player.anims.currentFrame.index;
-    //var totalFrames = this.player.anims.getTotalFrames();
-    //var modifier = currentFrame / totalFrames;
-    
+    var currentFrame = this.player.anims.currentFrame.index;
+    var totalFrames = this.player.anims.getTotalFrames();
+    var modifier = currentFrame / totalFrames;
+    //console.log('r:', totalFrames, currentFrame, modifier, this.player.body.width * modifier);
     //loop through enemies
-    var radius = this.player.body.width;
+    var radius = this.player.body.width * modifier;
     var px = this.player.body.center.x;
     var py = this.player.body.center.y;
     if (this.player.direction == Config.Directions.DOWN)
@@ -149,7 +149,7 @@ export default class DungeonScene extends Phaser.Scene
 
     this.monsters.children.iterate((enemy) => {    
       if (enemy.state == Config.PlayerStates.DAMAGE) return;
-      var collided = Utilx.CircleIntersect(px, py, radius, enemy.x, enemy.y, enemy.body.width*0.5);
+      var collided = Utilx.CircleIntersect(px, py, radius, enemy.body.center.x, enemy.body.center.y, enemy.body.radius);
       if (collided)
       {
         enemy.damage(this.player, this.player.strength);   

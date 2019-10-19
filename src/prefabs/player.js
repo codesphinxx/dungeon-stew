@@ -56,6 +56,20 @@ export default class Player extends GameSprite
     this.emit('health.change');
   }
 
+  get state()
+  {
+    return super.state;
+  }
+
+  /**
+   * @param {Number} value
+   */
+  set state(value)
+  {
+    console.log(`state:${this._state} ->> ${value}`);
+    super.state = value;
+  }
+
   get invulnerable()
   {
     return this._invulnerable;
@@ -69,12 +83,16 @@ export default class Player extends GameSprite
     this._invulnerable = value;
     //TODO: initialize invulnerable graphics
   }  
-
-  /**
-   * @param {String} animKey 
-   */
-  _onPostAttackComplete(animKey)
+  
+  _onPostDamageComplete()
   {
+    if (!this.alive) return;
+    this.state = Config.PlayerStates.IDLE;
+  }
+
+  _onAttackComplete(animation, frame)
+  {
+    console.log('after attack');
     this.state = Config.PlayerStates.MOVE;
   }
 
@@ -83,65 +101,68 @@ export default class Player extends GameSprite
     if (!this.scene) return;
     if (this.state == Config.PlayerStates.CORPSE) return;
 
-    var keys = this.keys;
-
-    if (this.state == Config.PlayerStates.IDLE || this.state == Config.PlayerStates.MOVE)
+    if (this.alive)
     {
-      //set look direction if not attacking or damage
-      let pointer = this.scene.input.activePointer.positionToCamera(this.scene.cameras.main)
-      let dx = Math.abs(pointer.x - this.body.x);
-      let dy = Math.abs(pointer.y - this.body.y);
+      var keys = this.keys;
 
-      if (dx > dy)
+      if (this.state == Config.PlayerStates.IDLE || this.state == Config.PlayerStates.MOVE)
       {
-        this.direction = (pointer.x > this.x) ? Config.Directions.RIGHT : Config.Directions.LEFT;
-      }
-      else
-      {
-        this.direction = (pointer.y > this.y) ? Config.Directions.DOWN : Config.Directions.UP;
-      }
-      if (Phaser.Input.Keyboard.JustDown(keys.Z)) 
-      {
-        this.attack();
-      }
-    }
+        //set look direction if not attacking or damage
+        let pointer = this.scene.input.activePointer.positionToCamera(this.scene.cameras.main)
+        let dx = Math.abs(pointer.x - this.body.x);
+        let dy = Math.abs(pointer.y - this.body.y);
 
-    if (this.state != Config.PlayerStates.DAMAGE) //No tweaking of velocity while playing knockback
-    {
-      // Stop any previous movement from the last frame
-      this.body.setVelocity(0);
-      
-      if (this.direction == Config.Directions.LEFT)
-      {
-        this.setFlipX(true);
+        if (dx > dy)
+        {
+          this.direction = (pointer.x > this.x) ? Config.Directions.RIGHT : Config.Directions.LEFT;
+        }
+        else
+        {
+          this.direction = (pointer.y > this.y) ? Config.Directions.DOWN : Config.Directions.UP;
+        }
+        if (Phaser.Input.Keyboard.JustDown(keys.Z)) 
+        {
+          this.attack();
+        }
       }
-      else if (this.direction == Config.Directions.RIGHT)
+      //No tweaking of velocity while playing knockback
+      if (this.state != Config.PlayerStates.DAMAGE) 
       {
-        this.setFlipX(false);
-      }
+        // Stop any previous movement from the last frame
+        this.body.setVelocity(0);
+        
+        if (this.direction == Config.Directions.LEFT)
+        {
+          this.setFlipX(true);
+        }
+        else if (this.direction == Config.Directions.RIGHT)
+        {
+          this.setFlipX(false);
+        }
 
-      // Horizontal movement
-      if (keys.left.isDown || keys.A.isDown || this.gamepad.left) 
-      {
-        this.body.setVelocityX(-this.speed);
-      } 
-      else if (keys.right.isDown || keys.D.isDown || this.gamepad.right) 
-      {
-        this.body.setVelocityX(this.speed);
-      }
+        // Horizontal movement
+        if (keys.left.isDown || keys.A.isDown || this.gamepad.left) 
+        {
+          this.body.setVelocityX(-this.speed);
+        } 
+        else if (keys.right.isDown || keys.D.isDown || this.gamepad.right) 
+        {
+          this.body.setVelocityX(this.speed);
+        }
 
-      // Vertical movement
-      if (keys.up.isDown || keys.W.isDown || this.gamepad.up) 
-      {
-        this.body.setVelocityY(-this.speed);
-      } 
-      else if (keys.down.isDown || keys.S.isDown || this.gamepad.down) 
-      {
-        this.body.setVelocityY(this.speed);
-      }
+        // Vertical movement
+        if (keys.up.isDown || keys.W.isDown || this.gamepad.up) 
+        {
+          this.body.setVelocityY(-this.speed);
+        } 
+        else if (keys.down.isDown || keys.S.isDown || this.gamepad.down) 
+        {
+          this.body.setVelocityY(this.speed);
+        }
 
-      // Normalize and scale the velocity so that sprite can't move faster along a diagonal
-      this.body.velocity.normalize().scale(this.speed);      
+        // Normalize and scale the velocity so that sprite can't move faster along a diagonal
+        this.body.velocity.normalize().scale(this.speed);      
+      }
     }
 
     if (this.state == Config.PlayerStates.IDLE || this.state == Config.PlayerStates.MOVE)

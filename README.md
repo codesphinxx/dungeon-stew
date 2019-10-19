@@ -30,7 +30,7 @@ Run next commands in your terminal:
 3. show inventory items
 4. create GameOver scene
 5. refine damage knockback
-6. refine melee collision detection
+6. refine melee collision detection - check against stage of attack
 7. refine death animation effects
 8. refine collectible bounce effect
 9. handle item collect animation/effect
@@ -38,5 +38,10 @@ Run next commands in your terminal:
 11. monster item drop
 12. create dialog window
 
+
+
+https://www.youtube.com/watch?v=sa3YNhkbvLc
+
+http://www.kesiev.com/akihabara/demo/game-tlol.html
 
 

@@ -20,7 +20,7 @@ let SceneMixins = {
         item(scene, physicsGroup, x, y, id)
         {
             var data = $Items[id];
-            var item = new Collectible(scene, x, y, data);
+            var item = new Collectible(scene, x, y, data, Phaser.Utils.String.UUID());
             if (physicsGroup != null && physicsGroup != undefined)
             {
                 physicsGroup.add(item);
@@ -39,7 +39,7 @@ let SceneMixins = {
         monster(scene, physicsGroup, x, y, id, routeWidth, routeHeight)
         {
             var data = $Monsters[id];
-            var monster = new Monster(scene, x, y, data, { width: routeWidth, height: routeHeight });
+            var monster = new Monster(scene, x, y, Phaser.Utils.String.UUID(), data, { width: routeWidth, height: routeHeight });
             if (physicsGroup != null && physicsGroup != undefined)
             {
                 physicsGroup.add(monster);

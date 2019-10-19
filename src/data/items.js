@@ -2,7 +2,7 @@ import { ItemTypes } from "../config";
 
 export default [
     {
-        id: 0,
+        _key: 0,
         amount: 3,
         itemType: ItemTypes.POTION,
         duration: 0,
