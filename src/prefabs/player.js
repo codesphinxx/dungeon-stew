@@ -56,20 +56,6 @@ export default class Player extends GameSprite
     this.emit('health.change');
   }
 
-  get state()
-  {
-    return super.state;
-  }
-
-  /**
-   * @param {Number} value
-   */
-  set state(value)
-  {
-    console.log(`state:${this._state} ->> ${value}`);
-    super.state = value;
-  }
-
   get invulnerable()
   {
     return this._invulnerable;

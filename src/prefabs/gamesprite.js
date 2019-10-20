@@ -212,7 +212,7 @@ export default class GameSprite extends Phaser.Physics.Arcade.Sprite
   {
     if (this.state == Config.PlayerStates.DAMAGE || this._health == 0) return;
     if (enemy.state == Config.PlayerStates.DAMAGE || enemy.health == 0) return;
-  
+    
     this.health -= dmg;
     this.state = Config.PlayerStates.DAMAGE;
 

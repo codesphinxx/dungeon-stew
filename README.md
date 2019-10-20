@@ -25,7 +25,6 @@ Run next commands in your terminal:
 
 
 ## TODO
-1. monster move within route
 2. character level system
 3. show inventory items
 4. create GameOver scene
@@ -37,11 +36,4 @@ Run next commands in your terminal:
 10. create NPC entities
 11. monster item drop
 12. create dialog window
-
-
-
-https://www.youtube.com/watch?v=sa3YNhkbvLc
-
-http://www.kesiev.com/akihabara/demo/game-tlol.html
-
 

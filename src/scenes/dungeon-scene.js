@@ -80,9 +80,6 @@ export default class DungeonScene extends Phaser.Scene
       })
       .setScrollFactor(0); 
 
-    this.circle = new Phaser.Geom.Circle(0, 0, 0);
-    this.graphics = this.add.graphics({ fillStyle: { color: 0xff0000 } });
-
     this.hud = new Hud(this, 0, 0, {atlas:'ui',left:'left',right:'right',up:'up',down:'down',keyA:'keyA'});
     this.hud.syncLife(this.player.health); 
     
@@ -96,9 +93,12 @@ export default class DungeonScene extends Phaser.Scene
     this.monsters.setDepth(2);
     this.collectibles.setDepth(1);
     this.hud.setDepth(6);
+    this.monsters.children.iterate(function(monster) {    
+      monster.healthbar.setDepth(2);
+    });
 
-    this.circle = new Phaser.Geom.Circle(0, 0, this.player.body.width);
-    this.graphics = this.add.graphics({ lineStyle: { width: 2, color: 0x00ff00 }, fillStyle: { color: 0xff0000 }});
+    //this.circle = new Phaser.Geom.Circle(0, 0, this.player.body.width);
+    //this.graphics = this.add.graphics({ lineStyle: { width: 2, color: 0x00ff00 }, fillStyle: { color: 0xff0000 }});
   }
 
   update(time, delta) 
@@ -200,14 +200,8 @@ export default class DungeonScene extends Phaser.Scene
    */
   onEnemyWallContact(enemy, wall)
   {    
-    console.log('wall collision');
-    if (enemy.state == Config.PlayerStates.DAMAGE)
-    {
-      enemy.decideNextAction(1);
-    }
-    else
-    {
-      enemy.idle();
-    }    
+    if (enemy.state == Config.PlayerStates.DAMAGE) return;
+    
+    enemy.idle();
   }
 }

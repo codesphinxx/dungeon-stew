@@ -69,6 +69,15 @@ export default class HealthBar
         this.render();
     }
 
+    /**
+     * @param {Number} value 
+     */
+    setDepth(value)
+    {
+        if (!this.sprite) return;
+        this.sprite.depth = value;
+    }
+
     render ()
     {
         this.sprite.clear();

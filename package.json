@@ -19,11 +19,12 @@
   },
   "homepage": "https://github.com/codesphinxx/dungeon-stew#readme",
   "dependencies": {
-    "@mikewesthad/dungeon": "^1.2.2",
     "stats.js": "^0.17.0"
   },
   "devDependencies": {
+    "@mikewesthad/dungeon": "^1.2.2",
     "phaser": "^3.19.0",
+    "phaser3-nineslice": "^0.5.0",
     "raw-loader": "^0.5.1",
     "webpack": "^4.25.1",
     "webpack-cli": "^3.1.2",
