@@ -12,18 +12,18 @@ const gameVariables = {};
 
 const config = {
   type: Phaser.AUTO,
-  width: window.innerWidth,
-  height: window.innerHeight,
+  width: 640,//window.innerWidth,
+  height: 800,//window.innerHeight,
   version: __VERSION__,
   title:"Dungeon Stew",
   pixelArt: true,
   backgroundColor: "#000",
   parent: "game-container",
   disableContextMenu:true,
-  //resolution: window.devicePixelRatio,
+  resolution: window.devicePixelRatio,
   scene: [BootScene, DungeonScene],
   scale: {
-    mode: Phaser.Scale.ENVELOP,
+    mode: Phaser.Scale.FIT,
     autoCenter: Phaser.Scale.CENTER_BOTH
   },
   physics: {

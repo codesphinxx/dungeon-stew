@@ -265,12 +265,11 @@ export default class GameSprite extends Phaser.Physics.Arcade.Sprite
     let dx = this.x + (Config.KNOCKBACK_INFLUENCE * Math.sign(rAngle));
     let dy = this.y + (Config.KNOCKBACK_INFLUENCE * Math.sign(rAngle));
 
-
     console.log('a:', dx - this.x, dy - this.y);
-    //this.body.setVelocity(0);
+    this.body.setVelocity(0);
     this.scene.physics.moveTo(this, dx, dy, 0, 25);
 
-    this.scene.time.delayedCall(200, this._onDamageComplete, null, this);
+    this.scene.time.delayedCall(500, this._onDamageComplete, null, this);
   }
 
   onDeath()

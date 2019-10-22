@@ -172,6 +172,7 @@ export default class DungeonScene extends Phaser.Scene
    */
   onPlayerEnemyContact(player, enemy)
   {    
+    if (!player.alive || player.state == Config.PlayerStates.DAMAGE) return;
     player.damage(enemy, enemy.strength);
     enemy.idle();
   }
