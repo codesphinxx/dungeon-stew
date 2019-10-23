@@ -33,7 +33,8 @@ export default class Player extends GameSprite
       A: Phaser.Input.Keyboard.KeyCodes.A,
       S: Phaser.Input.Keyboard.KeyCodes.S,
       D: Phaser.Input.Keyboard.KeyCodes.D,
-      Z: Phaser.Input.Keyboard.KeyCodes.Z
+      Z: Phaser.Input.Keyboard.KeyCodes.Z,
+      X: Phaser.Input.Keyboard.KeyCodes.X
     });
 
     this.gamepad = {
@@ -41,7 +42,8 @@ export default class Player extends GameSprite
       down: false,
       left: false,
       right: false,
-      A: false
+      A: false,
+      B: false
     };
   } 
 
@@ -109,6 +111,10 @@ export default class Player extends GameSprite
         if (Phaser.Input.Keyboard.JustDown(keys.Z)) 
         {
           this.attack();
+        }
+        else if (Phaser.Input.Keyboard.JustDown(keys.X)) 
+        {
+          //TODO: write action button event
         }
       }
       //No tweaking of velocity while playing knockback

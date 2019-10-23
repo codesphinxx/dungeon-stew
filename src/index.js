@@ -12,8 +12,8 @@ const gameVariables = {};
 
 const config = {
   type: Phaser.AUTO,
-  width: 640,//window.innerWidth,
-  height: 800,//window.innerHeight,
+  width: window.innerWidth,
+  height: window.innerHeight,
   version: __VERSION__,
   title:"Dungeon Stew",
   pixelArt: true,
