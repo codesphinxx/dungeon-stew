@@ -7,7 +7,7 @@ export default [
         itemType: ItemTypes.POTION,
         duration: 0,
         name: 'Potion',
-        frame: 'potion',
+        frame: 'life',
         texture: 'ui'
     }
 ]

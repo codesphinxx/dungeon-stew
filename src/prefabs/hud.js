@@ -20,11 +20,13 @@ export default class Hud extends Phaser.GameObjects.Container
         super(scene, x, y);
 
         this.hearts = [];
-        this.lifePanel = scene.add.image(0, 10, 'ui', 'lifebg');
-        this.lifePanel.displayOriginX = 0;
-        this.lifePanel.displayOriginY = 0;
+        this.background = new Phaser.Geom.Rectangle(0, 0, scene.game.config.width, 50);
+        this.graphics = scene.add.graphics({fillStyle: { color: 0x000000 }});
+        this.graphics.fillRectShape(this.background);
+        this.graphics.setDepth(25);
+        this.graphics.alpha = 0.5;
 
-        this.add(this.lifePanel);
+        this.add(this.graphics);
         
         if (scene.isMobile())
         {
@@ -42,6 +44,9 @@ export default class Hud extends Phaser.GameObjects.Container
 
             this.keyA = new Button(scene, scene.width - 100, 60, textures.atlas, textures.keyA, textures.keyA+'_press');
             this.add(this.keyA);
+
+            this.keyB = new Button(scene, scene.width - 100, 60, textures.atlas, textures.keyB, textures.keyB+'_press');
+            this.add(this.keyB);
 
             this.down.addInputDownCallback(() => {
                 this.scene.player.gamepad.down = true;
@@ -76,7 +81,15 @@ export default class Hud extends Phaser.GameObjects.Container
         else
         {
             scene.input.on('pointerdown', (pointer) => {
-                if (this.scene.player.alive) this.scene.player.attack();
+                if (!this.scene.player.alive) return;
+                if (pointer.rightButtonDown())
+                {
+                    //TODO: action button event
+                }
+                else
+                {
+                    this.scene.player.attack();
+                }                
             });
         }
         this.setScrollFactor(0);
@@ -92,11 +105,11 @@ export default class Hud extends Phaser.GameObjects.Container
     {
         if (this.hearts.length < health)
         {
-            var dx = (32) * this.hearts.length;
+            var dx = (38) * this.hearts.length;
             var increase = health - this.hearts.length;
             for (var i=0; i < increase; i++)
             {
-                var heart = this.scene.add.image(dx, 12, 'ui', 'potion');
+                var heart = this.scene.add.image(dx, 12, 'ui', 'life');
                 heart.displayOriginX = 0;
                 heart.displayOriginY = 0;
                 this.hearts.push(heart);

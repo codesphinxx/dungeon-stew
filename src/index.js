@@ -20,7 +20,7 @@ const config = {
   backgroundColor: "#000",
   parent: "game-container",
   disableContextMenu:true,
-  resolution: window.devicePixelRatio,
+  //resolution: window.devicePixelRatio,
   scene: [BootScene, DungeonScene],
   scale: {
     mode: Phaser.Scale.FIT,
