@@ -163,6 +163,11 @@ export default class GameSprite extends Phaser.Physics.Arcade.Sprite
     this.title.text = displayName;
     this.setName(displayName);
   }
+
+  _onAttackTriggered(x, y)
+  {
+
+  }
   
   _onAttackComplete(animation, frame)
   {
@@ -202,6 +207,7 @@ export default class GameSprite extends Phaser.Physics.Arcade.Sprite
         this.anims.play(this.key + "-up-attack", true);
       break;
     }
+    this._onAttackTriggered(this.body.x, this.body.y);
   }
 
   /**
@@ -293,6 +299,10 @@ export default class GameSprite extends Phaser.Physics.Arcade.Sprite
     this.body.moves = false;
   }
 
+  /**
+   * @param {Number} time 
+   * @param {Number} delta 
+   */
   update(time, delta) 
   {
     this.title.x = this.getCenter().x;

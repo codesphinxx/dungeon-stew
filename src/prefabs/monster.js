@@ -3,6 +3,7 @@ import Config from '../config';
 import Utilx from '../helpers/utilx';
 import GameSprite from './gamesprite';
 import HealthBar from './healthbar';
+import Bullet from './bullet';
 
 export default class Monster extends GameSprite
 {
@@ -17,6 +18,7 @@ export default class Monster extends GameSprite
    * @param {Number} data.speed 
    * @param {Number} data.health 
    * @param {Number} data.strength 
+   * @param {Boolean} data.shooter 
    * @param {Object} route
    * @param {Number} route.width 
    * @param {Number} route.height 
@@ -30,6 +32,7 @@ export default class Monster extends GameSprite
     this.speed = data.speed;
     super.health = data.health;
     this.strength = data.strength;
+    this.shooter = data.shooter;
     this._chasing = false;
     this._zoning = false;
     this._places = Phaser.Utils.Array.Shuffle([0,1,2,3]);
@@ -62,6 +65,21 @@ export default class Monster extends GameSprite
   _onAttackComplete(animation, frame)
   {
     this.idle();
+  }  
+
+  /**
+   * @param {Number} x 
+   * @param {Number} y 
+   */
+  _onAttackTriggered(x, y)
+  {
+
+  }
+
+  _shooterRangeTest()
+  {
+    //TODO: implement shooter range check along directional path.
+    return false;
   }
 
   _meleeRangeTest() 
@@ -188,7 +206,7 @@ export default class Monster extends GameSprite
     }
     else if (this._chasing)
     {
-      let inRange = this._meleeRangeTest();
+      let inRange = this.shooter ? this._shooterRangeTest() : this._meleeRangeTest();
       if (inRange)
       {
         this.attack();
@@ -248,7 +266,7 @@ export default class Monster extends GameSprite
     {
       this.decideNextAction();      
     }
-    else if (this.state == Config.PlayerStates.ATTACK)
+    else if (this.state == Config.PlayerStates.ATTACK && !this.shooter)
     {
       this._meleeHitTest();
     }

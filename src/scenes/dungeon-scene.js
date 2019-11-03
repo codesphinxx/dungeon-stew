@@ -5,6 +5,7 @@ import Config from '../config';
 import Utilx from '../helpers/utilx';
 import Hud from "../prefabs/hud.js";
 import Collectible from "../prefabs/collectible.js";
+import Bullet from '../prefabs/bullet';
 
 
 export default class DungeonScene extends Phaser.Scene 
@@ -47,11 +48,13 @@ export default class DungeonScene extends Phaser.Scene
     this.physics.add.collider(this.monsters, this.monsters, this.onEnemyFriendContact, null, this);
     //this.physics.add.collider(this.monsters, worldObjectLayer, this.onEnemyWallContact, null, this);
 
+    this.bullets = this.physics.add.group({ classType: Bullet, runChildUpdate: true });
+
     const monsterLayer = map.getObjectLayer('MonsterLayer')['objects'];
     monsterLayer.forEach(entry => {
       this.build.monster(this, this.monsters, entry.x, entry.y, Number(entry.type), entry.width, entry.height);
     });
-    
+        
     const spawnPoint = map.findObject("Objects", obj => obj.name === "Spawn Point");
     
     // Place the player in the center of the map
@@ -204,5 +207,33 @@ export default class DungeonScene extends Phaser.Scene
     if (enemy.state == Config.PlayerStates.DAMAGE) return;
     
     enemy.idle();
+  }
+
+  playerHitCallback(playerHit, bulletHit)
+  {
+    // Reduce health of player
+    if (bulletHit.active === true && playerHit.active === true)
+    {
+        playerHit.health = playerHit.health - 1;
+        console.log("Player hp: ", playerHit.health);
+
+        // Kill hp sprites and kill player if health <= 0
+        if (playerHit.health == 2)
+        {
+            hp3.destroy();
+        }
+        else if (playerHit.health == 1)
+        {
+            hp2.destroy();
+        }
+        else
+        {
+            hp1.destroy();
+            // Game over state should execute here
+        }
+
+        // Destroy bullet
+        bulletHit.setActive(false).setVisible(false);
+    }
   }
 }

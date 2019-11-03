@@ -8,7 +8,8 @@ import Utilx from './helpers/utilx';
 import BootScene from "./scenes/boot-scene.js";
 import DungeonScene from "./scenes/dungeon-scene";
 
-const gameVariables = {};
+window.$gameVariables = {};
+window.$gameData = {};
 
 const config = {
   type: Phaser.AUTO,

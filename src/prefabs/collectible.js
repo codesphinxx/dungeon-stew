@@ -99,6 +99,10 @@ export default class Collectible extends Phaser.GameObjects.Sprite
     this.data.values.duration = value;
   }
 
+  /**
+   * @param {Number} time 
+   * @param {Number} delta 
+   */
   update(time, delta) 
   {
     var speed  = 0.0040;
