@@ -55,6 +55,14 @@ export default class Monster extends GameSprite
     super.health = value;
     this.healthbar.value = super.health;
   }
+
+  /**
+   * @param {Phaser.Physics.Arcade.Group} group 
+   */
+  setBulletGroup(group)
+  {
+    this._bullets = group;
+  }
   
   _onPostDamageComplete()
   {
@@ -73,7 +81,14 @@ export default class Monster extends GameSprite
    */
   _onAttackTriggered(x, y)
   {
+    var bullet = this._bullets.get().setActive(true).setVisible(true);
 
+    if (bullet)
+    {
+      bullet.fire(this, this.scene.player);
+      // Add collider between bullet and player
+      this.physics.add.collider(this.scene.player, bullet, this.scene);
+    }
   }
 
   _shooterRangeTest()

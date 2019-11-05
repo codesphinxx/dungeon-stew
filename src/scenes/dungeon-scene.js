@@ -52,7 +52,7 @@ export default class DungeonScene extends Phaser.Scene
 
     const monsterLayer = map.getObjectLayer('MonsterLayer')['objects'];
     monsterLayer.forEach(entry => {
-      this.build.monster(this, this.monsters, entry.x, entry.y, Number(entry.type), entry.width, entry.height);
+      this.build.monster(this, this.monsters, entry.x, entry.y, Number(entry.type), entry.width, entry.height, this.bullets);
     });
         
     const spawnPoint = map.findObject("Objects", obj => obj.name === "Spawn Point");
@@ -209,20 +209,24 @@ export default class DungeonScene extends Phaser.Scene
     enemy.idle();
   }
 
-  playerHitCallback(playerHit, bulletHit)
+  /**
+   * @param {Player} player 
+   * @param {Bullet} bullet 
+   */
+  onPlayerBulletContact(player, bullet)
   {
     // Reduce health of player
-    if (bulletHit.active === true && playerHit.active === true)
+    if (bullet.active === true && player.active === true)
     {
-        playerHit.health = playerHit.health - 1;
-        console.log("Player hp: ", playerHit.health);
+        player.health = player.health - 1;
+        console.log("Player hp: ", player.health);
 
         // Kill hp sprites and kill player if health <= 0
-        if (playerHit.health == 2)
+        if (player.health == 2)
         {
             hp3.destroy();
         }
-        else if (playerHit.health == 1)
+        else if (player.health == 1)
         {
             hp2.destroy();
         }
@@ -233,7 +237,7 @@ export default class DungeonScene extends Phaser.Scene
         }
 
         // Destroy bullet
-        bulletHit.setActive(false).setVisible(false);
+        bullet.setActive(false).setVisible(false);
     }
   }
 }

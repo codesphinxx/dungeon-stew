@@ -1,6 +1,6 @@
 import Phaser from 'phaser';
 
-class Bullet extends Phaser.GameObjects.Image 
+export default class Bullet extends Phaser.GameObjects.Image 
 {
     /**
      * @param {Phaser.Scene} scene 

@@ -30,19 +30,24 @@ let SceneMixins = {
         /**
          * @param {Phaser.Scene} scene 
          * @param {Phaser.Physics.Arcade.Group} physicsGroup
+         * @param {Phaser.Physics.Arcade.Group} bulletGroup
          * @param {Number} x 
          * @param {Number} y 
          * @param {Number} id
          * @param {Number} routeWidth
          * @param {Number} routeHeight
          */
-        monster(scene, physicsGroup, x, y, id, routeWidth, routeHeight)
+        monster(scene, physicsGroup, x, y, id, routeWidth, routeHeight, bulletGroup)
         {
             var data = $Monsters[id];
             var monster = new Monster(scene, x, y, Phaser.Utils.String.UUID(), data, { width: routeWidth, height: routeHeight });
             if (physicsGroup != null && physicsGroup != undefined)
             {
                 physicsGroup.add(monster);
+            }
+            if (data.shooter && bulletGroup != null)
+            {
+                monster.setBulletGroup(bulletGroup);
             }
             return monster;
         },
