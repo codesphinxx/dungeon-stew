@@ -1,5 +1,5 @@
 import Phaser from 'phaser';
-import Config from '../config';
+import Config from '../settings';
 import Utilx from '../helpers/utilx';
 import GameSprite from './gamesprite';
 import HealthBar from './healthbar';
@@ -81,13 +81,16 @@ export default class Monster extends GameSprite
    */
   _onAttackTriggered(x, y)
   {
-    var bullet = this._bullets.get().setActive(true).setVisible(true);
-
-    if (bullet)
+    if (this.shooter)
     {
-      bullet.fire(this, this.scene.player);
-      // Add collider between bullet and player
-      this.physics.add.collider(this.scene.player, bullet, this.scene);
+      var bullet = this._bullets.get().setActive(true).setVisible(true);
+
+      if (bullet)
+      {
+        bullet.fire(this, this.scene.player);
+        // Add collider between bullet and player
+        this.physics.add.collider(this.scene.player, bullet, this.scene);
+      }
     }
   }
 

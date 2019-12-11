@@ -1,5 +1,5 @@
 import Phaser from 'phaser';
-import Config from '../config';
+import Config from '../settings';
 import GameSprite from './gamesprite';
 
 export default class Player extends GameSprite

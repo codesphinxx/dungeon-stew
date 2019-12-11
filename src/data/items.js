@@ -1,4 +1,4 @@
-import { ItemTypes } from "../config";
+import { ItemTypes } from "../settings";
 
 export default [
     {

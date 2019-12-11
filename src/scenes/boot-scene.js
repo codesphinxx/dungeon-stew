@@ -1,5 +1,5 @@
 import Phaser from 'phaser';
-import Config from '../config';
+import Config from '../settings';
 
 /**
  * Scene that loads game assets

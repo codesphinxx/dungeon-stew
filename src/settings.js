@@ -23,7 +23,7 @@ export const ItemTypes = {
     KEY:'key'
 };
 
-const Config = {
+const Settings = {
     PlayerStates:PlayerStates,
     Directions:Directions,
     ItemTypes:ItemTypes,
@@ -32,6 +32,10 @@ const Config = {
     MAX_HEALTH:7,
     MAX_STRENGTH:4,
     PLAYER_MOVE_SPEED:200,
+    VIEWPORT:{
+        WIDTH: 768,
+        HEIGHT: 1280
+    },
     AI:{        
         IDLE_DURATION:1500,
         CHASE_INTERVAL:500,
@@ -44,5 +48,5 @@ const Config = {
     }
 };
 
-export default Config;
+export default Settings;
 

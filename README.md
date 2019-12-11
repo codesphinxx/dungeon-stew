@@ -37,3 +37,7 @@ Run next commands in your terminal:
 11. monster item drop
 12. create dialog window
 
+
+## ISSUES
+1. Player cannot move while damage effect is on
+

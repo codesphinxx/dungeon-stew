@@ -1,5 +1,5 @@
 import Phaser from 'phaser';
-import Config from '../config';
+import Config from '../settings';
 
 export default class GameSprite extends Phaser.Physics.Arcade.Sprite
 {

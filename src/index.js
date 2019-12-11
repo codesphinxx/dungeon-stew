@@ -7,9 +7,13 @@ import Phaser from 'phaser';
 import Utilx from './helpers/utilx';
 import BootScene from "./scenes/boot-scene.js";
 import DungeonScene from "./scenes/dungeon-scene";
+import settings from './settings';
 
 window.$gameVariables = {};
 window.$gameData = {};
+
+let _gameWidth = Math.floor((settings.VIEWPORT.WIDTH / settings.VIEWPORT.HEIGHT) * window.innerHeight);
+let _gameHeight = window.innerHeight;
 
 const config = {
   type: Phaser.AUTO,
