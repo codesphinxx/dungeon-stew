@@ -1,6 +1,7 @@
 import Phaser from "phaser";
 import Button from '../prefabs/hud.button';
-import PlayData from '../models/playData';
+import PlayData from '../models/playerData';
+import Config from '../settings';
 
 /**
  * Game main menu scene
@@ -29,10 +30,16 @@ export default class TitleScene extends Phaser.Scene
   create() 
   {
     this.background = this.add.image(0, 0, 'title-bg');
-    this.title = this.add.image(this.game.config.width * 0.5, 80, 'game-title');
-    this.title.setDisplayOrigin(0.5, 0);
+    this.background.setDisplayOrigin(0, 0);
 
-    this.credits = new Button(scene, 48, 80, 'ui', 'credits', 'credits_press');
+    this.title = this.add.image(0, 80, 'game-title');
+    this.title.setDisplayOrigin(0, 0);
+    
+    this.version = this.add.text(0, 0, `v${__VERSION__}`, {font: "16px pixelmix", fill: "#ffffff", stroke:"#000000", strokeThickness:2}); 
+    this.version.x = this.game.config.width - (this.version.width + Config.DEFAULT_MARGIN);
+    this.version.y = this.game.config.height - (this.version.height + Config.DEFAULT_MARGIN);
+
+    /*this.credits = new Button(scene, 48, 80, 'ui', 'credits', 'credits_press');
     this.add(this.credits);
 
     this.credits.addInputDownCallback(() => {
@@ -44,19 +51,22 @@ export default class TitleScene extends Phaser.Scene
 
     this.settings.addInputDownCallback(() => {
       
-    });
+    });*/
 
-    this.newgame = new Button(scene, scene.width - 100, 60, 'ui', 'newgame', 'newgame_press');
-    this.add(this.newgame);
-
+    let posx = this.game.config.width * 0.5 - 160;
+    let posy = this.game.config.height * 0.5 + 60;
+    this.newgame = new Button(this, posx, posy, 'ui', 'newgame', 'newgame_press');
+    this.add.existing(this.newgame);
+    
     this.newgame.addInputDownCallback(() => {
-      
-    });
+      this.scene.start('dungeon');
+    }, this);
 
     if (window.$gameData.progress)
     {
-      this.continue = new Button(scene, scene.width - 100, 60, 'ui', 'continue', 'continue_press');
-      this.add(this.continue);
+      posy += this.newgame.height + 60;
+      this.continue = new Button(this, posx, posy, 'ui', 'continue', 'continue_press');
+      this.add.existing(this.continue);
 
       this.continue.addInputDownCallback(() => {
         

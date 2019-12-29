@@ -25,9 +25,9 @@ Run next commands in your terminal:
 
 
 ## TODO
+1. redesign game hud
 2. character level system
-3. show inventory items
-4. create GameOver scene
+3. create inventory window
 5. refine damage knockback
 6. refine melee collision detection - check against stage of attack
 7. refine death animation effects
@@ -36,6 +36,8 @@ Run next commands in your terminal:
 10. create NPC entities
 11. monster item drop
 12. create dialog window
+13. reduce player hit radius
+14. fix player cannot move after receiving damage
 
 
 ## ISSUES

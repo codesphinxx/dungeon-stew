@@ -1,12 +1,12 @@
 import Phaser from 'phaser';
-import Player from "../prefabs/player.js";
-import Monster from '../prefabs/monster';
 import Config from '../settings';
 import Utilx from '../helpers/utilx';
-import Hud from "../prefabs/hud.js";
-import Collectible from "../prefabs/collectible.js";
 import Bullet from '../prefabs/bullet';
-
+import Monster from '../prefabs/monster';
+import Player from '../prefabs/player.js';
+import Collectible from '../prefabs/collectible.js';
+import PlayerData from '../models/playerData.js';
+import HudScene from './hud-scene';
 
 export default class DungeonScene extends Phaser.Scene 
 {
@@ -17,6 +17,18 @@ export default class DungeonScene extends Phaser.Scene
      * @type {Player}
      */
     this.player = null;
+    /**
+     * @type {PlayerData}
+     */
+    this.playData = new PlayerData();
+  }
+
+  init()
+  {
+    if (!window.$gameData.progress)
+    {
+
+    }
   }
 
   preload() 
@@ -65,7 +77,8 @@ export default class DungeonScene extends Phaser.Scene
 
     // Constrain the camera so that it isn't allowed to move outside the width/height of tilemap
     camera.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
-    camera.startFollow(this.player);     
+    camera.startFollow(this.player); 
+    camera.setZoom(Config.DEFAULT_ZOOM);    
 
     // Watch the player and tilemap layers for collisions, for the duration of the scene:
     this.physics.add.collider(this.player, worldLayer);
@@ -83,11 +96,11 @@ export default class DungeonScene extends Phaser.Scene
       })
       .setScrollFactor(0); 
 
-    this.hud = new Hud(this, 0, 0, {atlas:'ui',left:'left',right:'right',up:'up',down:'down',keyA:'keyA'});
-    this.hud.syncLife(this.player.health); 
-    
-    this.player.on('health.change', () =>{
-      this.hud.syncLife(this.player.health);
+    //initialize hud
+    this.scene.add('hud', new HudScene(this.player), true);
+
+    this.player.on('death', () =>{
+      this.scene.start('gameover');
     });
 
     worldLayer.setDepth(2);
@@ -95,13 +108,14 @@ export default class DungeonScene extends Phaser.Scene
     this.player.setDepth(2);
     this.monsters.setDepth(2);
     this.collectibles.setDepth(1);
-    this.hud.setDepth(6);
     this.monsters.children.iterate(function(monster) {    
       monster.healthbar.setDepth(2);
     });
 
     //this.circle = new Phaser.Geom.Circle(0, 0, this.player.body.width);
     //this.graphics = this.add.graphics({ lineStyle: { width: 2, color: 0x00ff00 }, fillStyle: { color: 0xff0000 }});
+
+    this.input.setDefaultCursor('url(assets/images/crosshair.png), crosshair');
   }
 
   update(time, delta) 

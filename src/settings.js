@@ -23,7 +23,52 @@ export const ItemTypes = {
     KEY:'key'
 };
 
-const Settings = {
+export const Assets = {
+    Images:[
+        {key:'tiles', value:'../assets/tilesets/tuxmon-sample-32px-extruded.png'},
+        {key:'game-title', value:'../assets/images/game-title.png'},
+        {key:'title-bg', value:'../assets/images/title-bg.png'}
+    ],
+    Atlas: [
+        {key:'ui', image:'../assets/images/ui.png', data:'../assets/images/ui.json'}
+    ],
+    Plugins:[
+        {key:'rexbbcodetextplugin', url:'../assets/js/rexbbcodetextplugin.min.js', autoStart:true}
+    ],
+    Sprites:[
+        {
+            key:'player', 
+            image:'../assets/spritesheets/chara_hero.png', 
+            data:{
+                frameWidth: 48,
+                frameHeight: 48,
+                margin: 0,
+                spacing: 0
+            }
+        },
+        {
+            key:'slime', 
+            image:'../assets/spritesheets/slime.png', 
+            data:{
+                frameWidth: 48,
+                frameHeight: 48,
+                margin: 0,
+                spacing: 0
+            }
+        }
+    ],
+    Files: {
+        Left: { atlas:'ui', image: 'left', pressed: 'left_pressed' },
+        Up: { atlas:'ui', image: 'up', pressed: 'up_pressed' },
+        Down: { atlas:'ui', image: 'down', pressed: 'down_pressed' },
+        Right: { atlas:'ui', image: 'right', pressed: 'right_pressed' },
+        A: { atlas:'ui', image: 'keyA', pressed: 'keyA_pressed' },
+        B: { atlas:'ui', image: 'keyA', pressed: 'keyA_pressed' },
+        Life: { atlas:'ui', image: 'life' }
+    }
+};
+
+export const Settings = {
     PlayerStates:PlayerStates,
     Directions:Directions,
     ItemTypes:ItemTypes,
@@ -31,10 +76,13 @@ const Settings = {
     BASE_HEALTH:3,
     MAX_HEALTH:7,
     MAX_STRENGTH:4,
+    DEFAULT_MARGIN: 10,
     PLAYER_MOVE_SPEED:200,
+    DEFAULT_ZOOM:1.5,
+    HEART_SPACING: 40,
     VIEWPORT:{
-        WIDTH: 768,
-        HEIGHT: 1280
+        WIDTH: 614,
+        HEIGHT: 1024
     },
     AI:{        
         IDLE_DURATION:1500,

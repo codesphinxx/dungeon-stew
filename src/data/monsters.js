@@ -6,6 +6,7 @@ export default [
         strength: 1,
         shooter: false,
         name: 'Slime',
-        texture: 'slime'
+        texture: 'slime',
+        droppable: [{id:0, rate:0.5}]
     }
 ]

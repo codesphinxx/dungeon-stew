@@ -299,11 +299,18 @@ export default class Player extends GameSprite
       break;
       case Config.ItemTypes.POTION:
          this.health += value;
+         console.log('health.change', this.health);
          this.emit('health.change');
       break;
       case Config.ItemTypes.KEY:
         this.inventoryAdd(id, itemType, value);
       break;
     }
+  }
+
+  destroy() 
+  {    
+    this.emit('death');
+    super.destroy();
   }
 }

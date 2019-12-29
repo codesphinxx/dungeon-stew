@@ -1,5 +1,5 @@
 import Phaser from 'phaser';
-import Config from '../settings';
+import {Assets} from '../settings';
 
 /**
  * Scene that loads game assets
@@ -15,31 +15,22 @@ export default class BootScene extends Phaser.Scene
 
   preload() 
   {
-    var url = 'http://raw.githubusercontent.com/rexrainbow/phaser3-rex-notes/master/plugins/dist/rexbbcodetextplugin.min.js';
-    this.load.plugin('rexbbcodetextplugin', url, true);
-    this.load.image('mask', '../assets/images/mask1.png');
-    this.load.image("tiles", "../assets/tilesets/tuxmon-sample-32px-extruded.png");
-    this.load.atlas('ui', '../assets/images/ui.png', '../assets/images/ui.json');
-    this.load.spritesheet(
-      "player",
-      "../assets/spritesheets/chara_hero.png",
-      {
-        frameWidth: 48,
-        frameHeight: 48,
-        margin: 0,
-        spacing: 0
-      }
-    );
-    this.load.spritesheet(
-      "slime",
-      "../assets/spritesheets/slime.png",
-      {
-        frameWidth: 48,
-        frameHeight: 48,
-        margin: 0,
-        spacing: 0
-      }
-    );    
+    for (var i = 0; i < Assets.Images.length; i++)
+    {
+      this.load.image(Assets.Images[i].key, Assets.Images[i].value);
+    }
+    for (i = 0; i < Assets.Atlas.length; i++)
+    {
+      this.load.atlas(Assets.Atlas[i].key, Assets.Atlas[i].image, Assets.Atlas[i].data);
+    }
+    for (i = 0; i < Assets.Plugins.length; i++)
+    {
+      this.load.plugin(Assets.Plugins[i].key, Assets.Plugins[i].url, Assets.Plugins[i].autoStart);
+    }
+    for (i = 0; i < Assets.Sprites.length; i++)
+    {
+      this.load.spritesheet(Assets.Sprites[i].key, Assets.Sprites[i].image, Assets.Sprites[i].data);
+    }    
     /*WebFont.load({
       custom: {
           families: [ 'pixelmix', 'Thin Pixel-7' ]
@@ -59,7 +50,7 @@ export default class BootScene extends Phaser.Scene
     {
       this.loadComplete = true;
       //this.scene.start('boss', {map:'demo'});
-      this.scene.start('dungeon');
+      this.scene.start('title');
     }    
   }
 }

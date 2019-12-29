@@ -16,10 +16,22 @@ export default class GameSprite extends Phaser.Physics.Arcade.Sprite
     scene.physics.add.existing(this);
 
     this.id = id;
-    this.speed = 0;
-    this._strength = 1;
-    this._health = 0;
     this.key = asset;
+    /**
+     * @type {Number}
+     */
+    this.speed = 0;
+    /**
+     * @type {Number}
+     */
+    this._strength = 1;
+    /**
+     * @type {Number}
+     */
+    this._health = 0;
+    /**
+     * @type {Number}
+     */
     this._state = Config.PlayerStates.IDLE;    
     this.flash = {active:false, counter:0, duration:15, color:0xff3300};
     /**

@@ -24,6 +24,8 @@ export default class Button extends Phaser.GameObjects.Image
         this.on('pointerout', this._onpointerout, this);
         this.on('pointerdown', this._onpointerdown, this);
         this.on('pointerup', this._onpointerup, this);
+
+        this.setInteractive();
     }
 
     _onpointerover()
