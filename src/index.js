@@ -1,7 +1,7 @@
 /**
  * Author: CodeSphinx
  */
-import 'phaser';
+/*import 'phaser';
 export * from './helpers/mixins';
 import Phaser from 'phaser';
 import Utilx from './helpers/utilx';
@@ -49,4 +49,7 @@ const config = {
 };
 
 const game = new Phaser.Game(config);
-Utilx.AttachStatPanel(game, 1);
+Utilx.AttachStatPanel(game, 1);*/
+
+import GameManager from './game.manager';
+GameManager.init();
