@@ -118,6 +118,10 @@ export default class DungeonScene extends Phaser.Scene
     this.input.setDefaultCursor('url(assets/images/crosshair.png), crosshair');
   }
 
+  /**
+   * @param {Number} time 
+   * @param {Number} delta 
+   */
   update(time, delta) 
   {
     this.player.update(time, delta);
@@ -249,7 +253,7 @@ export default class DungeonScene extends Phaser.Scene
             hp1.destroy();
             // Game over state should execute here
         }
-
+        
         // Destroy bullet
         bullet.setActive(false).setVisible(false);
     }

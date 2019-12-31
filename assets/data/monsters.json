@@ -1,0 +1,12 @@
+[
+    {
+        "id": 0,
+        "health": 3,
+        "speed": 40,
+        "strength": 1,
+        "shooter": false,
+        "name": "Slime",
+        "texture": "slime",
+        "droppable": [{ "id":0, "rate":0.5, "type":"material" }]
+    }
+]

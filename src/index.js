@@ -13,6 +13,13 @@ import settings from './settings';
 
 window.$gameVariables = {};
 window.$gameData = {};
+window.$Monsters = [];
+window.$Items = [];
+window.$Weapons = [];
+window.$Armor = [];
+window.$Npc = [];
+
+window._IS_AUTHENTICATED = false;
 
 const config = {
   type: Phaser.AUTO,

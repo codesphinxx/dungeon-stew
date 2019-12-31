@@ -30,7 +30,11 @@ export default class BootScene extends Phaser.Scene
     for (i = 0; i < Assets.Sprites.length; i++)
     {
       this.load.spritesheet(Assets.Sprites[i].key, Assets.Sprites[i].image, Assets.Sprites[i].data);
-    }    
+    }  
+    for (var i = 0; i < Assets.Data.length; i++)
+    {
+      this.load.json(Assets.Data[i].key, Assets.Data[i].path);
+    }  
     /*WebFont.load({
       custom: {
           families: [ 'pixelmix', 'Thin Pixel-7' ]
@@ -41,7 +45,10 @@ export default class BootScene extends Phaser.Scene
 
   create() 
   {
-        
+    for (var i = 0; i < Assets.Data.length; i++)
+    {
+      window[`$${Assets.Data[i].key.capitalize()}`] = this.cache.json.get(Assets.Data[i].key);
+    }
   }
 
   update(time, delta) 

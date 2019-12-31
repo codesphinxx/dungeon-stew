@@ -27,6 +27,7 @@ module.exports = {
     plugins: [
         new webpack.DefinePlugin({
             __VERSION__: JSON.stringify(pkg.version),
+            __CLOUD_SAVE_URI__: JSON.stringify('http://localhost:5000/savedb'),
         }),
         new webpack.DefinePlugin({
             'CANVAS_RENDERER': JSON.stringify(true),

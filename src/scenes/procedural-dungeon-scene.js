@@ -183,7 +183,7 @@ export default class DungeonScene extends Phaser.Scene
 
     this.stuffLayer.setTileIndexCallback(TILES.STAIRS, (sprite) => {
       if (sprite instanceof Monster) return;
-      if (Utilx.IsNullOrEmpty(this.keyHolder)) return;
+      if (String.IsNullOrEmpty(this.keyHolder)) return;
 
       this.stuffLayer.setTileIndexCallback(TILES.STAIRS, null);
       this.hasPlayerReachedStairs = true;

@@ -93,21 +93,6 @@ export default class Utilx
     }
 
     /**
-     * @function Utilx.IsNullOrEmpty
-     * @param {String} str
-     */
-    static IsNullOrEmpty (str)
-    {
-        if (str === null || str === undefined)
-			return true;
-
-		var text = str.replace('/ /g', '');
-
-		if (text.length === 0)
-			return true;
-    }
-
-    /**
      * @param {Phaser.Game} game 
      * @param {Number} mode 
      */

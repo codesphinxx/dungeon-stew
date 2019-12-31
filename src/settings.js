@@ -20,10 +20,15 @@ export const ItemTypes = {
     DAMAGE_UP:'dmgup',
     INVULNERABLE:'invulnerable',
     STEALTH:'stealth',
-    KEY:'key'
+    KEY:'key',
+    MATERIAL:'material'
 };
 
 export const Assets = {
+    Data:[
+        {key:'items', path:'../assets/data/items.json'},
+        {key:'monsters', path:'../assets/data/monsters.json'}
+    ],
     Images:[
         {key:'tiles', value:'../assets/tilesets/tuxmon-sample-32px-extruded.png'},
         {key:'game-title', value:'../assets/images/game-title.png'},

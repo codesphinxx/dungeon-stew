@@ -16,6 +16,7 @@ export default class TitleScene extends Phaser.Scene
   init()
   {
     window.$gameData = {
+      player: null,
       progress: null,
       sound: Boolean(JSON.parse(localStorage.getItem('ds-sound') || 'true')),
       vibrate: Boolean(JSON.parse(localStorage.getItem('ds-vibrate')  || 'true'))
@@ -24,6 +25,12 @@ export default class TitleScene extends Phaser.Scene
     if (progress)
     {
       window.$gameData.progress = Object.assign(new PlayData, JSON.parse(progress));
+    }
+    window.$gameData.player = localStorage.getItem('ds-player');
+    if (String.IsNullOrEmpty(window.$gameData.player))
+    {
+      window.$gameData.player = Math.uuid();
+      localStorage.setItem('ds-player', window.$gameData.player);
     }
   }
 
@@ -52,7 +59,7 @@ export default class TitleScene extends Phaser.Scene
     this.settings.addInputDownCallback(() => {
       
     });*/
-
+    console.log(this.scene.get('hud'), this.scene);
     let posx = this.game.config.width * 0.5 - 160;
     let posy = this.game.config.height * 0.5 + 60;
     this.newgame = new Button(this, posx, posy, 'ui', 'newgame', 'newgame_press');

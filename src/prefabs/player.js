@@ -24,6 +24,9 @@ export default class Player extends GameSprite
     this.speed = Config.PLAYER_MOVE_SPEED;
     this.setName(data.name);
 
+    this.weapon = -1;
+    this.armor = -1;
+
     this.keys = scene.input.keyboard.addKeys({
       up: Phaser.Input.Keyboard.KeyCodes.UP,
       down: Phaser.Input.Keyboard.KeyCodes.DOWN,
@@ -299,7 +302,6 @@ export default class Player extends GameSprite
       break;
       case Config.ItemTypes.POTION:
          this.health += value;
-         console.log('health.change', this.health);
          this.emit('health.change');
       break;
       case Config.ItemTypes.KEY:

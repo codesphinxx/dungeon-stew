@@ -19,6 +19,10 @@ export default class Monster extends GameSprite
    * @param {Number} data.health 
    * @param {Number} data.strength 
    * @param {Boolean} data.shooter 
+   * @param {Object[]} data.droppable
+   * @param {Number} data.droppable.id
+   * @param {Number} data.droppable.rate
+   * @param {String} data.droppable.type
    * @param {Object} route
    * @param {Number} route.width 
    * @param {Number} route.height 
@@ -33,6 +37,7 @@ export default class Monster extends GameSprite
     super.health = data.health;
     this.strength = data.strength;
     this.shooter = data.shooter;
+    this.droppable = data.droppable;
     this._chasing = false;
     this._zoning = false;
     this._places = Phaser.Utils.Array.Shuffle([0,1,2,3]);

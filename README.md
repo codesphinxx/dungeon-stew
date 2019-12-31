@@ -1,13 +1,5 @@
 # Dungeon Stew
-Dungeon crawler game built on Phaser 3
-
-
-## Collectibles
-1. Key
-2. Life
-3. Damage Up
-4. Invulnerable
-5. Stealth
+A Micro 2D adventure game built on Phaser 3
 
 
 ### Requirements
@@ -24,20 +16,27 @@ Run next commands in your terminal:
 | `npm start` | Launch browser to show the examples. <br> Press `Ctrl + c` to kill **http-server** process. |
 
 
+## Collectibles
+1. Key
+2. Life
+3. Damage Up
+4. Invulnerable
+5. Stealth
+
+
 ## TODO
 1. redesign game hud
-2. character level system
-3. create inventory window
-5. refine damage knockback
-6. refine melee collision detection - check against stage of attack
-7. refine death animation effects
-8. refine collectible bounce effect
-9. handle item collect animation/effect
+2. fix player cannot move after receiving damage
+3. reduce player hit radius
+4. refine damage knockback
+5. refine melee collision detection - check against stage of attack
+6. refine death animation effects
+7. refine collectible bounce effect
+8. handle item collect animation/effect
+9. create inventory window
 10. create NPC entities
-11. monster item drop
-12. create dialog window
-13. reduce player hit radius
-14. fix player cannot move after receiving damage
+11. create dialog window
+12. implement monster item drop
 
 
 ## ISSUES

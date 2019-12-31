@@ -1,0 +1,11 @@
+[
+    {
+        "_key": 0,
+        "amount": 1,
+        "itemType": "potion",
+        "duration": 0,
+        "name": "Potion",
+        "frame": "life",
+        "texture": "ui"
+    }
+]

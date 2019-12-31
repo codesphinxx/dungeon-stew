@@ -1,7 +1,5 @@
 import Phaser from "phaser";
 import Button from '../prefabs/hud.button';
-import PlayData from '../models/playerData';
-import Config from '../settings';
 
 /**
  * Gameover menu scene
@@ -11,6 +9,7 @@ export default class GameoverScene extends Phaser.Scene
   constructor() 
   {
     super({key:'gameover', active:false});
+    this.purge = false;
   }
 
   create() 
@@ -30,9 +29,22 @@ export default class GameoverScene extends Phaser.Scene
     posy += this.continue.height + 60;
     this.quit = new Button(this, posx, posy, 'ui', 'quit', 'quit_press');
     this.add.existing(this.quit);
-
+    
     this.quit.addInputDownCallback(() => {
       this.scene.start('title');
     }, this);
+  }
+
+  /**
+   * @param {Number} time 
+   * @param {Number} delta 
+   */
+  update(time, delta)
+  {
+    if (!this.purge)
+    {
+      this.purge = true;
+      this.scene.remove('hud');     
+    }
   }
 }
