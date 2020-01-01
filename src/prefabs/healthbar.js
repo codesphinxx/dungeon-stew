@@ -19,7 +19,7 @@ export default class HealthBar
         this._value = mhp || 100;
         this.maximum = mhp || 100;
         this.sprite = scene.add.graphics({x: this.x, y: this.y});
-        this.style = Utilx.MergeObject({width:60,height:4,stroke:1,background:0xffffff,foreground:0xff0000,strokeColor:0x000000}, style);
+        this.style = Utilx.mergeObject({width:60,height:4,stroke:1,background:0xffffff,foreground:0xff0000,strokeColor:0x000000}, style);
 
         this.render();
 

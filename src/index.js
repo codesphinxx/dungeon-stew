@@ -1,9 +1,8 @@
 /**
  * Author: CodeSphinx
  */
-/*import 'phaser';
-export * from './helpers/mixins';
 import Phaser from 'phaser';
+export * from './helpers/mixins';
 import Utilx from './helpers/utilx';
 import BootScene from "./scenes/boot-scene.js";
 import TitleScene from "./scenes/title-scene";
@@ -43,13 +42,13 @@ const config = {
     default: "arcade",
     arcade: {
       gravity: { y: 0 },
-      debug: false
+      debug: true
     }
   }
 };
 
 const game = new Phaser.Game(config);
-Utilx.AttachStatPanel(game, 1);*/
+Utilx.attachStatPanel(game, 1);
 
-import GameManager from './game.manager';
-GameManager.init();
+//import GameManager from './game.manager';
+//GameManager.init();

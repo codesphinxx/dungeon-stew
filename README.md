@@ -25,18 +25,14 @@ Run next commands in your terminal:
 
 
 ## TODO
-1. redesign game hud
-2. fix player cannot move after receiving damage
-3. reduce player hit radius
-4. refine damage knockback
-5. refine melee collision detection - check against stage of attack
-6. refine death animation effects
-7. refine collectible bounce effect
-8. handle item collect animation/effect
-9. create inventory window
-10. create NPC entities
-11. create dialog window
-12. implement monster item drop
+1. refine collectible bounce effect
+2. redesign game hud
+3. add death animation effects for monsters
+4. add item collect animation/effect
+5. create inventory window
+6. create NPC entities
+7. create dialog window
+8. implement monster item drop
 
 
 ## ISSUES

@@ -83,7 +83,6 @@ export default class Player extends GameSprite
 
   _onAttackComplete(animation, frame)
   {
-    console.log('after attack');
     this.state = Config.PlayerStates.MOVE;
   }
 
@@ -121,7 +120,7 @@ export default class Player extends GameSprite
         }
       }
       //No tweaking of velocity while playing knockback
-      if (this.state != Config.PlayerStates.DAMAGE) 
+      //if (this.state != Config.PlayerStates.DAMAGE) 
       {
         // Stop any previous movement from the last frame
         this.body.setVelocity(0);

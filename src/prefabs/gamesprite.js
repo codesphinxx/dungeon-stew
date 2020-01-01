@@ -105,8 +105,7 @@ export default class GameSprite extends Phaser.Physics.Arcade.Sprite
     this._prevDirection = Config.Directions.DOWN;
     
     this.setScale(2);     
-    this.setOffset(16, 16);
-    this.setCircle(8);
+    this.setCircle(8, 16, 16);
     this.setFrame(0);
 
     this.title = scene.add.text(x, y, '', { fontFamily:'pixelmix', fontSize:10, color:'#ffffff' });
@@ -233,7 +232,7 @@ export default class GameSprite extends Phaser.Physics.Arcade.Sprite
     
     this.health -= dmg;
     this.state = Config.PlayerStates.DAMAGE;
-
+  
     switch(this.direction)
     { 
       case Config.Directions.DOWN:
@@ -252,16 +251,16 @@ export default class GameSprite extends Phaser.Physics.Arcade.Sprite
     this.flash.active = true;
     this.flash.counter = this.flash.duration;
 
-    /*let dx = this.x;
+    let dx = this.x;
     let dy = this.y;
     let direction = Number(enemy.direction);
     if (direction == Config.Directions.UP)
     {
-      dy += Config.KNOCKBACK_INFLUENCE;
+      dy -= Config.KNOCKBACK_INFLUENCE;
     }
     else if (direction == Config.Directions.DOWN)
     {
-      dy -= Config.KNOCKBACK_INFLUENCE;
+      dy += Config.KNOCKBACK_INFLUENCE;
     }
     else if (direction == Config.Directions.RIGHT)
     {
@@ -271,9 +270,9 @@ export default class GameSprite extends Phaser.Physics.Arcade.Sprite
     {
       dx -= Config.KNOCKBACK_INFLUENCE;
     }
-    this.scene.physics.moveTo(this, dx, dy, 0, 25);*/
+    this.scene.physics.moveTo(this, dx, dy, 0, 25);
 
-    let angle = Phaser.Math.Angle.Between(enemy.x, enemy.y, this.x, this.y);
+    /*let angle = Phaser.Math.Angle.Between(enemy.x, enemy.y, this.x, this.y);
 
     let roundingAngle = 45;
     let dAngle = Phaser.Math.RadToDeg(angle);
@@ -283,15 +282,15 @@ export default class GameSprite extends Phaser.Physics.Arcade.Sprite
     let dx = this.x + (Config.KNOCKBACK_INFLUENCE * Math.sign(rAngle));
     let dy = this.y + (Config.KNOCKBACK_INFLUENCE * Math.sign(rAngle));
 
-    console.log('a:', dx - this.x, dy - this.y);
     this.body.setVelocity(0);
-    this.scene.physics.moveTo(this, dx, dy, 0, 25);
+    this.scene.physics.moveTo(this, dx, dy, 0, 25);*/
 
     this.scene.time.delayedCall(500, this._onDamageComplete, null, this);
   }
 
   onDeath()
   {
+    this.body.setVelocity(0);
     this.state = Config.PlayerStates.CORPSE;
     var tween = this.scene.tweens.add({
         targets: this,

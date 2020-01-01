@@ -79,7 +79,7 @@ export const Settings = {
     ItemTypes:ItemTypes,
     KNOCKBACK_INFLUENCE:1,
     BASE_HEALTH:3,
-    MAX_HEALTH:7,
+    MAX_HEALTH:10,
     MAX_STRENGTH:4,
     DEFAULT_MARGIN: 10,
     PLAYER_MOVE_SPEED:200,

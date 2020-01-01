@@ -59,7 +59,7 @@ export default class TitleScene extends Phaser.Scene
     this.settings.addInputDownCallback(() => {
       
     });*/
-    console.log(this.scene.get('hud'), this.scene);
+    
     let posx = this.game.config.width * 0.5 - 160;
     let posy = this.game.config.height * 0.5 + 60;
     this.newgame = new Button(this, posx, posy, 'ui', 'newgame', 'newgame_press');

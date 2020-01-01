@@ -71,7 +71,6 @@ export default class Monster extends GameSprite
   
   _onPostDamageComplete()
   {
-    if (!this.alive) return;
     this.idle();
   }
 
@@ -132,7 +131,7 @@ export default class Monster extends GameSprite
       px += radius; 
     }
         
-    return Utilx.CircleIntersect(px, py, radius, this.scene.player.x, this.scene.player.y, this.scene.player.body.width*0.75);
+    return Utilx.circleIntersect(px, py, radius, this.scene.player.x, this.scene.player.y, this.scene.player.body.width*0.75);
   }
 
   _meleeHitTest() 
@@ -160,7 +159,7 @@ export default class Monster extends GameSprite
     {
       px += radius; 
     }
-    var collided = Utilx.CircleIntersect(px, py, radius, this.scene.player.x, this.scene.player.y, this.scene.player.body.width*0.5);
+    var collided = Utilx.circleIntersect(px, py, radius, this.scene.player.x, this.scene.player.y, this.scene.player.body.width*0.5);
     if (collided)
     {
       this.scene.player.damage(this, this.strength);       
@@ -176,7 +175,7 @@ export default class Monster extends GameSprite
   idle()
   {
     if (!this.alive) return;
-
+    
     this.body.setVelocity(0);
     this.state = Config.PlayerStates.IDLE;
     this._timer = Config.AI.IDLE_DURATION;
@@ -265,9 +264,13 @@ export default class Monster extends GameSprite
     }    
   }
 
+  /**
+   * @param {Number} time 
+   * @param {Number} delta 
+   */
   update(time, delta) 
   {    
-    if (this.state == Config.PlayerStates.CORPSE || Utilx.IsNull(this.body)) return;
+    if (this.state == Config.PlayerStates.CORPSE || Utilx.isNull(this.body)) return;
     if (this._zoning)
     {
       this._timer -= delta;
@@ -300,11 +303,6 @@ export default class Monster extends GameSprite
       {    
         this.decideNextAction();
       }      
-    }
-    else
-    {
-      //this._zoning = !this.route.contains(this.x, this.y);
-      //console.log('some other update', this.state, this.direction);
     }
     if (this.state != Config.PlayerStates.DAMAGE)
     {

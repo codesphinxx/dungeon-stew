@@ -170,12 +170,13 @@ export default class DungeonScene extends Phaser.Scene
 
     this.monsters.children.iterate((enemy) => {    
       if (enemy.state == Config.PlayerStates.DAMAGE) return;
-      var collided = Utilx.CircleIntersect(px, py, radius, enemy.body.center.x, enemy.body.center.y, enemy.body.radius);
+      var collided = Utilx.circleIntersect(px, py, radius, enemy.body.center.x, enemy.body.center.y, enemy.body.radius);
       if (collided)
       {
         enemy.damage(this.player, this.player.strength);   
         meleeConnected = true;     
       }
+      //console.log(px, py, radius, enemy.body.center.x, enemy.body.center.y, enemy.body.radius, meleeConnected);
     });
     /*this.graphics.clear();
     this.circle.setEmpty();

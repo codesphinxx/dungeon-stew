@@ -21,7 +21,8 @@ export default class Collectible extends Phaser.GameObjects.Sprite
   {
     super(scene, x, y, data.texture, data.frame);
     scene.physics.add.existing(this, false);
-    this.body.setCircle(this.width * 0.4);
+   
+    this.body.setCircle(this.width * 0.4, 4, 4);
     scene.add.existing(this);
     
     this.id = id;

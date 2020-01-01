@@ -1,0 +1,20 @@
+[
+    {
+        "_key": 0,
+        "name": "Rusty Sword",
+        "power": 1,
+        "frame": "r.sword",
+        "texture": "gear",
+        "cost": 10,
+        "gearType": 1
+    },
+    {
+        "_key": 1,
+        "name": "Wooden Shield",
+        "power": 1,
+        "frame": "w.shield",
+        "texture": "gear",
+        "cost": 8,
+        "gearType": 2
+    }
+]

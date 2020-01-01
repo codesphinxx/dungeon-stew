@@ -16,20 +16,17 @@ export default class Utilx
      * @param {Number} y2 
      * @param {Number} r2 
      */
-    static CircleIntersect (x1, y1, r1, x2, y2, r2)
+    static circleIntersect (x1, y1, r1, x2, y2, r2)
     {
-        var circle1 = {radius: r1, x: x1, y: y1};
-        var circle2 = {radius: r2, x: x2, y: y2};
-
-        var dx = (circle1.x + circle1.radius) - (circle2.x + circle2.radius);
-        var dy = (circle1.y + circle1.radius) - (circle2.y + circle2.radius);
-        var distance = Math.sqrt(dx * dx + dy * dy);
-
-        if (distance < circle1.radius + circle2.radius) 
-        {
-            return true;
-        }
-        return false;
+        let distSq = (x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2); 
+        let radSumSq = (r1 + r2) * (r1 + r2); 
+        
+		if (distSq == radSumSq) 
+			return true; 
+		else if (distSq > radSumSq) 
+			return false; 
+		else
+			return true;
     };
 
     /**
@@ -46,7 +43,7 @@ export default class Utilx
      * @param {Object} target 
      * @param {Object} modifier 
      */
-    static MergeObject (target, modifier) 
+    static mergeObject (target, modifier) 
     {
         if (modifier==null || modifier==undefined) return target;
         for (var i in modifier) 
@@ -67,7 +64,7 @@ export default class Utilx
      * @param {Object[]} array 
      * @param {Object} item 
      */
-    static RemoveItem(array, item)
+    static removeItem(array, item)
     {
         var index;
 
@@ -87,7 +84,7 @@ export default class Utilx
      * @function Utilx.IsNull
      * @param {Object} obj 
      */
-    static IsNull (obj)
+    static isNull (obj)
     {
         return (obj==null || obj==undefined);
     }
@@ -96,7 +93,7 @@ export default class Utilx
      * @param {Phaser.Game} game 
      * @param {Number} mode 
      */
-    static AttachStatPanel(game, mode)
+    static attachStatPanel(game, mode)
     {
         var stats = new Stats();
         stats.setMode(mode);
