@@ -34,6 +34,9 @@ const config = {
   disableContextMenu:true,
   //resolution: window.devicePixelRatio,
   scene: [BootScene, TitleScene, DungeonScene, GameoverScene],
+  input: {
+    gamepad: true
+  },
   scale: {
     mode: Phaser.Scale.FIT,
     autoCenter: Phaser.Scale.CENTER_BOTH
@@ -46,6 +49,13 @@ const config = {
     }
   }
 };
+
+// change layout on mobile
+if (/Android|webOS|iPhone|iPad|iPod|Windows Phone|BlackBerry/i.test(navigator.userAgent))
+{
+    config.width = settings.VIEWPORT.WIDTH;
+    config.height = settings.VIEWPORT.HEIGHT;
+}
 
 const game = new Phaser.Game(config);
 Utilx.attachStatPanel(game, 1);

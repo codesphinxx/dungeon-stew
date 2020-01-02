@@ -29,22 +29,25 @@ export default class HudScene extends Phaser.Scene
         if (this.isMobile())
         {
             this.left = new Button(this, 15, 50, Assets.Files.Left.atlas, Assets.Files.Left.image, Assets.Files.Left.pressed);
-            this.add(this.left);
+            this.add.existing(this.left);
 
             this.up = new Button(this, 48, 0, Assets.Files.Up.atlas, Assets.Files.Up.image, Assets.Files.Up.pressed);
-            this.add(this.up);
+            this.add.existing(this.up);
 
             this.right = new Button(this, 128, 50, Assets.Files.Right.atlas, Assets.Files.Right.image, Assets.Files.Right.pressed);
-            this.add(this.right);
+            this.add.existing(this.right);
 
             this.down = new Button(this, 48, 80, Assets.Files.Down.atlas, Assets.Files.Down.image, Assets.Files.Down.pressed);
-            this.add(this.down);
+            this.add.existing(this.down);
 
-            this.keyA = new Button(this, scene.width - 100, 60, Assets.Files.A.atlas, Assets.Files.A.image, Assets.Files.A.pressed);
-            this.add(this.keyA);
+            this.keyA = new Button(this, this.game.config.width - 100, 60, Assets.Files.A.atlas, Assets.Files.A.image, Assets.Files.A.pressed);
+            this.add.existing(this.keyA);
 
-            this.keyB = new Button(this, scene.width - 100, 60, Assets.Files.B.atlas, Assets.Files.B.image, Assets.Files.B.pressed);
-            this.add(this.keyB);
+            this.keyB = new Button(this, this.game.config.width - 100, 60, Assets.Files.B.atlas, Assets.Files.B.image, Assets.Files.B.pressed);
+            this.add.existing(this.keyB);
+
+            this.keyC = new Button(this, this.game.config.width - 100, 60, Assets.Files.B.atlas, Assets.Files.B.image, Assets.Files.B.pressed);
+            this.add.existing(this.keyC);
 
             this.down.addInputDownCallback(() => {
                 this.player.gamepad.down = true;
@@ -57,8 +60,7 @@ export default class HudScene extends Phaser.Scene
             });
             this.up.addInputUpCallback(() => {
                 this.player.gamepad.up = false;
-            });
-        
+            });        
             this.left.addInputDownCallback(() => {
                 this.player.gamepad.left = true;
             });
@@ -75,20 +77,18 @@ export default class HudScene extends Phaser.Scene
             this.keyA.addInputDownCallback(() => {
                 if (this.player) this.player.attack();
             });
+        
+            this.keyB.addInputDownCallback(() => {
+                
+            });
+        
+            this.keyC.addInputDownCallback(() => {
+                
+            });
         }
         else
         {
-            this.input.on('pointerdown', (pointer) => {
-                if (!this.player.alive) return;
-                if (pointer.rightButtonDown())
-                {
-                    //TODO: action button event
-                }
-                else
-                {
-                    this.player.attack();
-                }                
-            });
+            
         }
 
         this.syncLife(this.player.health); 

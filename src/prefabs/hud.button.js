@@ -17,9 +17,8 @@ export default class Button extends Phaser.GameObjects.Image
         this.key = frame;
         this.pressKey = pressFrame;
         this.setTexture(texture, frame);
+        this.setDisplayOrigin(0.5, 0.5);
         this.setPosition(x, y);
-        this.displayOriginX = 0.5;
-        this.displayOriginY = 0.5;
         this.on('pointerover', this._onpointerover, this);
         this.on('pointerout', this._onpointerout, this);
         this.on('pointerdown', this._onpointerdown, this);

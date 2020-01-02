@@ -37,7 +37,8 @@ export default class Player extends GameSprite
       S: Phaser.Input.Keyboard.KeyCodes.S,
       D: Phaser.Input.Keyboard.KeyCodes.D,
       Z: Phaser.Input.Keyboard.KeyCodes.Z,
-      X: Phaser.Input.Keyboard.KeyCodes.X
+      X: Phaser.Input.Keyboard.KeyCodes.X,
+      C: Phaser.Input.Keyboard.KeyCodes.C
     });
 
     this.gamepad = {
@@ -46,8 +47,31 @@ export default class Player extends GameSprite
       left: false,
       right: false,
       A: false,
-      B: false
+      B: false,
+      C: false
     };
+
+    if (!scene.isMobile())
+    {
+      scene.input.on('pointerdown', (pointer) => {
+          if (!this.alive) return;
+          if (pointer.rightButtonDown())
+          {
+              //TODO: action button event
+          }
+          else
+          {
+              this.attack();
+          }                
+      });
+
+      scene.input.gamepad.once('down', (pad) => {
+        /**
+         * @type {Phaser.Input.Gamepad.Gamepad}
+         */
+          this.controller = pad;
+      });
+    }
   } 
 
   get health()
@@ -86,6 +110,10 @@ export default class Player extends GameSprite
     this.state = Config.PlayerStates.MOVE;
   }
 
+  /**
+   * @param {Number} time 
+   * @param {Number} delta 
+   */
   update(time, delta) 
   {     
     if (!this.scene) return;
@@ -98,7 +126,7 @@ export default class Player extends GameSprite
       if (this.state == Config.PlayerStates.IDLE || this.state == Config.PlayerStates.MOVE)
       {
         //set look direction if not attacking or damage
-        let pointer = this.scene.input.activePointer.positionToCamera(this.scene.cameras.main)
+        /*let pointer = this.scene.input.activePointer.positionToCamera(this.scene.cameras.main)
         let dx = Math.abs(pointer.x - this.body.x);
         let dy = Math.abs(pointer.y - this.body.y);
 
@@ -109,21 +137,96 @@ export default class Player extends GameSprite
         else
         {
           this.direction = (pointer.y > this.y) ? Config.Directions.DOWN : Config.Directions.UP;
-        }
-        if (Phaser.Input.Keyboard.JustDown(keys.Z)) 
+        }*/
+        if (!this.scene.isMobile())
         {
-          this.attack();
-        }
-        else if (Phaser.Input.Keyboard.JustDown(keys.X)) 
-        {
-          //TODO: write action button event
+          if (Phaser.Input.Keyboard.JustDown(keys.Z)) 
+          {
+            this.attack();
+          }
+          else if (Phaser.Input.Keyboard.JustDown(keys.X)) 
+          {
+            //TODO: trigger interaction
+          }
+          else if (Phaser.Input.Keyboard.JustDown(keys.C)) 
+          {
+            //TODO: call inventory
+          }
+          if (this.controller)
+          {
+            if (this.controller.A)
+            {
+              this.attack();
+            }
+            else if (this.controller.X)
+            {
+              //TODO: trigger interaction
+            }
+            else if (this.controller.Y)
+            {
+              //TODO: call inventory
+            }
+          }
         }
       }
-      //No tweaking of velocity while playing knockback
+   
       //if (this.state != Config.PlayerStates.DAMAGE) 
       {
         // Stop any previous movement from the last frame
         this.body.setVelocity(0);
+
+        if (!this.scene.isMobile())
+        {
+          // Horizontal movement
+          if (keys.left.isDown || keys.A.isDown || this.gamepad.left || (this.controller && this.controller.left))
+          {
+            this.direction = Config.Directions.LEFT;
+            this.body.setVelocityX(-this.speed);
+          } 
+          else if (keys.right.isDown || keys.D.isDown || this.gamepad.right || (this.controller && this.controller.right)) 
+          {
+            this.direction = Config.Directions.RIGHT;
+            this.body.setVelocityX(this.speed);
+          }
+
+          // Vertical movement
+          if (keys.up.isDown || keys.W.isDown || this.gamepad.up || (this.controller && this.controller.up))
+          {
+            this.direction = Config.Directions.UP;
+            this.body.setVelocityY(-this.speed);
+          } 
+          else if (keys.down.isDown || keys.S.isDown || this.gamepad.down || (this.controller && this.controller.down))
+          {
+            this.direction = Config.Directions.DOWN;
+            this.body.setVelocityY(this.speed);
+          }
+        }
+        else
+        {
+          // Horizontal movement
+          if (this.gamepad.left) 
+          {
+            this.direction = Config.Directions.LEFT;
+            this.body.setVelocityX(-this.speed);
+          } 
+          else if (this.gamepad.right) 
+          {
+            this.direction = Config.Directions.RIGHT;
+            this.body.setVelocityX(this.speed);
+          }
+
+          // Vertical movement
+          if (this.gamepad.up) 
+          {
+            this.direction = Config.Directions.UP;
+            this.body.setVelocityY(-this.speed);
+          } 
+          else if (this.gamepad.down) 
+          {
+            this.direction = Config.Directions.DOWN;
+            this.body.setVelocityY(this.speed);
+          }
+        }
         
         if (this.direction == Config.Directions.LEFT)
         {
@@ -132,26 +235,6 @@ export default class Player extends GameSprite
         else if (this.direction == Config.Directions.RIGHT)
         {
           this.setFlipX(false);
-        }
-
-        // Horizontal movement
-        if (keys.left.isDown || keys.A.isDown || this.gamepad.left) 
-        {
-          this.body.setVelocityX(-this.speed);
-        } 
-        else if (keys.right.isDown || keys.D.isDown || this.gamepad.right) 
-        {
-          this.body.setVelocityX(this.speed);
-        }
-
-        // Vertical movement
-        if (keys.up.isDown || keys.W.isDown || this.gamepad.up) 
-        {
-          this.body.setVelocityY(-this.speed);
-        } 
-        else if (keys.down.isDown || keys.S.isDown || this.gamepad.down) 
-        {
-          this.body.setVelocityY(this.speed);
         }
 
         // Normalize and scale the velocity so that sprite can't move faster along a diagonal
