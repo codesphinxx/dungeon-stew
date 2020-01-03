@@ -1,7 +1,7 @@
 {
   "name": "dungeon-stew",
   "version": "0.0.1",
-  "description": "Dungeon crawler game for Game Off 2018",
+  "description": "A Micro 2D adventure game built on Phaser 3",
   "main": "src/index.js",
   "scripts": {
     "build": "webpack",

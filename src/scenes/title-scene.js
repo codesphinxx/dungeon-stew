@@ -1,6 +1,6 @@
 import Phaser from "phaser";
 import Button from '../prefabs/hud.button';
-import PlayData from '../models/playerData';
+import GameManager from '../game.manager';
 import Config from '../settings';
 
 /**
@@ -15,23 +15,7 @@ export default class TitleScene extends Phaser.Scene
 
   init()
   {
-    window.$gameData = {
-      player: null,
-      progress: null,
-      sound: Boolean(JSON.parse(localStorage.getItem('ds-sound') || 'true')),
-      vibrate: Boolean(JSON.parse(localStorage.getItem('ds-vibrate')  || 'true'))
-    };
-    let progress = localStorage.getItem('ds-data');
-    if (progress)
-    {
-      window.$gameData.progress = Object.assign(new PlayData, JSON.parse(progress));
-    }
-    window.$gameData.player = localStorage.getItem('ds-player');
-    if (String.IsNullOrEmpty(window.$gameData.player))
-    {
-      window.$gameData.player = Math.uuid();
-      localStorage.setItem('ds-player', window.$gameData.player);
-    }
+    GameManager.init();
   }
 
   create() 
@@ -69,7 +53,7 @@ export default class TitleScene extends Phaser.Scene
       this.scene.start('dungeon');
     }, this);
 
-    if (window.$gameData.progress)
+    if (GameManager.$gameData.progress)
     {
       posy += this.newgame.height + 60;
       this.continue = new Button(this, posx, posy, 'ui', 'continue', 'continue_press');

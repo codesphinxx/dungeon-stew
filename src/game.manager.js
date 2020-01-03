@@ -1,11 +1,4 @@
-import Phaser from 'phaser';
-export * from './helpers/mixins';
-import Utilx from './helpers/utilx';
-import BootScene from "./scenes/boot-scene.js";
-import TitleScene from "./scenes/title-scene";
-import GameoverScene from "./scenes/gameover-scene";
-import DungeonScene from "./scenes/dungeon-scene";
-import settings from './settings';
+import PlayerData from "./models/playerData";
 
 class GameManager
 {
@@ -13,13 +6,57 @@ class GameManager
     {
         if (!GameManager.instance)
         {
-            this.game = null;
+            this.$gameData = {
+                /**
+                 * @type {String}
+                 */            
+                player: null,
+                /**
+                 * @type {PlayerData}
+                 */            
+                progress: null,
+                /**
+                 * @type {Boolean}
+                 */ 
+                sound: true,
+                /**
+                 * @type {Boolean}
+                 */ 
+                vibrate: true
+            };
+            this.$gameVariables = {};
             this._handlers = {};
+            this.gamepadConnected = false;
+            this.isAuthenticated = false;
 
             GameManager.instance = this;
         }
 
         return GameManager.instance;
+    }
+
+    init()
+    {
+        window.$Monsters = [];
+        window.$Items = [];
+        window.$Weapons = [];
+        window.$Armor = [];
+        window.$Npc = [];
+
+        this.$gameData.sound = Boolean(JSON.parse(localStorage.getItem('ds-sound') || 'true'));
+        this.$gameData.vibrate = Boolean(JSON.parse(localStorage.getItem('ds-vibrate')  || 'true'));
+
+        let progress = localStorage.getItem('ds-data');
+        if (progress)
+        {
+            this.$gameData.progress = Object.assign(new PlayData, JSON.parse(progress));
+        }
+        this.$gameData.player = localStorage.getItem('ds-player');
+        if (String.IsNullOrEmpty(this.$gameData.player))
+        {
+            this.$gameData.player = Math.uuid();
+            localStorage.setItem('ds-player', this.$gameData.player);
+        }
     }
 
     /**
@@ -62,57 +99,35 @@ class GameManager
         }
     }
 
-    init()
+    saveGame()
     {
-        window.$gameVariables = {};
-        window.$gameData = {};
-        window.$Monsters = [];
-        window.$Items = [];
-        window.$Weapons = [];
-        window.$Armor = [];
-        window.$Npc = [];
+        if (!this.$gameData) return false;
+        if (this.$gameData.sound !== null && this.$gameData.sound !== undefined)
+        {
+            localStorage.setItem('ds-sound', JSON.stringify(this.$gameData.sound));
+        }
+        if (this.$gameData.vibrate !== null && this.$gameData.vibrate !== undefined)
+        {
+            localStorage.setItem('ds-vibrate', JSON.stringify(this.$gameData.vibrate));
+        }
+        if (this.$gameData.progress !== null && this.$gameData.progress !== undefined)
+        {
+            localStorage.setItem('ds-data', JSON.stringify(this.$gameData.progress));
+        }
 
-        window._IS_AUTHENTICATED = false;
-
-        const config = {
-            type: Phaser.AUTO,            
-            width: window.innerWidth,
-            height: window.innerHeight,
-            version: __VERSION__,
-            title:"Dungeon Stew",
-            pixelArt: true,
-            backgroundColor: "#000",
-            parent: "game-container",
-            disableContextMenu:true,
-            //resolution: window.devicePixelRatio,
-            scene: [BootScene, TitleScene, DungeonScene, GameoverScene],
-            scale: {
-              mode: Phaser.Scale.FIT,
-              autoCenter: Phaser.Scale.CENTER_BOTH
-            },
-            physics: {
-              default: "arcade",
-              arcade: {
-                gravity: { y: 0 },
-                debug: false
-              }
+        if (!this.isAuthenticated) return;	
+        
+        let gameData = JSON.stringify(this.$gameData);
+        let _xhttp = new XMLHttpRequest();
+        _xhttp.onreadystatechange = function() {
+            if (_xhttp.readyState === XMLHttpRequest.DONE && _xhttp.status !== 200)
+            {
+                //TODO: notify user
             }
         };
-
-        // change layout on mobile
-        if (/Android|webOS|iPhone|iPad|iPod|Windows Phone|BlackBerry/i.test(navigator.userAgent))
-        {
-            config.width = settings.VIEWPORT.WIDTH;
-            config.height = settings.VIEWPORT.HEIGHT;
-        }
-          
-        const game = new Phaser.Game(config);
-        Utilx.AttachStatPanel(game, 1);
-    }
-
-    save()
-    {
-        
+        _xhttp.open('POST', __CLOUD_SAVE_URI__, true);
+        _xhttp.setRequestHeader('Content-Type', 'application/json');        
+        _xhttp.send(JSON.stringify(gameData));
     }
 
     destroy()
