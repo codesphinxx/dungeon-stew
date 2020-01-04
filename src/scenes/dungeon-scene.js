@@ -6,6 +6,7 @@ import Monster from '../prefabs/monster';
 import Player from '../prefabs/player.js';
 import Collectible from '../prefabs/collectible.js';
 import PlayerData from '../models/playerData.js';
+import GameManager from '../game.manager';
 import HudScene from './hud-scene';
 
 export default class DungeonScene extends Phaser.Scene 
@@ -25,7 +26,7 @@ export default class DungeonScene extends Phaser.Scene
 
   init()
   {
-    if (!window.$gameData.progress)
+    if (GameManager.$gameData.progress)
     {
 
     }
@@ -87,8 +88,7 @@ export default class DungeonScene extends Phaser.Scene
     this.physics.add.overlap(this.player, this.collectibles, this.onPlayerItemContact, null, this);
 
     // Help text that has a "fixed" position on the screen
-    this.add
-      .text(16, this.height - 80, `Find the stairs. Go deeper.\nCurrent level: ${this.level}`, {
+    this.add.text(16, this.height - 80, `Find the stairs. Go deeper.\nCurrent level: ${this.level}`, {
         font: "12px pixelmix",
         fill: "#000000",
         padding: { x: 20, y: 10 },
@@ -111,11 +111,11 @@ export default class DungeonScene extends Phaser.Scene
     this.monsters.children.iterate(function(monster) {    
       monster.healthbar.setDepth(2);
     });
-
+    
     //this.circle = new Phaser.Geom.Circle(0, 0, this.player.body.width);
     //this.graphics = this.add.graphics({ lineStyle: { width: 2, color: 0x00ff00 }, fillStyle: { color: 0xff0000 }});
 
-    this.input.setDefaultCursor('url(assets/images/crosshair.png), crosshair');
+    //this.input.setDefaultCursor('url(assets/images/crosshair.png), crosshair');
   }
 
   /**

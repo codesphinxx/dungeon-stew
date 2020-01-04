@@ -7,36 +7,6 @@ let SceneMixins = {
     {
         return (/Android|webOS|iPhone|iPad|iPod|Windows Phone|BlackBerry/i.test(navigator.userAgent));
     },
-    saveGame() {
-        if (!window.$gameData) return false;
-        if (window.$gameData.sound !== null && window.$gameData.sound !== undefined)
-        {
-            localStorage.setItem('ds-sound', JSON.stringify(window.$gameData.sound));
-        }
-        if (window.$gameData.vibrate !== null && window.$gameData.vibrate !== undefined)
-        {
-            localStorage.setItem('ds-vibrate', JSON.stringify(window.$gameData.vibrate));
-        }
-        if (window.$gameData.progress !== null && window.$gameData.progress !== undefined)
-        {
-            localStorage.setItem('ds-data', JSON.stringify(window.$gameData.progress));
-        }
-
-        if (!window._IS_AUTHENTICATED) return;	
-        
-        let gameData = JSON.stringify(window.$gameData);
-        let _xhttp = new XMLHttpRequest();
-        _xhttp.onreadystatechange = function() {
-            if (_xhttp.readyState === XMLHttpRequest.DONE && _xhttp.status !== 200)
-            {
-                //TODO: notify user
-            }
-        };
-        _xhttp.open('POST', __CLOUD_SAVE_URI__, true);
-        _xhttp.setRequestHeader('Content-Type', 'application/json');        
-        _xhttp.send(JSON.stringify(gameData));
-
-    },
     build: {
         /**
          * @param {Phaser.Scene} scene 

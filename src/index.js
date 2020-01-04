@@ -10,20 +10,14 @@ import GameoverScene from "./scenes/gameover-scene";
 import DungeonScene from "./scenes/dungeon-scene";
 import settings from './settings';
 
-window.$gameVariables = {};
-window.$gameData = {};
 window.$Monsters = [];
 window.$Items = [];
 window.$Weapons = [];
 window.$Armor = [];
 window.$Npc = [];
 
-window._IS_AUTHENTICATED = false;
-
 const config = {
   type: Phaser.AUTO,
-  //width: settings.VIEWPORT.WIDTH,
-  //height: settings.VIEWPORT.HEIGHT,
   width: window.innerWidth,
   height: window.innerHeight,
   version: __VERSION__,

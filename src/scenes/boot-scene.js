@@ -35,12 +35,12 @@ export default class BootScene extends Phaser.Scene
     {
       this.load.json(Assets.Data[i].key, Assets.Data[i].path);
     }  
-    /*WebFont.load({
+    WebFont.load({
       custom: {
           families: [ 'pixelmix', 'Thin Pixel-7' ]
       },
-      active: () => { this.fontLoad = true; }
-    });*/
+      active: () => { this.fontLoad = true; console.log('font loaded'); }
+    });
   }
 
   create() 

@@ -1,0 +1,13 @@
+@font-face {
+    font-family: pixelmix;
+    src: url(../fonts/pixelmix.ttf) format("truetype");
+    font-weight: 400;
+    font-style: normal
+}
+
+@font-face {
+    font-family: 'Thin Pixel-7';
+    src: url(../fonts/thin_pixel.ttf) format("truetype");
+    font-weight: 400;
+    font-style: normal
+}
