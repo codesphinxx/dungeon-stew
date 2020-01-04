@@ -178,24 +178,24 @@ export default class Player extends GameSprite
         if (!this.scene.isMobile())
         {
           // Horizontal movement
-          if (keys.left.isDown || keys.A.isDown || this.gamepad.left || (this.controller && this.controller.left))
+          if (keys.left.isDown || keys.A.isDown || (this.controller && this.controller.left))
           {
             this.direction = Config.Directions.LEFT;
             this.body.setVelocityX(-this.speed);
           } 
-          else if (keys.right.isDown || keys.D.isDown || this.gamepad.right || (this.controller && this.controller.right)) 
+          else if (keys.right.isDown || keys.D.isDown || (this.controller && this.controller.right)) 
           {
             this.direction = Config.Directions.RIGHT;
             this.body.setVelocityX(this.speed);
           }
 
           // Vertical movement
-          if (keys.up.isDown || keys.W.isDown || this.gamepad.up || (this.controller && this.controller.up))
+          if (keys.up.isDown || keys.W.isDown || (this.controller && this.controller.up))
           {
             this.direction = Config.Directions.UP;
             this.body.setVelocityY(-this.speed);
           } 
-          else if (keys.down.isDown || keys.S.isDown || this.gamepad.down || (this.controller && this.controller.down))
+          else if (keys.down.isDown || keys.S.isDown || (this.controller && this.controller.down))
           {
             this.direction = Config.Directions.DOWN;
             this.body.setVelocityY(this.speed);
@@ -204,24 +204,24 @@ export default class Player extends GameSprite
         else
         {
           // Horizontal movement
-          if (this.gamepad.left) 
+          if (this.gamepad.left || (this.controller && this.controller.left)) 
           {
             this.direction = Config.Directions.LEFT;
             this.body.setVelocityX(-this.speed);
           } 
-          else if (this.gamepad.right) 
+          else if (this.gamepad.right || (this.controller && this.controller.right)) 
           {
             this.direction = Config.Directions.RIGHT;
             this.body.setVelocityX(this.speed);
           }
 
           // Vertical movement
-          if (this.gamepad.up) 
+          if (this.gamepad.up || (this.controller && this.controller.up)) 
           {
             this.direction = Config.Directions.UP;
             this.body.setVelocityY(-this.speed);
           } 
-          else if (this.gamepad.down) 
+          else if (this.gamepad.down || (this.controller && this.controller.down)) 
           {
             this.direction = Config.Directions.DOWN;
             this.body.setVelocityY(this.speed);
