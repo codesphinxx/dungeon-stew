@@ -25,8 +25,8 @@ Run next commands in your terminal:
 
 
 ## TODO
-1. refine collectible bounce effect
-2. redesign game hud
+1. redesign game hud
+2. refine collectible bounce effect
 3. add death animation effects for monsters
 4. add item collect animation/effect
 5. create inventory window
