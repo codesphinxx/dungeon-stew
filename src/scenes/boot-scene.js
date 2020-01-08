@@ -1,5 +1,6 @@
 import Phaser from 'phaser';
 import {Assets} from '../settings';
+import GameManager from '../game.manager';
 
 /**
  * Scene that loads game assets
@@ -11,6 +12,11 @@ export default class BootScene extends Phaser.Scene
     super({key:'boot', active:true});
     this.loadComplete = false;
     this.fontLoad = false;
+  }
+
+  init()
+  {
+    GameManager.init();
   }
 
   preload() 

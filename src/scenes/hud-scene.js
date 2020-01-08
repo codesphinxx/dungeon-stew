@@ -34,7 +34,7 @@ export default class HudScene extends Phaser.Scene
             this.up = new Button(this, 48, 0, Assets.Files.Up.atlas, Assets.Files.Up.image, Assets.Files.Up.pressed);
             this.add.existing(this.up);
             console.log('h:', this.up.width);
-            this.right = new Button(this, 128, 50, Assets.Files.Right.atlas, Assets.Files.Right.image, Assets.Files.Right.pressed);
+            this.right = new Button(this, 105, 50, Assets.Files.Right.atlas, Assets.Files.Right.image, Assets.Files.Right.pressed);
             this.add.existing(this.right);
 
             this.down = new Button(this, 48, 80, Assets.Files.Down.atlas, Assets.Files.Down.image, Assets.Files.Down.pressed);

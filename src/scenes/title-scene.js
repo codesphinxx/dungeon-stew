@@ -13,11 +13,6 @@ export default class TitleScene extends Phaser.Scene
     super({key:'title', active:false});
   }
 
-  init()
-  {
-    GameManager.init();
-  }
-
   create() 
   {
     this.background = this.add.image(0, 0, 'title-bg');
