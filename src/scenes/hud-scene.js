@@ -28,12 +28,12 @@ export default class HudScene extends Phaser.Scene
         
         if (this.isMobile())
         {
-            this.left = new Button(this, 15, 50, Assets.Files.Left.atlas, Assets.Files.Left.image, Assets.Files.Left.pressed);
+            this.left = new Button(this, 25, 50, Assets.Files.Left.atlas, Assets.Files.Left.image, Assets.Files.Left.pressed);
             this.add.existing(this.left);
-
+            console.log('w:', this.left.width);
             this.up = new Button(this, 48, 0, Assets.Files.Up.atlas, Assets.Files.Up.image, Assets.Files.Up.pressed);
             this.add.existing(this.up);
-
+            console.log('h:', this.up.width);
             this.right = new Button(this, 128, 50, Assets.Files.Right.atlas, Assets.Files.Right.image, Assets.Files.Right.pressed);
             this.add.existing(this.right);
 
