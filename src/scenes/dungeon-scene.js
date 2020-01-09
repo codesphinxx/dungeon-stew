@@ -79,7 +79,12 @@ export default class DungeonScene extends Phaser.Scene
     // Constrain the camera so that it isn't allowed to move outside the width/height of tilemap
     camera.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
     camera.startFollow(this.player); 
-    camera.setZoom(Config.DEFAULT_ZOOM);    
+    camera.setZoom(Config.DEFAULT_ZOOM);   
+    
+    if (this.isMobile())
+    {
+      camera.setViewport(0, 0, Config.CAMERA.WIDTH, Config.CAMERA.HEIGHT);
+    }
 
     // Watch the player and tilemap layers for collisions, for the duration of the scene:
     this.physics.add.collider(this.player, worldLayer);

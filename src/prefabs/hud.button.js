@@ -17,7 +17,6 @@ export default class Button extends Phaser.GameObjects.Image
         this.key = frame;
         this.pressKey = pressFrame;
         this.setTexture(texture, frame);
-        this.setDisplayOrigin(0.5, 0.5);
         this.setPosition(x, y);
         this.on('pointerover', this._onpointerover, this);
         this.on('pointerout', this._onpointerout, this);
@@ -37,6 +36,7 @@ export default class Button extends Phaser.GameObjects.Image
         console.log('point down');
         this.isDown = true;
         if (this.pressKey) this.setFrame(this.pressKey);
+        this.scale = 1.1;
     }
 
     _onpointerup()
@@ -44,6 +44,7 @@ export default class Button extends Phaser.GameObjects.Image
         console.log('point up');
         this.isDown = false;
         if (this.key) this.setFrame(this.key);
+        this.scale = 1;
     }
 
     _onpointerout()

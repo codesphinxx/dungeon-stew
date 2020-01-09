@@ -28,25 +28,25 @@ export default class HudScene extends Phaser.Scene
         
         if (this.isMobile())
         {
-            this.left = new Button(this, 25, 50, Assets.Files.Left.atlas, Assets.Files.Left.image, Assets.Files.Left.pressed);
+            this.left = new Button(this, 97, 817, Assets.Files.Left.atlas, Assets.Files.Left.image, Assets.Files.Left.pressed);
             this.add.existing(this.left);
-            console.log('w:', this.left.width);
-            this.up = new Button(this, 48, 0, Assets.Files.Up.atlas, Assets.Files.Up.image, Assets.Files.Up.pressed);
+            
+            this.up = new Button(this, 157, 757, Assets.Files.Up.atlas, Assets.Files.Up.image, Assets.Files.Up.pressed);
             this.add.existing(this.up);
-            console.log('h:', this.up.width);
-            this.right = new Button(this, 105, 50, Assets.Files.Right.atlas, Assets.Files.Right.image, Assets.Files.Right.pressed);
+           
+            this.right = new Button(this, 217, 817, Assets.Files.Right.atlas, Assets.Files.Right.image, Assets.Files.Right.pressed);
             this.add.existing(this.right);
 
-            this.down = new Button(this, 48, 80, Assets.Files.Down.atlas, Assets.Files.Down.image, Assets.Files.Down.pressed);
+            this.down = new Button(this, 157, 877, Assets.Files.Down.atlas, Assets.Files.Down.image, Assets.Files.Down.pressed);
             this.add.existing(this.down);
 
-            this.keyA = new Button(this, this.game.config.width - 100, 60, Assets.Files.A.atlas, Assets.Files.A.image, Assets.Files.A.pressed);
+            this.keyA = new Button(this, this.game.config.width - 90, 874, Assets.Files.A.atlas, Assets.Files.A.image, Assets.Files.A.pressed);
             this.add.existing(this.keyA);
 
-            this.keyB = new Button(this, this.game.config.width - 100, 60, Assets.Files.B.atlas, Assets.Files.B.image, Assets.Files.B.pressed);
+            this.keyB = new Button(this, this.game.config.width - 150, 774, Assets.Files.B.atlas, Assets.Files.B.image, Assets.Files.B.pressed);
             this.add.existing(this.keyB);
 
-            this.keyC = new Button(this, this.game.config.width - 100, 60, Assets.Files.B.atlas, Assets.Files.B.image, Assets.Files.B.pressed);
+            this.keyC = new Button(this, this.game.config.width - 200, 914, Assets.Files.C.atlas, Assets.Files.C.image, Assets.Files.C.pressed);
             this.add.existing(this.keyC);
 
             this.down.addInputDownCallback(() => {

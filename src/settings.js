@@ -63,12 +63,13 @@ export const Assets = {
         }
     ],
     Files: {
-        Left: { atlas:'ui', image: 'left', pressed: 'left_pressed' },
-        Up: { atlas:'ui', image: 'up', pressed: 'up_pressed' },
-        Down: { atlas:'ui', image: 'down', pressed: 'down_pressed' },
-        Right: { atlas:'ui', image: 'right', pressed: 'right_pressed' },
-        A: { atlas:'ui', image: 'keyA', pressed: 'keyA_pressed' },
-        B: { atlas:'ui', image: 'keyA', pressed: 'keyA_pressed' },
+        Left: { atlas:'ui', image: 'left', pressed: 'left_press' },
+        Up: { atlas:'ui', image: 'up', pressed: 'up_press' },
+        Down: { atlas:'ui', image: 'down', pressed: 'down_press' },
+        Right: { atlas:'ui', image: 'right', pressed: 'right_press' },
+        A: { atlas:'ui', image: 'keyA', pressed: 'keyA_press' },
+        B: { atlas:'ui', image: 'keyB', pressed: 'keyB_press' },
+        C: { atlas:'ui', image: 'keyB', pressed: 'keyB_press' },
         Life: { atlas:'ui', image: 'life' }
     }
 };
@@ -87,7 +88,11 @@ export const Settings = {
     HEART_SPACING: 40,
     VIEWPORT:{
         WIDTH: 614,
-        HEIGHT: 1024
+        HEIGHT: 1092
+    },
+    CAMERA:{
+        WIDTH: 614,
+        HEIGHT: 600
     },
     AI:{        
         IDLE_DURATION:1500,

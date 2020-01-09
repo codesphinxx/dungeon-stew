@@ -39,8 +39,8 @@ export default class TitleScene extends Phaser.Scene
       
     });*/
     
-    let posx = this.game.config.width * 0.5 - 160;
-    let posy = this.game.config.height * 0.5 + 60;
+    let posx = this.game.config.width * 0.5;
+    let posy = this.game.config.height * 0.5;
     this.newgame = new Button(this, posx, posy, 'ui', 'newgame', 'newgame_press');
     this.add.existing(this.newgame);
     
