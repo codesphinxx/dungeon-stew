@@ -2,25 +2,38 @@
     {
         "id": 0,
         "name": "Country boy",
-        "texture": "boy-a",
-        "frames": [0,1,2,1],
+        "texture": "npc-1",
+        "animations": [
+            {"key":"misa-front-walk", "prefix":"misa-front-walk.", "start":0, "end":3, "zeroPad":3, "frameRate":8, "repeat":-1}
+        ],
         "xFlip": false,
         "body": {
-            "x": 16,
-            "y": 16,
-            "radius": 8
+            "offset":{"x": -9, "y": 18},
+            "width":48,
+            "height": 48
         },
-        "conversation":[
-            {
-                "line": "Welcome to XenaFore"
-            },
-            {
-                "line": "Do you want to know about our town?",
-                "choice": {
-                    "variable": "{aboutXenaFore}",
-                    "items":[{"id":"1", "text":"Yes"}, {"id":"0", "text":"No"}]
+        "conversation":{
+            "lines":[
+                {
+                    "text": "Welcome to XenaFore"
+                },
+                {
+                    "text": "Do you want to know about our town?",
+                    "choice": {
+                        "variable": "{aboutXenaFore}",
+                        "items":[{"id":1, "text":"Yes"}, {"id":2, "text":"No"}]
+                    }
+                },
+                {
+                    "text": "This is a quest entry",
+                    "quest": {
+                        "id": 0,
+                        "difficulty": 1,
+                        "description": "Go to mount. Fuji and get a bottle of water.",
+                        "rewards": [{"id":0, "type":"item.type"}]
+                    }
                 }
-            }
-        ]
+            ]
+        }
     }
 ]

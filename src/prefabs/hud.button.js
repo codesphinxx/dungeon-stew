@@ -52,6 +52,7 @@ export default class Button extends Phaser.GameObjects.Image
         console.log('point out');
         this.isDown = false;
         if (this.key) this.setFrame(this.key);
+        this.scale = 1;
     }
 
     /**

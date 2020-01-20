@@ -146,13 +146,13 @@ export default class Player extends GameSprite
           }
           else if (Phaser.Input.Keyboard.JustDown(keys.X)) 
           {
-            //TODO: trigger interaction
+            this.triggerInteraction();
           }
           else if (Phaser.Input.Keyboard.JustDown(keys.C)) 
           {
-            //TODO: call inventory
+            this.triggerInventory();
           }
-          if (this.controller)
+          else if (this.controller)
           {
             if (this.controller.A)
             {
@@ -160,11 +160,11 @@ export default class Player extends GameSprite
             }
             else if (this.controller.X)
             {
-              //TODO: trigger interaction
+              this.triggerInteraction();
             }
             else if (this.controller.Y)
             {
-              //TODO: call inventory
+              this.triggerInventory();
             }
           }
         }
@@ -358,6 +358,40 @@ export default class Player extends GameSprite
   hasItem(id)
   {
     return this.inventory.findIndex(a => a.id == id && a.quantity > 0) !== -1;
+  }
+
+  triggerInteraction()
+  {
+    if (!this.alive) return;
+    let x = 0, y = 0, offset = 2;
+
+    if (this.direction == Config.Directions.DOWN)
+    {      
+      y = this.body.bottom + offset;
+      x = this.body.center.x;
+    }
+    else if (this.direction == Config.Directions.LEFT)
+    {
+      y = this.body.center.y;
+      x = this.body.left - offset;
+    }
+    else if (this.direction == Config.Directions.RIGHT)
+    {
+      y = this.body.center.y;
+      x = this.body.right + offset;
+    }
+    else if (this.direction == Config.Directions.UP)
+    {
+      y = this.body.top;
+      x = this.body.center.x;
+    }
+    this.emit('interaction.check', x, y, this.direction);
+  }
+
+  triggerInventory()
+  {
+    if (!this.alive) return;
+    this.emit('inventory.open');
   }
 
   /**

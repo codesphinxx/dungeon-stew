@@ -79,16 +79,12 @@ export default class HudScene extends Phaser.Scene
             });
         
             this.keyB.addInputDownCallback(() => {
-                
+                if (this.player) this.player.triggerInteraction();
             });
         
             this.keyC.addInputDownCallback(() => {
-                
+                if (this.player) this.player.triggerInventory();
             });
-        }
-        else
-        {
-            
         }
 
         this.syncLife(this.player.health); 

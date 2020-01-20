@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.2" tiledversion="1.2.5" orientation="orthogonal" renderorder="right-down" width="40" height="40" tilewidth="32" tileheight="32" infinite="0" nextlayerid="8" nextobjectid="288">
+<map version="1.2" tiledversion="1.2.5" orientation="orthogonal" renderorder="right-down" width="40" height="40" tilewidth="32" tileheight="32" infinite="0" nextlayerid="9" nextobjectid="290">
  <properties>
   <property name="edges" value="clamped"/>
  </properties>
@@ -3423,9 +3423,14 @@
    <point/>
   </object>
  </objectgroup>
+ <objectgroup id="8" name="NPCLayer" visible="0">
+  <object id="289" name="npc-1" type="0" x="450" y="890">
+   <point/>
+  </object>
+ </objectgroup>
  <objectgroup id="7" name="MonsterLayer">
   <object id="286" name="slime" type="0" x="451" y="481" width="588" height="217" visible="0"/>
-  <object id="287" name="slime" type="0" x="712" y="1069.5" width="356" height="109" visible="0"/>
+  <object id="287" name="slime" type="0" x="712" y="1069.5" width="356" height="109"/>
  </objectgroup>
  <layer id="2" name="World" width="40" height="40">
   <data encoding="csv">

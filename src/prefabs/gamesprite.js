@@ -201,7 +201,7 @@ export default class GameSprite extends Phaser.Physics.Arcade.Sprite
 
   attack()
   {
-    if (this.state == Config.PlayerStates.ATTACK || this.state == Config.PlayerStates.DAMAGE) return;
+    if (this.state != Config.PlayerStates.IDLE && this.state != Config.PlayerStates.MOVE) return;
 
     this.state = Config.PlayerStates.ATTACK;
     this.once('animationcomplete', this._onAttackComplete, this);

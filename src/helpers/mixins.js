@@ -1,3 +1,4 @@
+import NPC from '../prefabs/npc';
 import Player from '../prefabs/player';
 import Monster from '../prefabs/monster';
 import Collectible from "../prefabs/collectible";
@@ -63,9 +64,26 @@ let SceneMixins = {
             var player = new Player(scene, x, y, {key:texture,name:name, id:id});
             if (physicsGroup != null && physicsGroup != undefined)
             {
-                physicsGroup.add(player);
+              physicsGroup.add(player);
             }
             return player;
+        },
+        /**
+         * @param {Phaser.Scene} scene 
+         * @param {Phaser.Physics.Arcade.Group} physicsGroup
+         * @param {Number} x 
+         * @param {Number} y 
+         * @param {Number} id
+         */
+        npc(scene, physicsGroup, x, y, id)
+        {
+            var data = $Npc[id];
+            var npc = new NPC(scene, x, y, data);
+            if (physicsGroup != null && physicsGroup != undefined)
+            {
+              physicsGroup.add(npc);
+            }
+            return npc;
         }
     }
 } 

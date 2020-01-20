@@ -1,6 +1,7 @@
 import Phaser from 'phaser';
 import Config from '../settings';
 import Utilx from '../helpers/utilx';
+import NPC from '../prefabs/npc';
 import Bullet from '../prefabs/bullet';
 import Monster from '../prefabs/monster';
 import Player from '../prefabs/player.js';
@@ -14,6 +15,14 @@ export default class DungeonScene extends Phaser.Scene
   constructor() 
   {
     super({key:'dungeon', active:false});
+  }
+
+  init()
+  {
+    /**
+     * @type {String|Number}
+     */
+    this.interactable = null;
     /**
      * @type {Player}
      */
@@ -22,10 +31,6 @@ export default class DungeonScene extends Phaser.Scene
      * @type {PlayerData}
      */
     this.playData = new PlayerData();
-  }
-
-  init()
-  {
     if (GameManager.$gameData.progress)
     {
 
@@ -59,13 +64,19 @@ export default class DungeonScene extends Phaser.Scene
     this.monsters = this.physics.add.group();
     this.physics.add.collider(this.monsters, worldLayer, this.onEnemyWallContact, null, this);
     this.physics.add.collider(this.monsters, this.monsters, this.onEnemyFriendContact, null, this);
-    //this.physics.add.collider(this.monsters, worldObjectLayer, this.onEnemyWallContact, null, this);
 
     this.bullets = this.physics.add.group({ classType: Bullet, runChildUpdate: true });
 
     const monsterLayer = map.getObjectLayer('MonsterLayer')['objects'];
     monsterLayer.forEach(entry => {
       this.build.monster(this, this.monsters, entry.x, entry.y, Number(entry.type), entry.width, entry.height, this.bullets);
+    });
+
+    //Setup npc group colliders
+    this.npcs = this.physics.add.staticGroup();
+    const npcLayer = map.getObjectLayer('NPCLayer')['objects'];
+    npcLayer.forEach(entry => {
+      this.build.npc(this, this.npcs, entry.x, entry.y, Number(entry.type));
     });
         
     const spawnPoint = map.findObject("Objects", obj => obj.name === "Spawn Point");
@@ -88,24 +99,21 @@ export default class DungeonScene extends Phaser.Scene
 
     // Watch the player and tilemap layers for collisions, for the duration of the scene:
     this.physics.add.collider(this.player, worldLayer);
-    //this.physics.add.collider(this.player, worldObjectLayer);
+    this.physics.add.collider(this.player, this.npcs);
     this.physics.add.overlap(this.player, this.monsters, this.onPlayerEnemyContact, null, this);
     this.physics.add.overlap(this.player, this.collectibles, this.onPlayerItemContact, null, this);
-
-    // Help text that has a "fixed" position on the screen
-    this.add.text(16, this.height - 80, `Find the stairs. Go deeper.\nCurrent level: ${this.level}`, {
-        font: "12px pixelmix",
-        fill: "#000000",
-        padding: { x: 20, y: 10 },
-        backgroundColor: "#ffffff"
-      })
-      .setScrollFactor(0); 
-
+    //console.log(this.scene.get('hud'));
     //initialize hud
     this.scene.add('hud', new HudScene(this.player), true);
 
     this.player.on('death', () =>{
       this.scene.start('gameover');
+    });
+
+    this.player.on('interaction.check', this._iteractionTest, this);
+
+    this.player.on('inventory.open', () =>{
+      //TODO: handle open inventory dialog
     });
 
     worldLayer.setDepth(2);
@@ -141,11 +149,11 @@ export default class DungeonScene extends Phaser.Scene
 
     if (this.player.state == Config.PlayerStates.ATTACK)
     {
-      this.meleeHitTest();
+      this._meleeHitTest();
     }
   }
 
-  meleeHitTest() 
+  _meleeHitTest() 
   {
     var currentFrame = this.player.anims.currentFrame.index;
     var totalFrames = this.player.anims.getTotalFrames();
@@ -191,6 +199,32 @@ export default class DungeonScene extends Phaser.Scene
     this.graphics.lineStyle(2, 0x00ff00);
     this.graphics.strokeCircleShape(this.circle);*/
     return meleeConnected;
+  }
+
+  /**
+   * @param {Number} x 
+   * @param {Number} y 
+   * @param {Number} direction 
+   */
+  _iteractionTest(x, y, direction)
+  {
+    //if (this.interactable == null) return;
+
+    let isValid = false;
+    this.npcs.children.iterate(
+      /**
+       * @param {NPC} npc
+       */
+      (npc) => {    
+      if (npc.bounds.contains(x, y))
+      {
+        console.log('interaction.set');
+      }
+    });
+    if (!isValid)
+    {
+      this.interactable = null;
+    }
   }
 
   /**

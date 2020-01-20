@@ -10,12 +10,6 @@ import GameoverScene from "./scenes/gameover-scene";
 import DungeonScene from "./scenes/dungeon-scene";
 import settings from './settings';
 
-window.$Monsters = [];
-window.$Items = [];
-window.$Weapons = [];
-window.$Armor = [];
-window.$Npc = [];
-
 const config = {
   type: Phaser.AUTO,
   width: window.innerWidth,

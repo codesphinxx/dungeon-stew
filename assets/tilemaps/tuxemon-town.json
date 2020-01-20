@@ -50,6 +50,29 @@
         }, 
         {
          "draworder":"topdown",
+         "id":8,
+         "name":"NPCLayer",
+         "objects":[
+                {
+                 "height":0,
+                 "id":289,
+                 "name":"npc-1",
+                 "point":true,
+                 "rotation":0,
+                 "type":"0",
+                 "visible":true,
+                 "width":0,
+                 "x":450,
+                 "y":890
+                }],
+         "opacity":1,
+         "type":"objectgroup",
+         "visible":false,
+         "x":0,
+         "y":0
+        }, 
+        {
+         "draworder":"topdown",
          "id":7,
          "name":"MonsterLayer",
          "objects":[
@@ -128,8 +151,8 @@
          "x":0,
          "y":0
         }],
- "nextlayerid":8,
- "nextobjectid":288,
+ "nextlayerid":9,
+ "nextobjectid":290,
  "orientation":"orthogonal",
  "properties":[
         {

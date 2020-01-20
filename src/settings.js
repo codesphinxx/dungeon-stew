@@ -21,13 +21,15 @@ export const ItemTypes = {
     INVULNERABLE:'invulnerable',
     STEALTH:'stealth',
     KEY:'key',
-    MATERIAL:'material'
+    MATERIAL:'material',
+    RECIPE:'recipe'
 };
 
 export const Assets = {
     Data:[
         {key:'items', path:'../assets/data/items.json'},
-        {key:'monsters', path:'../assets/data/monsters.json'}
+        {key:'monsters', path:'../assets/data/monsters.json'},
+        {key:'npc', path:'../assets/data/npcs.json'}
     ],
     Images:[
         {key:'tiles', value:'../assets/tilesets/tuxmon-sample-32px-extruded.png'},
@@ -35,7 +37,8 @@ export const Assets = {
         {key:'title-bg', value:'../assets/images/title-bg.png'}
     ],
     Atlas: [
-        {key:'ui', image:'../assets/images/ui.png', data:'../assets/images/ui.json'}
+        {key:'ui', image:'../assets/images/ui.png', data:'../assets/images/ui.json'},        
+        {key:'npc-1', image:'../assets/spritesheets/npc-1.png', data:'../assets/spritesheets/npc-1.json'}
     ],
     Plugins:[
         {key:'rexbbcodetextplugin', url:'../assets/js/rexbbcodetextplugin.min.js', autoStart:true}

@@ -1,7 +1,23 @@
+import Phaser from 'phaser';
 import PlayerData from "./models/playerData";
 
 class GameManager
 {
+    static get EVENTS()
+    {
+        return {
+            TOP_LEFT:1,
+            TOP_CENTER:2,
+            TOP_RIGHT:3,
+            MID_LEFT:4,
+            MID_CENTER:5,
+            MID_RIGHT:6,
+            BOTTOM_LEFT:7,
+            BOTTOM_CENTER:8,
+            BOTTOM_RIGHT:9
+        };
+    }
+
     constructor()
     {
         if (!GameManager.instance)
@@ -54,7 +70,7 @@ class GameManager
         this.$gameData.player = localStorage.getItem('ds-player');
         if (String.IsNullOrEmpty(this.$gameData.player))
         {
-            this.$gameData.player = Math.uuid();
+            this.$gameData.player = Phaser.Utils.String.UUID();
             localStorage.setItem('ds-player', this.$gameData.player);
         }
     }

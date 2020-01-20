@@ -9,6 +9,10 @@ export default class GameoverScene extends Phaser.Scene
   constructor() 
   {
     super({key:'gameover', active:false});
+  }
+
+  init()
+  {    
     this.purge = false;
   }
 
@@ -31,7 +35,7 @@ export default class GameoverScene extends Phaser.Scene
     this.add.existing(this.quit);
     
     this.quit.addInputDownCallback(() => {
-      this.scene.start('title');
+      this.scene.start('title'); //TODO: fix bug where hud-scene failes after consecutive gameover
     }, this);
   }
 
