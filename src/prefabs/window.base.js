@@ -15,7 +15,7 @@ export default class WindowBase extends Phaser.Scene
     {
         super({key:key, active:false});
 
-        this.config = {x:x, y:y, width:width, height:height, texture:texture};
+        this.config = {x:x, y:y, width:width, height:height, texture:texture, key:key};
         
         this.manager = GameManager;
 
@@ -24,7 +24,7 @@ export default class WindowBase extends Phaser.Scene
 
     create()
     {
-        this.texture = this.add.nineslice(
+        this.panel = this.add.nineslice(
             this.config.x, 
             this.config.y, 
             this.config.width, 
@@ -46,6 +46,7 @@ export default class WindowBase extends Phaser.Scene
         this.active = true;
         this.scene.setActive(true);
         this.scene.setVisible(true);
+        this.game.events.emit('active.scene', this.config.key, false);
     }
 
     hide()
@@ -53,5 +54,6 @@ export default class WindowBase extends Phaser.Scene
         this.active = false;
         this.scene.setActive(false);
         this.scene.setVisible(false);
+        this.game.events.emit('active.scene', this.config.key, true);
     }
 }

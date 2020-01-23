@@ -33,8 +33,9 @@ export default class MessageBox extends WindowBase
             if (!this.active) return;
             event.stopPropagation();            
         });
-        this.input.on('pointerdown', (pointer) => {
+        this.input.on('pointerdown', (pointer, x, y, event) => {
             if (!this.active) return;
+            pointer.event.stopPropagation();
             this.hide();                
         });
     }

@@ -180,9 +180,14 @@ export default class GameSprite extends Phaser.Physics.Arcade.Sprite
 
   }
   
+  /**
+   * 
+   * @param {Phaser.GameObjects.Components.Animation} animation 
+   * @param {*} frame 
+   */
   _onAttackComplete(animation, frame)
   {
-    
+    //if (animation.key.indexOf('attack') == -1) return;
   }
   
   _onDamageComplete()
@@ -202,9 +207,10 @@ export default class GameSprite extends Phaser.Physics.Arcade.Sprite
   attack()
   {
     if (this.state != Config.PlayerStates.IDLE && this.state != Config.PlayerStates.MOVE) return;
-    console.log('attack');
+    
     this.state = Config.PlayerStates.ATTACK;
-    this.once('animationcomplete', this._onAttackComplete, this);
+    this.body.setVelocity(0);
+    
     switch(this.direction)
     {
       case Config.Directions.DOWN:
@@ -218,6 +224,7 @@ export default class GameSprite extends Phaser.Physics.Arcade.Sprite
         this.anims.play(this.key + "-up-attack", true);
       break;
     }
+    
     this._onAttackTriggered(this.body.x, this.body.y);
   }
 

@@ -30,6 +30,7 @@ export default class HudScene extends Phaser.Scene
          * @type {Phaser.GameObjects.Image[]}
          */
         this.hearts = [];
+        this.interactive = true;
     }
     
     create()
@@ -64,24 +65,28 @@ export default class HudScene extends Phaser.Scene
             this.add.existing(this.keyC);
 
             this.down.addInputDownCallback(() => {
+                if (!this.interactive) return;
                 this.player.gamepad.down = true;
             });
             this.down.addInputUpCallback(() => {
                 this.player.gamepad.down = false;
             });
             this.up.addInputDownCallback(() => {
+                if (!this.interactive) return;
                 this.player.gamepad.up = true;
             });
             this.up.addInputUpCallback(() => {
                 this.player.gamepad.up = false;
             });        
             this.left.addInputDownCallback(() => {
+                if (!this.interactive) return;
                 this.player.gamepad.left = true;
             });
             this.left.addInputUpCallback(() => {
                 this.player.gamepad.left = false;
             });
             this.right.addInputDownCallback(() => {
+                if (!this.interactive) return;
                 this.player.gamepad.right = true;
             });
             this.right.addInputUpCallback(() => {
@@ -89,21 +94,24 @@ export default class HudScene extends Phaser.Scene
             });
         
             this.keyA.addInputDownCallback(() => {
+                if (!this.interactive) return;
                 if (this.player) this.player.attack();
             });
         
             this.keyB.addInputDownCallback(() => {
+                if (!this.interactive) return;
                 if (this.player) this.player.triggerInteraction();
             });
         
             this.keyC.addInputDownCallback(() => {
+                if (!this.interactive) return;
                 if (this.player) this.player.triggerInventory();
             });
         }
         else
         {
             this.input.keyboard.on('keydown', (event) => {
-                if (!this.player) return;
+                if (!this.player || !this.interactive) return;
                 event.stopPropagation();
 
                 if (event.keyCode === Phaser.Input.Keyboard.KeyCodes.UP || event.keyCode === Phaser.Input.Keyboard.KeyCodes.W)
@@ -151,7 +159,7 @@ export default class HudScene extends Phaser.Scene
               });    
               
             this.input.gamepad.on('down', (pad, button) => {
-                if (!this.player || !this.player.alive) return;
+                if (!this.player || !this.player.alive || !this.interactive) return;
                
                 if (button.index === HudScene.XPAD_BUTTONS.UP && button.pressed)
                 {   
@@ -208,7 +216,7 @@ export default class HudScene extends Phaser.Scene
             });
 
             this.input.on('pointerdown', (pointer) => {
-                if (!this.player.alive) return;
+                if (!this.player.alive || !this.interactive) return;
                 if (pointer.rightButtonDown())
                 {
                     //TODO: action button event
@@ -226,6 +234,11 @@ export default class HudScene extends Phaser.Scene
             this.syncLife(this.player.health);
         });
 
+        this.game.events.on('active.scene', (sceneKey, interactive) => {
+            console.log('change.active.scene:', sceneKey, interactive);
+            this.interactive = interactive;
+        });
+
         this.scene.bringToTop();
     }
 
@@ -235,15 +248,13 @@ export default class HudScene extends Phaser.Scene
      */
     update(time, delta) 
     {
-        if (this.player.alive && !this.isMobile())
+        if (this.player.alive && !this.isMobile() && this.interactive)
         {
-            //console.log('state:', this.player.state);
             if (this.player.state == Config.PlayerStates.IDLE || this.player.state == Config.PlayerStates.MOVE)
             {
                 if (Phaser.Input.Keyboard.JustDown(this.keys.Z)) 
                 {
                     this.player.attack();
-                    console.log('hud.state:', this.player.state);
                 }
                 else if (Phaser.Input.Keyboard.JustDown(this.keys.X)) 
                 {
@@ -253,47 +264,7 @@ export default class HudScene extends Phaser.Scene
                 {
                     this.player.triggerInventory();
                 }
-                /*else if (this.controller)
-                {
-                    if (this.controller.A)
-                    {
-                        this.player.attack();
-                    }
-                    else if (this.controller.X)
-                    {
-                        this.player.triggerInteraction();
-                    }
-                    else if (this.controller.Y)
-                    {
-                        this.player.triggerInventory();
-                    }
-                }*/
             }
-            /*if (this.controller)
-            {
-                this.player.gamepad.up = false;
-                this.player.gamepad.down = false;
-                this.player.gamepad.left = false;
-                this.player.gamepad.right = false;
-
-                if (this.controller.left)
-                {
-                    this.player.gamepad.left = true;
-                } 
-                else if (this.controller.right)
-                {
-                    this.player.gamepad.right = true;
-                }
-                // Vertical movement
-                if (this.controller.up)
-                {
-                    this.player.gamepad.up = true;
-                } 
-                else if (this.controller.down)
-                {
-                    this.player.gamepad.down = true;
-                }
-            }*/
         }
         super.update();
     }

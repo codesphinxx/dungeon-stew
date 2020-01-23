@@ -23,6 +23,8 @@ export default class Player extends GameSprite
     this.health = Config.BASE_HEALTH;
     this.speed = Config.PLAYER_MOVE_SPEED;
     this.setName(data.name);
+    
+    this.on('animationcomplete', this._onAttackComplete, this);
 
     this.weapon = -1;
     this.armor = -1;
@@ -66,10 +68,14 @@ export default class Player extends GameSprite
     this.state = Config.PlayerStates.IDLE;
   }
 
+  /**
+   * @param {Phaser.Animations.Animation} animation 
+   * @param {*} frame 
+   */
   _onAttackComplete(animation, frame)
   {
-    console.log('attack.complete:', this.state);
-    this.state = Config.PlayerStates.MOVE;
+    if (animation.key.indexOf('attack') == -1) return;
+    this.state = Config.PlayerStates.MOVE;    
   }
 
   /**
@@ -83,8 +89,7 @@ export default class Player extends GameSprite
 
     if (this.alive)
     {
-      console.log('player.state:', this.state);
-      //if (this.state != Config.PlayerStates.DAMAGE) 
+      if (this.state != Config.PlayerStates.ATTACK && this.state != Config.PlayerStates.TALK) 
       {
         // Stop any previous movement from the last frame
         this.body.setVelocity(0);

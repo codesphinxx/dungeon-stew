@@ -48,7 +48,8 @@ export default class GameoverScene extends Phaser.Scene
     if (!this.purge)
     {
       this.purge = true;
-      this.scene.remove('hud');     
+      this.scene.remove('hud');    
+      this.scene.remove('message.win');   
     }
   }
 }

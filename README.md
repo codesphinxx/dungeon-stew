@@ -38,6 +38,7 @@ Run next commands in your terminal:
 
 ## ISSUES
 1. Player cannot move while damage effect is on
+2. Stop pointerdown event from propagating on window scene
 
 ## IMPROVEMENT
 1. divid map into zones, when checking collision for attack or interaction with npc, you can filter by zone.
