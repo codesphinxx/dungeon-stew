@@ -34,7 +34,8 @@ export const Assets = {
     Images:[
         {key:'tiles', value:'../assets/tilesets/tuxmon-sample-32px-extruded.png'},
         {key:'game-title', value:'../assets/images/game-title.png'},
-        {key:'title-bg', value:'../assets/images/title-bg.png'}
+        {key:'title-bg', value:'../assets/images/title-bg.png'},
+        {key:'panel', value:'../assets/images/panel.png'}
     ],
     Atlas: [
         {key:'ui', image:'../assets/images/ui.png', data:'../assets/images/ui.json'},        

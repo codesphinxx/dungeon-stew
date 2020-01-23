@@ -15,6 +15,10 @@ module.exports = {
         publicPath: '/build/',
         filename: 'project.bundle.js'
     },
+    externals: {
+          "phaser3-nineslice": "NineSlice",
+          "phaser": "Phaser"
+      },
     module: {
         rules: [
           {
@@ -23,7 +27,6 @@ module.exports = {
           }
         ]
     },
-
     plugins: [
         new webpack.DefinePlugin({
             __VERSION__: JSON.stringify(pkg.version),

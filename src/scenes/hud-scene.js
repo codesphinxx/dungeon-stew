@@ -1,10 +1,24 @@
 import Phaser from 'phaser';
 import Button from '../prefabs/hud.button';
-import {Assets, Settings} from '../settings';
+import Config, {Assets, Settings} from '../settings';
 import Player from '../prefabs/player';
 
 export default class HudScene extends Phaser.Scene
 {
+    static get XPAD_BUTTONS()
+    {
+        return {
+            LEFT:14,
+            UP:12,
+            RIGHT:15,
+            DOWN:13,
+            Y:3,
+            B:1,
+            A:0,
+            X:2
+        };
+    }
+
     /**
      * @param {Player} player 
      */
@@ -86,6 +100,125 @@ export default class HudScene extends Phaser.Scene
                 if (this.player) this.player.triggerInventory();
             });
         }
+        else
+        {
+            this.input.keyboard.on('keydown', (event) => {
+                if (!this.player) return;
+                event.stopPropagation();
+
+                if (event.keyCode === Phaser.Input.Keyboard.KeyCodes.UP || event.keyCode === Phaser.Input.Keyboard.KeyCodes.W)
+                {   
+                   this.player.gamepad.up = true;
+                }
+                else if (event.keyCode === Phaser.Input.Keyboard.KeyCodes.DOWN || event.keyCode === Phaser.Input.Keyboard.KeyCodes.S)
+                {   
+                    this.player.gamepad.down = true;
+                }
+                else if (event.keyCode === Phaser.Input.Keyboard.KeyCodes.LEFT || event.keyCode === Phaser.Input.Keyboard.KeyCodes.A)
+                {   
+                    this.player.gamepad.left = true;
+                }
+                else if (event.keyCode === Phaser.Input.Keyboard.KeyCodes.RIGHT || event.keyCode === Phaser.Input.Keyboard.KeyCodes.D)
+                {   
+                    this.player.gamepad.right = true;
+                }
+            });
+            this.input.keyboard.on('keyup', (event) => {
+                if (!this.player) return;
+                event.stopPropagation();
+
+                if (event.keyCode === Phaser.Input.Keyboard.KeyCodes.UP || event.keyCode === Phaser.Input.Keyboard.KeyCodes.W)
+                {   
+                   this.player.gamepad.up = false;
+                }
+                else if (event.keyCode === Phaser.Input.Keyboard.KeyCodes.DOWN || event.keyCode === Phaser.Input.Keyboard.KeyCodes.S)
+                {   
+                    this.player.gamepad.down = false;
+                }
+                else if (event.keyCode === Phaser.Input.Keyboard.KeyCodes.LEFT || event.keyCode === Phaser.Input.Keyboard.KeyCodes.A)
+                {   
+                    this.player.gamepad.left = false;
+                }
+                else if (event.keyCode === Phaser.Input.Keyboard.KeyCodes.RIGHT || event.keyCode === Phaser.Input.Keyboard.KeyCodes.D)
+                {   
+                    this.player.gamepad.right = false;
+                }
+            });
+            this.keys = this.input.keyboard.addKeys({
+                Z: Phaser.Input.Keyboard.KeyCodes.Z,
+                X: Phaser.Input.Keyboard.KeyCodes.X,
+                C: Phaser.Input.Keyboard.KeyCodes.C
+              });    
+              
+            this.input.gamepad.on('down', (pad, button) => {
+                if (!this.player || !this.player.alive) return;
+               
+                if (button.index === HudScene.XPAD_BUTTONS.UP && button.pressed)
+                {   
+                   this.player.gamepad.up = true;
+                }
+                else if (button.index === HudScene.XPAD_BUTTONS.DOWN && button.pressed)
+                {   
+                    this.player.gamepad.down = true;
+                }
+                else if (button.index === HudScene.XPAD_BUTTONS.LEFT && button.pressed)
+                {   
+                    this.player.gamepad.left = true;
+                }
+                else if (button.index === HudScene.XPAD_BUTTONS.RIGHT && button.pressed)
+                {   
+                    this.player.gamepad.right = true;
+                }
+                if (this.player.state == Config.PlayerStates.IDLE || this.player.state == Config.PlayerStates.MOVE)
+                {
+                    if (button.index === HudScene.XPAD_BUTTONS.A && button.pressed)
+                    {   
+                        this.player.attack();
+                    }
+                    else if (button.index === HudScene.XPAD_BUTTONS.Y && button.pressed)
+                    {   
+                        this.player.triggerInventory();
+                    }
+                    else if (button.index === HudScene.XPAD_BUTTONS.X && button.pressed)
+                    {   
+                        this.player.triggerInteraction();
+                    }
+                }
+            });   
+              
+            this.input.gamepad.on('up', (pad, button) => {
+                if (!this.player || !this.player.alive) return;
+                
+                if (button.index === HudScene.XPAD_BUTTONS.UP)
+                {   
+                   this.player.gamepad.up = false;
+                }
+                else if (button.index === HudScene.XPAD_BUTTONS.DOWN)
+                {   
+                    this.player.gamepad.down = false;
+                }
+                else if (button.index === HudScene.XPAD_BUTTONS.LEFT)
+                {   
+                    this.player.gamepad.left = false;
+                }
+                else if (button.index === HudScene.XPAD_BUTTONS.RIGHT)
+                {   
+                    this.player.gamepad.right = false;
+                }
+            });
+
+            this.input.on('pointerdown', (pointer) => {
+                if (!this.player.alive) return;
+                if (pointer.rightButtonDown())
+                {
+                    //TODO: action button event
+                }
+                else
+                {
+                    this.player.attack();
+                }                
+            });
+        }
 
         this.syncLife(this.player.health); 
     
@@ -94,6 +227,75 @@ export default class HudScene extends Phaser.Scene
         });
 
         this.scene.bringToTop();
+    }
+
+    /**
+     * @param {Number} time 
+     * @param {Number} delta 
+     */
+    update(time, delta) 
+    {
+        if (this.player.alive && !this.isMobile())
+        {
+            //console.log('state:', this.player.state);
+            if (this.player.state == Config.PlayerStates.IDLE || this.player.state == Config.PlayerStates.MOVE)
+            {
+                if (Phaser.Input.Keyboard.JustDown(this.keys.Z)) 
+                {
+                    this.player.attack();
+                    console.log('hud.state:', this.player.state);
+                }
+                else if (Phaser.Input.Keyboard.JustDown(this.keys.X)) 
+                {
+                    this.player.triggerInteraction();
+                }
+                else if (Phaser.Input.Keyboard.JustDown(this.keys.C)) 
+                {
+                    this.player.triggerInventory();
+                }
+                /*else if (this.controller)
+                {
+                    if (this.controller.A)
+                    {
+                        this.player.attack();
+                    }
+                    else if (this.controller.X)
+                    {
+                        this.player.triggerInteraction();
+                    }
+                    else if (this.controller.Y)
+                    {
+                        this.player.triggerInventory();
+                    }
+                }*/
+            }
+            /*if (this.controller)
+            {
+                this.player.gamepad.up = false;
+                this.player.gamepad.down = false;
+                this.player.gamepad.left = false;
+                this.player.gamepad.right = false;
+
+                if (this.controller.left)
+                {
+                    this.player.gamepad.left = true;
+                } 
+                else if (this.controller.right)
+                {
+                    this.player.gamepad.right = true;
+                }
+                // Vertical movement
+                if (this.controller.up)
+                {
+                    this.player.gamepad.up = true;
+                } 
+                else if (this.controller.down)
+                {
+                    this.player.gamepad.down = true;
+                }
+            }*/
+        }
+        super.update();
     }
 
     refresh ()

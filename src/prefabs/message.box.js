@@ -14,13 +14,7 @@ export default class MessageBox extends WindowBase
    */
     constructor(x, y, width, height, texture)
     {
-        super('message.win', x, y, width, height, texture);
-
-        this.content = this.add.text(0, 0, '', {font: "16px pixelmix", fill: "#ffffff", stroke:"#000000", strokeThickness:2});
-
-        this.keys = this.input.keyboard.addKeys({
-            X: Phaser.Input.Keyboard.KeyCodes.X
-        });
+        super('message.win', x, y, width, height, texture);  
 
         this.charIndex = 0;
 
@@ -30,12 +24,36 @@ export default class MessageBox extends WindowBase
         this.message = null;
     }
 
+    create()
+    {
+        super.create();
+        this.content = this.add.text(0, 0, '', {font: "16px pixelmix", fill: "#ffffff", stroke:"#000000", strokeThickness:2});   
+
+        this.input.keyboard.on('keydown', (event) => {
+            if (!this.active) return;
+            event.stopPropagation();            
+        });
+        this.input.on('pointerdown', (pointer) => {
+            if (!this.active) return;
+            this.hide();                
+        });
+    }
+
+    show()
+    {
+        super.show();
+        this.scene.bringToTop();
+    }
+
     /**
      * @param {Number} time 
      * @param {Number} delta 
      */
     update(time, delta) 
     {
+        super.update();
+        if (!this.active) return;
+
         if (Phaser.Input.Keyboard.JustDown(this.keys.X)) 
         {
             //TODO: trigger next page
@@ -47,7 +65,6 @@ export default class MessageBox extends WindowBase
             //TODO: trigger next page
           }
         }
-        super.update();
     }
 
     read()
@@ -75,7 +92,7 @@ export default class MessageBox extends WindowBase
         let text = this.message.current.text;
         //TODO: handle special character like \r \n \t
         //TODO: handle word color
-        
+
         //  Add the next letter onto the text string
         this.content.text = this.content.text.concat(text[this.charIndex]);
     

@@ -27,51 +27,12 @@ export default class Player extends GameSprite
     this.weapon = -1;
     this.armor = -1;
 
-    this.keys = scene.input.keyboard.addKeys({
-      up: Phaser.Input.Keyboard.KeyCodes.UP,
-      down: Phaser.Input.Keyboard.KeyCodes.DOWN,
-      left: Phaser.Input.Keyboard.KeyCodes.LEFT,
-      right: Phaser.Input.Keyboard.KeyCodes.RIGHT,
-      W: Phaser.Input.Keyboard.KeyCodes.W,
-      A: Phaser.Input.Keyboard.KeyCodes.A,
-      S: Phaser.Input.Keyboard.KeyCodes.S,
-      D: Phaser.Input.Keyboard.KeyCodes.D,
-      Z: Phaser.Input.Keyboard.KeyCodes.Z,
-      X: Phaser.Input.Keyboard.KeyCodes.X,
-      C: Phaser.Input.Keyboard.KeyCodes.C
-    });
-
     this.gamepad = {
       up: false,
       down: false,
       left: false,
-      right: false,
-      A: false,
-      B: false,
-      C: false
+      right: false
     };
-
-    if (!scene.isMobile())
-    {
-      scene.input.on('pointerdown', (pointer) => {
-          if (!this.alive) return;
-          if (pointer.rightButtonDown())
-          {
-              //TODO: action button event
-          }
-          else
-          {
-              this.attack();
-          }                
-      });
-
-      scene.input.gamepad.once('down', (pad) => {
-        /**
-         * @type {Phaser.Input.Gamepad.Gamepad}
-         */
-          this.controller = pad;
-      });
-    }
   } 
 
   get health()
@@ -107,6 +68,7 @@ export default class Player extends GameSprite
 
   _onAttackComplete(animation, frame)
   {
+    console.log('attack.complete:', this.state);
     this.state = Config.PlayerStates.MOVE;
   }
 
@@ -121,111 +83,34 @@ export default class Player extends GameSprite
 
     if (this.alive)
     {
-      var keys = this.keys;
-
-      if (this.state == Config.PlayerStates.IDLE || this.state == Config.PlayerStates.MOVE)
-      {
-        //set look direction if not attacking or damage
-        /*let pointer = this.scene.input.activePointer.positionToCamera(this.scene.cameras.main)
-        let dx = Math.abs(pointer.x - this.body.x);
-        let dy = Math.abs(pointer.y - this.body.y);
-
-        if (dx > dy)
-        {
-          this.direction = (pointer.x > this.x) ? Config.Directions.RIGHT : Config.Directions.LEFT;
-        }
-        else
-        {
-          this.direction = (pointer.y > this.y) ? Config.Directions.DOWN : Config.Directions.UP;
-        }*/
-        if (!this.scene.isMobile())
-        {
-          if (Phaser.Input.Keyboard.JustDown(keys.Z)) 
-          {
-            this.attack();
-          }
-          else if (Phaser.Input.Keyboard.JustDown(keys.X)) 
-          {
-            this.triggerInteraction();
-          }
-          else if (Phaser.Input.Keyboard.JustDown(keys.C)) 
-          {
-            this.triggerInventory();
-          }
-          else if (this.controller)
-          {
-            if (this.controller.A)
-            {
-              this.attack();
-            }
-            else if (this.controller.X)
-            {
-              this.triggerInteraction();
-            }
-            else if (this.controller.Y)
-            {
-              this.triggerInventory();
-            }
-          }
-        }
-      }
-   
+      console.log('player.state:', this.state);
       //if (this.state != Config.PlayerStates.DAMAGE) 
       {
         // Stop any previous movement from the last frame
         this.body.setVelocity(0);
 
-        if (!this.scene.isMobile())
+        // Horizontal movement
+        if (this.gamepad.left) 
         {
-          // Horizontal movement
-          if (keys.left.isDown || keys.A.isDown || (this.controller && this.controller.left))
-          {
-            this.direction = Config.Directions.LEFT;
-            this.body.setVelocityX(-this.speed);
-          } 
-          else if (keys.right.isDown || keys.D.isDown || (this.controller && this.controller.right)) 
-          {
-            this.direction = Config.Directions.RIGHT;
-            this.body.setVelocityX(this.speed);
-          }
-
-          // Vertical movement
-          if (keys.up.isDown || keys.W.isDown || (this.controller && this.controller.up))
-          {
-            this.direction = Config.Directions.UP;
-            this.body.setVelocityY(-this.speed);
-          } 
-          else if (keys.down.isDown || keys.S.isDown || (this.controller && this.controller.down))
-          {
-            this.direction = Config.Directions.DOWN;
-            this.body.setVelocityY(this.speed);
-          }
+          this.direction = Config.Directions.LEFT;
+          this.body.setVelocityX(-this.speed);
+        } 
+        else if (this.gamepad.right) 
+        {
+          this.direction = Config.Directions.RIGHT;
+          this.body.setVelocityX(this.speed);
         }
-        else
-        {
-          // Horizontal movement
-          if (this.gamepad.left || (this.controller && this.controller.left)) 
-          {
-            this.direction = Config.Directions.LEFT;
-            this.body.setVelocityX(-this.speed);
-          } 
-          else if (this.gamepad.right || (this.controller && this.controller.right)) 
-          {
-            this.direction = Config.Directions.RIGHT;
-            this.body.setVelocityX(this.speed);
-          }
 
-          // Vertical movement
-          if (this.gamepad.up || (this.controller && this.controller.up)) 
-          {
-            this.direction = Config.Directions.UP;
-            this.body.setVelocityY(-this.speed);
-          } 
-          else if (this.gamepad.down || (this.controller && this.controller.down)) 
-          {
-            this.direction = Config.Directions.DOWN;
-            this.body.setVelocityY(this.speed);
-          }
+        // Vertical movement
+        if (this.gamepad.up) 
+        {
+          this.direction = Config.Directions.UP;
+          this.body.setVelocityY(-this.speed);
+        } 
+        else if (this.gamepad.down) 
+        {
+          this.direction = Config.Directions.DOWN;
+          this.body.setVelocityY(this.speed);
         }
         
         if (this.direction == Config.Directions.LEFT)
