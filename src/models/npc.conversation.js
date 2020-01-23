@@ -37,8 +37,18 @@ export default class Conversation
         this.lines = [];
     }
 
+    get complete()
+    {
+        return this.lines.length == this.index + 1;
+    }
+
+    get current()
+    {
+        return this.lines[this.index];
+    }
+
     /**
-     * @returns {String}
+     * @returns {ConversationEntry}
      */
     nextLine()
     {
@@ -46,7 +56,7 @@ export default class Conversation
         if (this.lines.length >= i) return null;
 
         this.index++;
-        return this.lines[i].text;
+        return this.lines[i];
     }
 
     /**

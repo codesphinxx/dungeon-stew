@@ -89,6 +89,7 @@ export const Settings = {
     PLAYER_MOVE_SPEED:200,
     DEFAULT_ZOOM:1.5,
     HEART_SPACING: 40,
+    MESSAGE_READ_SPEED: 80,
     VIEWPORT:{
         WIDTH: 614,
         HEIGHT: 1092

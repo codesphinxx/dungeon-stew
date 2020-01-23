@@ -2,6 +2,7 @@
  * Author: CodeSphinx
  */
 import Phaser from 'phaser';
+import NineSlice from 'phaser3-nineslice';
 export * from './helpers/mixins';
 import Utilx from './helpers/utilx';
 import BootScene from "./scenes/boot-scene.js";
@@ -35,6 +36,9 @@ const config = {
       gravity: { y: 0 },
       debug: true
     }
+  },
+  plugins: {
+    global: [ NineSlice.Plugin.DefaultCfg ],
   }
 };
 

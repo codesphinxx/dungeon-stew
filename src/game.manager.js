@@ -40,6 +40,10 @@ class GameManager
                  */ 
                 vibrate: true
             };
+            /**
+             * @type {Phaser.Input.Gamepad.Gamepad}
+             */
+            this.controller = null;
             this.$gameVariables = {};
             this._handlers = {};
             this.gamepadConnected = false;
