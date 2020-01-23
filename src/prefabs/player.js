@@ -23,8 +23,6 @@ export default class Player extends GameSprite
     this.health = Config.BASE_HEALTH;
     this.speed = Config.PLAYER_MOVE_SPEED;
     this.setName(data.name);
-    
-    this.on('animationcomplete', this._onAttackComplete, this);
 
     this.weapon = -1;
     this.armor = -1;
@@ -89,7 +87,7 @@ export default class Player extends GameSprite
 
     if (this.alive)
     {
-      if (this.state != Config.PlayerStates.ATTACK && this.state != Config.PlayerStates.TALK) 
+      if (this.state != Config.PlayerStates.ATTACK && this.state != Config.PlayerStates.TALK && this.state != Config.PlayerStates.DAMAGE) 
       {
         // Stop any previous movement from the last frame
         this.body.setVelocity(0);

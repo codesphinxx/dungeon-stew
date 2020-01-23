@@ -12,21 +12,20 @@ import settings from './settings';
 
 const config = {
   type: Phaser.AUTO,
-  width: window.innerWidth,
-  height: window.innerHeight,
+  width: 867,
+  height: 520,
   version: __VERSION__,
   title:"Dungeon Stew",
   pixelArt: true,
   backgroundColor: "#000",
   parent: "game-container",
   disableContextMenu:true,
-  //resolution: window.devicePixelRatio,
   scene: [BootScene, TitleScene, DungeonScene, GameoverScene],
   input: {
     gamepad: true
   },
   scale: {
-    mode: Phaser.Scale.FIT,
+    mode: Phaser.Scale.NONE,
     autoCenter: Phaser.Scale.CENTER_BOTH
   },
   physics: {
@@ -46,6 +45,7 @@ if (/Android|webOS|iPhone|iPad|iPod|Windows Phone|BlackBerry/i.test(navigator.us
 {
     config.width = settings.VIEWPORT.WIDTH;
     config.height = settings.VIEWPORT.HEIGHT;
+    config.scale.mode = Phaser.Scale.FIT;
 }
 
 const game = new Phaser.Game(config);

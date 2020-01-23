@@ -76,6 +76,7 @@ export default class Monster extends GameSprite
 
   _onAttackComplete(animation, frame)
   {
+    if (animation.key.indexOf('attack') == -1) return;
     this.idle();
   }  
 

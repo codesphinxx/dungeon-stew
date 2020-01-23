@@ -3,6 +3,8 @@
      <head>
          <meta charset="utf-8">
          <script src="https://ajax.googleapis.com/ajax/libs/webfont/1.5.10/webfont.js"></script>
+         <script src="assets/js/phaser.min.js" charset="utf-8"></script>
+         <script src="assets/js/nineslice.min.js" charset="utf-8"></script>
          <style>
              @font-face {
                 font-family: pixelmix;
@@ -10,23 +12,28 @@
                 font-weight: 400;
                 font-style: normal
             }
-
             @font-face {
                 font-family: 'Thin Pixel-7';
                 src: url(./assets/fonts/thin_pixel.ttf) format("truetype");
                 font-weight: 400;
                 font-style: normal
             }
-            body
+            body, html
             {
                 margin:0;
                 padding:0;
+                height: 100%;
+            }
+            #game-container
+            {
+                width: 100%;
+                height: 100%;
+                margin: auto;
             }
          </style>
      </head>
      <body>
-        <script src="assets/js/phaser.min.js" charset="utf-8"></script>
-        <script src="assets/js/nineslice.min.js" charset="utf-8"></script>
+        <div id="game-container"></div>
         <script src="build/project.bundle.js" charset="utf-8"></script>
      </body>
  </html>

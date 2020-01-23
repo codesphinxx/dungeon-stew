@@ -35,12 +35,6 @@ export default class HudScene extends Phaser.Scene
     
     create()
     {
-        this.background = new Phaser.Geom.Rectangle(0, 0, this.game.config.width, 50);
-        this.graphics = this.add.graphics({fillStyle: { color: 0x000000 }});
-        this.graphics.fillRectShape(this.background);
-        this.graphics.setDepth(5);
-        this.graphics.alpha = 0.5;
-        
         if (this.isMobile())
         {
             this.left = new Button(this, 97, 817, Assets.Files.Left.atlas, Assets.Files.Left.image, Assets.Files.Left.pressed);
@@ -235,8 +229,7 @@ export default class HudScene extends Phaser.Scene
         });
 
         this.game.events.on('active.scene', (sceneKey, interactive) => {
-            console.log('change.active.scene:', sceneKey, interactive);
-            this.interactive = interactive;
+            this.time.delayedCall(100, ()=> { this.interactive = interactive; }, null, this);
         });
 
         this.scene.bringToTop();
@@ -279,7 +272,7 @@ export default class HudScene extends Phaser.Scene
      */
     syncLife(health = 1)
     {
-        let posy = 0;
+        let posy = 10;
 
         if (this.hearts.length < health)
         {
@@ -289,11 +282,6 @@ export default class HudScene extends Phaser.Scene
             {
                 var heart = this.add.image(dx, posy, Assets.Files.Life.atlas, Assets.Files.Life.image);
                 heart.setDisplayOrigin(0);
-                if (posy == 0)
-                {
-                    posy = (this.background.height - heart.height) * 0.5;
-                    heart.y = posy;
-                }
                 this.hearts.push(heart);
 
                 dx += Settings.HEART_SPACING;

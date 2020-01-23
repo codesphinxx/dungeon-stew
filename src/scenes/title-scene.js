@@ -18,7 +18,7 @@ export default class TitleScene extends Phaser.Scene
     this.background = this.add.image(0, 0, 'title-bg');
     this.background.setDisplayOrigin(0, 0);
 
-    this.title = this.add.image(0, 80, 'game-title');
+    this.title = this.add.image(0, 30, 'game-title');
     this.title.setDisplayOrigin(0, 0);
     
     this.version = this.add.text(0, 0, `v${__VERSION__}`, {font: "16px pixelmix", fill: "#ffffff", stroke:"#000000", strokeThickness:2}); 
@@ -40,7 +40,7 @@ export default class TitleScene extends Phaser.Scene
     });*/
     
     let posx = this.game.config.width * 0.5;
-    let posy = this.game.config.height * 0.5;
+    let posy = this.game.config.height * 0.75;
     this.newgame = new Button(this, posx, posy, 'ui', 'newgame', 'newgame_press');
     this.add.existing(this.newgame);
     

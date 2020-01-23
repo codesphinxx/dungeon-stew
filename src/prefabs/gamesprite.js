@@ -101,6 +101,8 @@ export default class GameSprite extends Phaser.Physics.Arcade.Sprite
       frameRate: 10
     });     
     
+    this.on('animationcomplete', this._onAttackComplete, this);
+    
     this._direction = Config.Directions.DOWN;
     this._prevDirection = Config.Directions.DOWN;
     
@@ -187,7 +189,7 @@ export default class GameSprite extends Phaser.Physics.Arcade.Sprite
    */
   _onAttackComplete(animation, frame)
   {
-    //if (animation.key.indexOf('attack') == -1) return;
+    
   }
   
   _onDamageComplete()
@@ -277,6 +279,7 @@ export default class GameSprite extends Phaser.Physics.Arcade.Sprite
     {
       dx -= Config.KNOCKBACK_INFLUENCE;
     }
+    this.body.setVelocity(0);
     this.scene.physics.moveTo(this, dx, dy, 0, 25);
 
     /*let angle = Phaser.Math.Angle.Between(enemy.x, enemy.y, this.x, this.y);
