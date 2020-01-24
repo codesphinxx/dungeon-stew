@@ -12,8 +12,8 @@ import settings from './settings';
 
 const config = {
   type: Phaser.AUTO,
-  width: 867,
-  height: 520,
+  width: window.innerWidth,
+  height: window.innerHeight,
   version: __VERSION__,
   title:"Dungeon Stew",
   pixelArt: true,

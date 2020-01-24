@@ -137,8 +137,7 @@ export default class Monster extends GameSprite
 
   _meleeHitTest() 
   {
-    if (!this.scene.player) return false;
-    if (!this.scene.player.alive) return false;
+    if (!this.scene.player || !this.scene.player.alive) return false;
     if (this.scene.player.state === Config.PlayerStates.DAMAGE) return false;
 
     var radius = this.body.radius;
@@ -160,7 +159,7 @@ export default class Monster extends GameSprite
     {
       px += radius; 
     }
-    var collided = Utilx.circleIntersect(px, py, radius, this.scene.player.x, this.scene.player.y, this.scene.player.body.width*0.5);
+    var collided = Utilx.circleIntersect(px, py, radius, this.scene.player.x, this.scene.player.y, this.scene.player.body.radius);
     if (collided)
     {
       this.scene.player.damage(this, this.strength);       
@@ -293,10 +292,6 @@ export default class Monster extends GameSprite
     {
       this.decideNextAction();      
     }
-    else if (this.state == Config.PlayerStates.ATTACK && !this.shooter)
-    {
-      this._meleeHitTest();
-    }
     else if (this._chasing && this.state == Config.PlayerStates.MOVE)
     {
       this._timer -= delta;
@@ -304,6 +299,10 @@ export default class Monster extends GameSprite
       {    
         this.decideNextAction();
       }      
+    }
+    if (this.state == Config.PlayerStates.ATTACK && !this.shooter)
+    {
+      this._meleeHitTest();
     }
     if (this.state != Config.PlayerStates.DAMAGE)
     {

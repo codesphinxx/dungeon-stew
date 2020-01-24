@@ -37,6 +37,7 @@ Run next commands in your terminal:
 
 ## ISSUES
 1. Knockback doesn't affect player when collision occur outside of melee attack.
+2. Life UI incorrect after taking damage then add health
 
 ## IMPROVEMENT
 1. divid map into zones, when checking collision for attack or interaction with npc, you can filter by zone.

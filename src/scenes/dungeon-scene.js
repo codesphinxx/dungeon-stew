@@ -101,7 +101,7 @@ export default class DungeonScene extends Phaser.Scene
     // Watch the player and tilemap layers for collisions, for the duration of the scene:
     this.physics.add.collider(this.player, worldLayer);
     this.physics.add.collider(this.player, this.npcs);
-    this.physics.add.overlap(this.player, this.monsters, this.onPlayerEnemyContact, null, this);
+    this.physics.add.collider(this.player, this.monsters, this.onPlayerEnemyContact, null, this);
     this.physics.add.overlap(this.player, this.collectibles, this.onPlayerItemContact, null, this);
     
     this.messageWin = new MessageBox(20, this.game.config.height - 300, this.game.config.width - 40, 300, 'panel');
