@@ -1,6 +1,7 @@
 import Phaser from "phaser";
 import Button from '../prefabs/hud.button';
 import GameManager from '../game.manager';
+import PlayerData from '../models/playerData';
 import Config from '../settings';
 
 /**
@@ -44,7 +45,8 @@ export default class TitleScene extends Phaser.Scene
     this.newgame = new Button(this, posx, posy, 'ui', 'newgame', 'newgame_press');
     this.add.existing(this.newgame);
     
-    this.newgame.addInputDownCallback(() => {
+    this.newgame.addInputUpCallback(() => {
+      GameManager.$gameData.progress = new PlayerData();
       this.scene.start('dungeon');
     }, this);
 

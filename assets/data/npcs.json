@@ -20,7 +20,7 @@
                 {
                     "text": "Do you want to know about our town?",
                     "choice": {
-                        "variable": "{aboutXenaFore}",
+                        "variable": "aboutXenaFore",
                         "items":[{"id":1, "text":"Yes"}, {"id":2, "text":"No"}]
                     }
                 },

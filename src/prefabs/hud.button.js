@@ -50,9 +50,12 @@ export default class Button extends Phaser.GameObjects.Image
     _onpointerout()
     {
         console.log('point out');
+        if (!this.isDown) return;
+
         this.isDown = false;
         if (this.key) this.setFrame(this.key);
         this.scale = 1;
+        
     }
 
     /**
@@ -80,7 +83,6 @@ export default class Button extends Phaser.GameObjects.Image
     addInputUpCallback(fn, context)
     {
         this.on('pointerup', fn, context);
-        this.on('pointerout', fn, context);
     }
 
     /**
@@ -90,6 +92,5 @@ export default class Button extends Phaser.GameObjects.Image
     removeInputUpCallback(fn, context)
     {
         this.off('pointerup', fn, context);
-        this.off('pointerout', fn, context);
     }
 }

@@ -9,5 +9,6 @@ export default class PlayerData
         this.createdon = Date.now();
         this.modifiedon = Date.now();
         this.inventory = [];
+        this.variables = {};
     }
 }

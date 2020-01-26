@@ -44,7 +44,6 @@ class GameManager
              * @type {Phaser.Input.Gamepad.Gamepad}
              */
             this.controller = null;
-            this.$gameVariables = {};
             this._handlers = {};
             this.gamepadConnected = false;
             this.isAuthenticated = false;
@@ -53,6 +52,16 @@ class GameManager
         }
 
         return GameManager.instance;
+    }
+
+    get $gameVariables()
+    {
+        return this.$gameData.progress.variables;
+    }
+
+    set $gameVariables(value)
+    {
+        this.$gameData.progress.variables = value;
     }
 
     init()

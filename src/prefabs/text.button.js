@@ -15,12 +15,13 @@ export default class TextButton extends Phaser.GameObjects.Container
     {
         super(scene, x, y);
         
+        this.name = Phaser.Utils.String.UUID();
         this.isDown = false;
 
-        this.content = scene.add.text(0, 0, text || '', style);
+        this.label = scene.add.text(0, 0, text || '', style);
 
-        let width = Math.max(this.content.width + margin * 2, 100);
-        let height = this.content.height + margin * 2;
+        let width = Math.max(this.label.width + margin * 2, 100);
+        let height = this.label.height + margin * 2;
         
         this.image = scene.add.nineslice(
             0, 
@@ -31,73 +32,78 @@ export default class TextButton extends Phaser.GameObjects.Container
             [15, 15, 15, 15]
         );
         
+        this._resetLayout();        
+        this.setSize(width, height); 
+
+        this.image.setInteractive();
+        this.image.on('pointerover', this._onpointerover, this);
+        this.image.on('pointerout', this._onpointerout, this);
+        this.image.on('pointerdown', this._onpointerdown, this);
+        this.image.on('pointerup', this._onpointerup, this);
+
         this.add(this.image);
-        this.add(this.content);
-        this._resetLayout();
-        
-        this.setSize(width, height);
-        this.setInteractive();
-        this.on('pointerover', this._onpointerover, this);
-        this.on('pointerout', this._onpointerout, this);
-        this.on('pointerdown', this._onpointerdown, this);
-        this.on('pointerup', this._onpointerup, this);
+        this.add(this.label);
         scene.add.existing(this);
     }
 
     get text()
     {
-        return this.content.text;
+        return this.label.text;
     }
 
     set text(value)
     {
-        this.content.text = value;
+        this.label.text = value;
         this._resetLayout();
-    }
-
-    /**
-     * @param {Number} x 
-     * @param {Number} y 
-     * @param {Number} z 
-     * @param {Number} w 
-     */
-    setPosition(x, y, z, w)
-    {
-        super.setPosition(x, y, z, w);
-        
     }
 
     _resetLayout()
     {
-        let x = ((this.image.width - this.content.width) * 0.5) + this.x;
-        let y = ((this.image.height - this.content.height) * 0.5) + this.y;
-        this.content.setPosition(x, y);
+        let x = ((this.image.width - this.label.width) * 0.5) + this.x;
+        let y = ((this.image.height - this.label.height) * 0.5) + this.y;
+        this.label.setPosition(x, y);
+    }
+
+    /**
+     * @param {Number} value 
+     */
+    _setGlobalScale(value)
+    {
+        let w = this.image.width * this.scale;
+        let h = this.image.height * this.scale;
+        let dw = this.image.width * value;
+        let dh = this.image.height * value;
+        
+        this.scale = value;
+        
+        this.x += (w - dw) * 0.5;
+        this.y += (h - dh) * 0.5;
     }
 
     _onpointerover()
     {
-        console.log('point over');
+        //console.log('point over:', this.name);
     }
 
     _onpointerdown()
     {
-        console.log('point down');
+        //console.log('point down:', this.name);
         this.isDown = true;
-        this.scale = 1.1;
+        this._setGlobalScale(1.1);
     }
 
     _onpointerup()
     {
-        console.log('point up');
+        console.log('point up:', this.name);
         this.isDown = false;
-        this.scale = 1;
+        this._setGlobalScale(1);
     }
 
     _onpointerout()
     {
-        console.log('point out');
+        //console.log('point out:', this.name);
         this.isDown = false;
-        this.scale = 1;
+        this._setGlobalScale(1);
     }
 
     /**
@@ -106,7 +112,7 @@ export default class TextButton extends Phaser.GameObjects.Container
      */
     addInputDownCallback(fn, context)
     {
-        this.on('pointerdown', fn, context);
+        this.image.on('pointerdown', fn, context);
     }
 
     /**
@@ -115,7 +121,7 @@ export default class TextButton extends Phaser.GameObjects.Container
      */
     removeInputDownCallback(fn, context)
     {
-        this.off('pointerdown', fn, context);
+        this.image.off('pointerdown', fn, context);
     }
 
     /**
@@ -124,8 +130,7 @@ export default class TextButton extends Phaser.GameObjects.Container
      */
     addInputUpCallback(fn, context)
     {
-        this.on('pointerup', fn, context);
-        this.on('pointerout', fn, context);
+        this.image.on('pointerup', fn, context);
     }
 
     /**
@@ -134,7 +139,6 @@ export default class TextButton extends Phaser.GameObjects.Container
      */
     removeInputUpCallback(fn, context)
     {
-        this.off('pointerup', fn, context);
-        this.off('pointerout', fn, context);
+        this.image.off('pointerup', fn, context);
     }
 }

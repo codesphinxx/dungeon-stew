@@ -58,10 +58,7 @@ export default class MessageBox extends WindowBase
     {
         super.create();
 
-        let x = this.config.x + Settings.MESSAGE_MARGIN;
-        let y = this.config.y + Settings.MESSAGE_MARGIN;
-        this.content = this.add.text(x, y, '', Settings.TextStyles.DEFAULT);   
-        this.content.lineSpacing = 10;
+        this._resetContent();
 
         this.panel.setInteractive();        
 
@@ -128,6 +125,19 @@ export default class MessageBox extends WindowBase
         }
     }
 
+    _resetContent()
+    {
+        if (this.content)
+        {
+            this.content.destroy();
+            this.content = null;
+        }
+        let x = this.config.x + Settings.MESSAGE_MARGIN;
+        let y = this.config.y + Settings.MESSAGE_MARGIN;
+        this.content = this.add.text(x, y, '', Settings.TextStyles.DEFAULT);   
+        this.content.lineSpacing = 10;
+    }
+
     _handleInteraction()
     {
         if (this.canRead)
@@ -142,6 +152,15 @@ export default class MessageBox extends WindowBase
 
     read()
     {
+        if (this._buttons.length != 0)
+        {
+            for (var i = 0; i < this._buttons.length; i++)
+            {
+                this._buttons[i].destroy();
+            }
+            this._buttons.length = 0;
+        }
+
         // Check if window is currently writing letters
         if (this.writer && this._message.current)
         {
@@ -166,9 +185,10 @@ export default class MessageBox extends WindowBase
         let line = this._message.nextLine();
         
         if (!line || String.IsNullOrEmpty(line.text)) return;
-       
+
+        this._resetContent();
+               
         this.charIndex = 0;
-        this.content.text = '';
         this.writer = this.time.addEvent({ delay: Settings.MESSAGE_READ_SPEED, callback: this._nextChar, callbackScope: this, repeat: line.text.length });
     }
 
@@ -181,14 +201,14 @@ export default class MessageBox extends WindowBase
         {
             //  Add the next letter onto the text string
             this.content.text = this.content.text.concat(text[this.charIndex]);
-        
+          
             //  Advance the word index to the next word in the line
             this.charIndex++;
         }
     
         //  Last word?
         if (this.charIndex === text.length)
-        {
+        { 
             //  Add a carriage return
             this.content.text = this.content.text.concat("\n");
     
@@ -226,20 +246,21 @@ export default class MessageBox extends WindowBase
             let button = new TextButton(this, 0, 0, 'text-button', data.items[i].text, Settings.TextStyles.TEXT_BUTTON, Settings.BUTTON_MARGIN);
             button.x = (this.game.config.width - button.image.width) * 0.5;
             button.y = this.panel.y - (Settings.MESSAGE_BUTTON_OFFSET + button.image.height * this._buttons.length);
+
+            // enabled and set data property
+            button.setDataEnabled();
+            button.setData('id', data.items[i].id);
+
             if (this._buttons.length != 0) 
             {
                 button.y -= Settings.MESSAGE_BUTTON_SPACING;
             }
-            this.add.existing(button);
             
-            button.addInputDownCallback(() => {
+            button.addInputUpCallback(() => {
                 if (!this.active) return;
-                console.log('choice.button.down');
+                this.manager.$gameVariables[data.variable] = button.data.values.id;
+                this._handleInteraction();
             });
-            /*button.addInputUpCallback(() => {
-                if (!this.active) return;
-                console.log('choice.button.up');
-            });*/
             this._buttons.push(button);
         }        
     }

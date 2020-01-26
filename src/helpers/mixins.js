@@ -93,6 +93,15 @@ String.prototype.capitalize = function() {
     return this.charAt(0).toUpperCase() + this.slice(1)
 };
 
+String.prototype.replaceAll = function (searchStr, replaceStr) {
+  var str = this;
+
+  // escape regexp special characters in search string
+  searchStr = searchStr.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
+
+  return str.replace(new RegExp(searchStr, 'gi'), replaceStr);
+};
+
 /**
  * @param {String} str
  */
