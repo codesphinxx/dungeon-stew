@@ -15,7 +15,7 @@
         "conversation":{
             "lines":[
                 {
-                    "text": "Welcome to XenaFore"
+                    "text": "Welcome to XenaFore.\nOur humble town."
                 },
                 {
                     "text": "Do you want to know about our town?",

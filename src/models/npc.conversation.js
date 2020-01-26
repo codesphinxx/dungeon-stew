@@ -47,13 +47,18 @@ export default class Conversation
         return this.lines[this.index];
     }
 
+    reset()
+    {
+        this.index = -1;
+    }
+
     /**
      * @returns {ConversationEntry}
      */
     nextLine()
     {
         let i = this.index + 1;
-        if (this.lines.length >= i) return null;
+        if (i >= this.lines.length) return null;
 
         this.index++;
         return this.lines[i];

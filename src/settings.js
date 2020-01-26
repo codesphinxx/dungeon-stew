@@ -35,7 +35,8 @@ export const Assets = {
         {key:'tiles', value:'../assets/tilesets/tuxmon-sample-32px-extruded.png'},
         {key:'game-title', value:'../assets/images/game-title.png'},
         {key:'title-bg', value:'../assets/images/title-bg.png'},
-        {key:'panel', value:'../assets/images/panel.png'}
+        {key:'panel', value:'../assets/images/panel.png'},
+        {key:'text-button', value:'../assets/images/text-button.png'}
     ],
     Atlas: [
         {key:'ui', image:'../assets/images/ui.png', data:'../assets/images/ui.json'},        
@@ -78,19 +79,30 @@ export const Assets = {
     }
 };
 
+const TextStyles = {
+    DEFAULT:{font: "40px Thin Pixel-7", fill: "#ffffff"},
+    TEXT_BUTTON:{font: "32px Thin Pixel-7", fill: "#ffffff"}
+}
+
 export const Settings = {
     PlayerStates:PlayerStates,
     Directions:Directions,
     ItemTypes:ItemTypes,
+    TextStyles:TextStyles,
     KNOCKBACK_INFLUENCE:2,
     BASE_HEALTH:3,
     MAX_HEALTH:10,
     MAX_STRENGTH:4,
     DEFAULT_MARGIN: 10,
+    MESSAGE_MARGIN: 20,
+    BUTTON_MARGIN: 12,
     PLAYER_MOVE_SPEED:200,
     DEFAULT_ZOOM:1.2,
     HEART_SPACING: 40,
     MESSAGE_READ_SPEED: 80,
+    MIN_BUTTON_WIDTH: 100,
+    MESSAGE_BUTTON_OFFSET: 100,
+    MESSAGE_BUTTON_SPACING: 20,
     VIEWPORT:{
         WIDTH: 614,
         HEIGHT: 1092

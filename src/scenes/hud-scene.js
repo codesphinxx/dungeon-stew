@@ -128,6 +128,7 @@ export default class HudScene extends Phaser.Scene
             this.input.keyboard.on('keyup', (event) => {
                 if (!this.player) return;
                 event.stopPropagation();
+                event.stopImmediatePropagation();
 
                 if (event.keyCode === Phaser.Input.Keyboard.KeyCodes.UP || event.keyCode === Phaser.Input.Keyboard.KeyCodes.W)
                 {   

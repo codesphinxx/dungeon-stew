@@ -21,7 +21,7 @@ export default class DungeonScene extends Phaser.Scene
   init()
   {
     /**
-     * @type {String|Number}
+     * @type {NPC}
      */
     this.interactable = null;
     /**
@@ -91,7 +91,7 @@ export default class DungeonScene extends Phaser.Scene
     // Constrain the camera so that it isn't allowed to move outside the width/height of tilemap
     camera.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
     camera.startFollow(this.player); 
-    camera.setZoom(Config.DEFAULT_ZOOM);   
+    //camera.setZoom(Config.DEFAULT_ZOOM);   
     
     if (this.isMobile())
     {
@@ -100,11 +100,11 @@ export default class DungeonScene extends Phaser.Scene
 
     // Watch the player and tilemap layers for collisions, for the duration of the scene:
     this.physics.add.collider(this.player, worldLayer);
-    this.physics.add.collider(this.player, this.npcs);
+    this.physics.add.collider(this.player, this.npcs, this.onPlayerNPCContact, null, this);
     this.physics.add.collider(this.player, this.monsters, this.onPlayerEnemyContact, null, this);
     this.physics.add.overlap(this.player, this.collectibles, this.onPlayerItemContact, null, this);
     
-    this.messageWin = new MessageBox(20, this.game.config.height - 300, this.game.config.width - 40, 300, 'panel');
+    this.messageWin = new MessageBox(20, this.game.config.height - 120, this.game.config.width - 60, 100, 'panel');
     this.scene.add('message.win', this.messageWin, true);
   
     //initialize hud
@@ -212,24 +212,30 @@ export default class DungeonScene extends Phaser.Scene
    */
   _iteractionTest(x, y, direction)
   {
-    //if (this.interactable == null) return;
+    if (this.interactable == null) return;
 
-    let isValid = false;
-    this.npcs.children.iterate(
-      /**
-       * @param {NPC} npc
-       */
-      (npc) => {    
-      if (npc.bounds.contains(x, y))
-      {
-        console.log('interaction.set');
-        this.messageWin.show();
-      }
-    });
-    if (!isValid)
+    if (this.interactable.bounds.contains(x, y))
     {
+      console.log('interaction.set');
+      this.messageWin.message = this.interactable.conversation;
+      this.messageWin.show();
+      this.messageWin.read();
+    }
+    else
+    {
+      console.log('interaction.unset');
       this.interactable = null;
     }
+  }
+
+  /**
+   * @param {Player} player 
+   * @param {NPC} npc 
+   */
+  onPlayerNPCContact(player, npc)
+  {    
+    if (!player.alive) return;
+    this.interactable = npc;
   }
 
   /**

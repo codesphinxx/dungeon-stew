@@ -30,7 +30,7 @@ export default class WindowBase extends Phaser.Scene
             this.config.width, 
             this.config.height, 
             this.config.texture, 
-            [35, 15, 15, 15]
+            [40, 40, 40, 40]
         );
 
         this.keys = this.input.keyboard.addKeys({
