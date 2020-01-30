@@ -25,7 +25,6 @@ export default class Player extends GameSprite
     this.setName(data.name);
 
     this.weapon = -1;
-    this.armor = -1;
 
     this.gamepad = {
       up: false,
@@ -306,7 +305,6 @@ export default class Player extends GameSprite
       break;
       case Config.ItemTypes.POTION:
          this.health += value;
-         this.emit('health.change');
       break;
       case Config.ItemTypes.KEY:
         this.inventoryAdd(id, itemType, value);

@@ -9,7 +9,7 @@ import Collectible from '../prefabs/collectible.js';
 import PlayerData from '../models/playerData.js';
 import GameManager from '../game.manager';
 import HudScene from './hud-scene';
-import MessageBox from '../prefabs/message.box';
+import MessageWindow from '../prefabs/message.window';
 
 export default class DungeonScene extends Phaser.Scene 
 {
@@ -104,7 +104,7 @@ export default class DungeonScene extends Phaser.Scene
     this.physics.add.collider(this.player, this.monsters, this.onPlayerEnemyContact, null, this);
     this.physics.add.overlap(this.player, this.collectibles, this.onPlayerItemContact, null, this);
     
-    this.messageWin = new MessageBox(20, this.game.config.height - 120, this.game.config.width - 60, 100, 'panel');
+    this.messageWin = new MessageWindow(20, this.game.config.height - 120, this.game.config.width - 60, 100, 'panel');
     this.scene.add('message.win', this.messageWin, true);
   
     //initialize hud
@@ -255,6 +255,7 @@ export default class DungeonScene extends Phaser.Scene
    */
   onPlayerItemContact(player, item)
   {    
+    console.log('onPlayerItemContact');
     item.collect(player);
   }
 

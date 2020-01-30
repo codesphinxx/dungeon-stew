@@ -223,10 +223,10 @@ export default class HudScene extends Phaser.Scene
             });
         }
 
-        this.syncLife(this.player.health); 
+        this.sync(this.player.health); 
     
         this.player.on('health.change', () =>{
-            this.syncLife(this.player.health);
+            this.sync(this.player.health);
         });
 
         this.game.events.on('active.scene', (sceneKey, interactive) => {
@@ -271,16 +271,16 @@ export default class HudScene extends Phaser.Scene
     /**
      * @param {Number} health 
      */
-    syncLife(health = 1)
+    sync(health = 1)
     {
         let posy = 10;
-
         if (this.hearts.length < health)
         {
             var dx = (Settings.HEART_SPACING * this.hearts.length) + Settings.DEFAULT_MARGIN;
             var increase = health - this.hearts.length;
             for (var i=0; i < increase; i++)
             {
+                console.log('heart:', dx, posy);
                 var heart = this.add.image(dx, posy, Assets.Files.Life.atlas, Assets.Files.Life.image);
                 heart.setDisplayOrigin(0);
                 this.hearts.push(heart);
@@ -290,8 +290,8 @@ export default class HudScene extends Phaser.Scene
         }
         else if (this.hearts.length > health)
         {
-            var end = (this.hearts.length - health) -1;
-            for (var i=end; i >= 0; i--)
+            var end = health -1;
+            for (var i = this.hearts.length -1; i > end; i--)
             {
                 var heart = this.hearts[i];
                 this.hearts.splice(i, 1);

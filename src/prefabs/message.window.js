@@ -4,7 +4,7 @@ import TextButton from './text.button';
 import Conversation from '../models/npc.conversation';
 import {Settings} from '../settings';
 
-export default class MessageBox extends WindowBase
+export default class MessageWindow extends WindowBase
 {
   /**
    * @param {Number} x 
@@ -63,7 +63,7 @@ export default class MessageBox extends WindowBase
         this.panel.setInteractive();        
 
         this.input.keyboard.on('keydown', (event) => {
-            if (!this.active) return;
+            if (!this.active || this._buttons.length != 0) return;
             event.stopPropagation();   
             
             this.hasKeyDown = true;
@@ -101,6 +101,12 @@ export default class MessageBox extends WindowBase
             this._buttons[i].destroy();
         }
         this._buttons.length = 0;
+        if (this.questWin)
+        {
+            this.questWin.destroy();
+            this.questWin = null;
+            delete this.questWin;
+        }
     }
 
     /**
@@ -223,10 +229,6 @@ export default class MessageBox extends WindowBase
             {
                 this._displayChoice(this._message.current.choice);
             }
-            else if (this._message.current.quest)
-            {
-                this._displayQuest(this._message.current.quest);
-            }
         }    
     }
 
@@ -276,6 +278,21 @@ export default class MessageBox extends WindowBase
      */
     _displayQuest(data)
     {
-        console.log('quest:', data);
+        let height = this.panel.y - (Settings.MESSAGE_BUTTON_OFFSET + Settings.WINDOW_OFFSET.Y);
+        let posy = this.panel.y - (Settings.MESSAGE_BUTTON_OFFSET + height);
+        console.log('y:', this.panel.y, posy, height);
+        this.questWin = this.add.nineslice(
+            this.config.x, 
+            posy, 
+            this.config.width, 
+            height, 
+            this.config.texture, 
+            [40, 40, 40, 40]
+        );
+
+        let y = posy + Settings.MESSAGE_MARGIN;
+        let x = this.config.x + Settings.MESSAGE_MARGIN;
+        this.questContent = this.add.text(x, y, data.description, Settings.TextStyles.DEFAULT);   
+        this.questContent.lineSpacing = 10;
     }
 }

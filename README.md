@@ -23,6 +23,9 @@ Run next commands in your terminal:
 4. Invulnerable
 5. Stealth
 
+## Interactive Objects
+Interactive objects are used for doors, switches, keys, etc.
+
 
 ## TODO
 1. redesign game hud
@@ -30,14 +33,12 @@ Run next commands in your terminal:
 3. add death animation effects for monsters
 4. add item collect animation/effect
 5. create inventory window
-7. create message choice window
-8. create message quest window
-9. implement monster item drop
+6. implement monster item drop
 
 
 
 ## ISSUES
-1. Life UI incorrect after taking damage then add health
+1. 
 
 ## IMPROVEMENT
 1. divid map into zones, when checking collision for attack or interaction with npc, you can filter by zone.
